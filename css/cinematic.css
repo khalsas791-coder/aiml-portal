@@ -86,6 +86,10 @@
   display: flex; flex-direction: column; align-items: center;
   will-change: transform;
 }
+@keyframes floatAiry {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
 #gndecb-logo {
   width: clamp(140px, 22vw, 280px);
   height: clamp(140px, 22vw, 280px);
@@ -96,6 +100,7 @@
   /* fallback if no logo image */
   background: radial-gradient(circle, rgba(59,130,246,0.15), transparent);
   display: flex; align-items: center; justify-content: center;
+  animation: floatAiry 4s ease-in-out infinite;
 }
 .gndecb-logo-fallback {
   width: clamp(140px, 22vw, 280px);
