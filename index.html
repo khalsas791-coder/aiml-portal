@@ -14,87 +14,76 @@
 <link rel="stylesheet" href="css/responsive.css"/>
 <link rel="stylesheet" href="css/cinematic.css"/>
 <style>
-/* GSAP Hero Split Screen Styles */
-#gsap-hero-container {
-  height: 300vh; /* Scroll space */
-  position: relative;
-  background: #020817;
-}
-.gsap-hero-sticky {
+/* New Section-Wise Tab System Styles */
+#section-tab-bar {
   position: sticky;
   top: 0;
-  height: 100vh;
-  width: 100%;
-  overflow: hidden;
+  z-index: 900;
+  background: rgba(2, 8, 23, 0.95);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 1rem 0;
+  overflow-x: auto;
+  white-space: nowrap;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+/* Hide old scrollbar in tab bar */
+#section-tab-bar::-webkit-scrollbar { display: none; }
+#section-tab-bar { -ms-overflow-style: none; scrollbar-width: none; }
+
+.tab-bar-inner {
   display: flex;
+  gap: 0.75rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
 }
-.gsap-panel {
-  width: 50vw;
-  height: 100vh;
-  position: absolute;
-  top: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  will-change: transform;
-}
-.gsap-left {
-  left: 0;
-  background-image: url('assets/images/hero_bg.png'); /* college building image */
-  background-size: cover;
-  background-position: center;
-  transform-origin: right center;
-}
-.gsap-right {
-  right: 0;
-  background: #060c1c;
-  display: flex;
-  flex-direction: column;
-  padding: 4rem;
-  transform-origin: left center;
-}
-.gsap-right h1 {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(3rem, 6vw, 5rem);
-  color: #fff;
-  line-height: 1.1;
-  margin-bottom: 1rem;
-}
-.gsap-right p {
-  font-size: 1.1rem;
+.section-tab {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
   color: #94a3b8;
-  max-width: 400px;
+  padding: 0.6rem 1.25rem;
+  border-radius: 2rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
 }
-.gsap-merge-text {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) scale(0.5);
-  opacity: 0;
-  color: #D4AF37;
-  font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(4rem, 10vw, 8rem);
-  font-weight: 700;
-  z-index: 10;
-  text-shadow: 0 10px 30px rgba(0,0,0,0.8);
-  pointer-events: none;
+.section-tab:hover {
+  background: rgba(255,255,255,0.08);
+  color: #fff;
+}
+.section-tab.active {
+  background: linear-gradient(135deg, rgba(59,130,246,0.15), rgba(6,182,212,0.15));
+  border-color: var(--neon-cyan);
+  color: var(--neon-cyan);
+  box-shadow: 0 0 20px rgba(6,182,212,0.2);
 }
 
-/* Linear Scroll Sections Instead of Tabs */
 #section-content-area {
-  min-height: auto;
+  min-height: calc(100vh - 70px);
   background: #020817; 
 }
 .tab-section {
-  display: block !important; 
-  opacity: 1 !important;
-  transform: none !important;
-  filter: none !important;
-  animation: none !important;
-  min-height: 60vh;
-  border-bottom: 1px solid rgba(255,255,255,0.05);
+  display: none;
+  animation: fadeInTab 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
-#section-tab-bar { display: none !important; } /* Hide old tab bar */
+.tab-section.active {
+  display: block;
+}
+@keyframes fadeInTab {
+  from { opacity: 0; transform: translateY(30px); filter: blur(10px); }
+  to { opacity: 1; transform: translateY(0); filter: blur(0); }
+}
+
+/* Hide some legacy items since we are using tabs now */
+#scroll-progress-bar, #gndecb-navbar, .cinematic-bridge { display: none !important; }
+
+/* Let stats show cleanly */
+#gndecb-stats { border-bottom: none; }
 </style>
 </head>
 <body class="bg-black">
@@ -112,17 +101,67 @@
   <div class="loader-progress"><div class="loader-progress-bar" id="cin-loader-bar"></div></div>
 </div>
 
-<!-- ═══════════════════════ GNDECB GSAP SPLIT HERO ═══════════════════════ -->
-<section id="gsap-hero-container">
-  <div class="gsap-hero-sticky">
-    <div class="gsap-panel gsap-left" id="hero-left"></div>
-    <div class="gsap-panel gsap-right" id="hero-right">
-       <h1>GURU NANAK DEV <br/><span style="color:var(--neon-cyan)">ENGINEERING COLLEGE</span></h1>
-       <p>Pioneering education, research, and innovation in AI/ML. Journey with us from the twilight to the light.</p>
+<!-- ═══════════════════════ GNDECB MAIN HERO ═══════════════════════ -->
+<section id="gndecb-hero">
+  <div class="sticky-hero">
+    <div class="gndecb-bg-parallax" id="gndecb-bg-para"></div>
+    <canvas id="gndecb-particles-canvas" class="gndecb-particles"></canvas>
+    <div class="gndecb-logo-wrap" id="gndecb-logo-el">
+      <img src="assets/images/logo.png" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" alt="GNDECB Logo" id="gndecb-logo" style="width: clamp(140px, 22vw, 280px); height: clamp(140px, 22vw, 280px); object-fit: contain; border-radius: 50%;" loading="lazy">
+      <div class="gndecb-logo-fallback" style="display:none;">GNDECB</div>
     </div>
-    <div class="gsap-merge-text" id="hero-merge-text">GNDECB</div>
+    <div class="gndecb-title-wrap" id="gndecb-title-wrap">
+      <h1 class="gndecb-main-title" style="font-size: clamp(2.2rem, 5vw, 4.5rem); line-height:1.2; display:flex; flex-direction:column; align-items:center; text-align:center;">
+        <span style="font-size:0.4em; letter-spacing:0.15em; font-weight:400; color:var(--neon-cyan); text-transform:uppercase; margin-bottom:1rem; text-shadow: 0 0 10px rgba(6,182,212,0.5);">Welcome to</span>
+        GURU NANAK DEV <br/>ENGINEERING COLLEGE
+      </h1>
+    </div>
+    <div class="gndecb-scroll-hint" id="gndecb-scroll-hint">
+      <span>Scroll To Enter</span>
+      <div class="scroll-mouse-box"><div class="scroll-dot-inner"></div></div>
+    </div>
   </div>
 </section>
+
+<!-- ═══════════════════════ GNDECB CINEMATIC SCROLL LETTERS ═══════════════════════ -->
+<section id="gndecb-scroll-letters" class="cin-letter-section">
+  <div class="cin-letter-parallax-bg"></div>
+  <div class="cin-letter-blobs">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+  </div>
+  <div class="cin-letter-col">
+    <div class="cin-letter-box">G</div>
+    <div class="cin-letter-box">N</div>
+    <div class="cin-letter-box">D</div>
+    <div class="cin-letter-box">E</div>
+    <div class="cin-letter-box">C</div>
+    <div class="cin-letter-box">B</div>
+  </div>
+</section>
+
+<!-- ═══════════════════════ STICKY TAB BAR (Appears after hero) ═══════════════════════ -->
+<nav id="section-tab-bar">
+  <div class="tab-bar-inner">
+    <div class="tab-bar-logo" style="display: flex; align-items: center; gap: 0.75rem; margin-right: 1.5rem; padding-left: 0.5rem; cursor: pointer;" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+        <div style="width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; overflow: hidden; box-shadow: 0 0 15px rgba(255,255,255,0.3);">
+          <img src="assets/images/new_gold_logo.png" style="width: 100%; height: 100%; object-fit: contain;" alt="Logo">
+        </div>
+        <span style="font-family: 'Cormorant Garamond', serif; font-weight: 700; color: #fff; letter-spacing: 0.1em; font-size: 1.1rem;">GNDECB</span>
+    </div>
+    <button class="section-tab active" data-target="gndecb-leadership">Leadership</button>
+    <button class="section-tab" data-target="gndecb-departments">Departments</button>
+    <button class="section-tab" data-target="about">About AIML</button>
+    <button class="section-tab" data-target="courses">Curriculum</button>
+    <button class="section-tab" data-target="resources">Resources</button>
+    <button class="section-tab" data-target="events">Events</button>
+    <button class="section-tab" data-target="ai-tools">AI Tools</button>
+    <button class="section-tab" data-target="profiles">Profiles</button>
+    <button class="section-tab" data-target="cgpa">CGPA Calc</button>
+    <button class="section-tab" data-target="projects">Projects</button>
+    <button class="section-tab" data-target="contact">Contact</button>
+  </div>
+</nav>
 
 <!-- ═══════════════════════ TAB CONTENT AREA ═══════════════════════ -->
 <div id="section-content-area">
@@ -714,8 +753,10 @@
 </div>
 
 <!-- ═══════════════════════ SCRIPTS ═══════════════════════ -->
+<!-- GSAP & ScrollTrigger -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
 <script src="js/particles.js"></script>
 <script src="js/animations.js"></script>
 <script src="js/cgpa.js"></script>
@@ -740,48 +781,37 @@ document.addEventListener('DOMContentLoaded',function(){
     }, 10);
   });
 
-  // GSAP Animations
-  gsap.registerPlugin(ScrollTrigger);
+  // TAB LOGIC (Show/Hide Sections)
+  const tabs = document.querySelectorAll('.section-tab');
+  const sections = document.querySelectorAll('.tab-section');
+  const tabBar = document.getElementById('section-tab-bar');
 
-  // 1. Hero Split Animation
-  const heroLeft = document.getElementById('hero-left');
-  const heroRight = document.getElementById('hero-right');
-  const mergeText = document.getElementById('hero-merge-text');
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      // Remove active class from all
+      tabs.forEach(t => t.classList.remove('active'));
+      sections.forEach(s => s.classList.remove('active'));
+      
+      // Add active to clicked
+      tab.classList.add('active');
+      const targetId = tab.getAttribute('data-target');
+      document.getElementById(targetId).classList.add('active');
 
-  let tl = gsap.timeline({
-    scrollTrigger: {
-      trigger: "#gsap-hero-container",
-      start: "top top",
-      end: "+=2000",
-      scrub: 1,
-      pin: true
-    }
-  });
-
-  tl.to(heroLeft, { width: "100vw", x: "0%", ease: "power2.inOut" }, 0)
-    .to(heroRight, { x: "100%", opacity: 0, ease: "power2.inOut" }, 0)
-    .to(heroLeft, { scale: 1.2, filter: "brightness(0.5) blur(10px)", ease: "none" }, 0.3)
-    .to(mergeText, { opacity: 1, scale: 1, ease: "back.out(1.7)" }, 0.5)
-    .to(mergeText, { scale: 1.5, opacity: 0, ease: "power1.in" }, 0.8);
-
-  // 2. Reveal animations for all sections sequentially
-  const sections = gsap.utils.toArray('.tab-section');
-  sections.forEach((sec) => {
-    gsap.fromTo(sec, 
-      { opacity: 0, y: 100 },
-      { 
-        opacity: 1, 
-        y: 0, 
-        duration: 1,
-        scrollTrigger: {
-          trigger: sec,
-          start: "top 80%",
-          end: "top 20%",
-          scrub: 1
-        }
+      // Scroll so the tab bar is exactly at the top (if user scrolled down inside a tall section)
+      const tabRect = tabBar.getBoundingClientRect();
+      if(tabRect.top < 0 || window.scrollY > document.getElementById('gndecb-hero').offsetHeight) {
+         window.scrollTo({
+           top: document.getElementById('gndecb-hero').offsetHeight,
+           behavior: 'smooth'
+         });
       }
-    );
+
+      // Re-trigger IntersectionObserver animations for the newly visible section
+      initCinReveal();
+      initGndecbStats();
+    });
   });
+
 });
 </script>
 </body>

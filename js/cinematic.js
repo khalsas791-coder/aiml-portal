@@ -157,10 +157,45 @@
     els.forEach(el => io.observe(el));
   }
 
+  /* ── Scroll Letters Animation (GNDECB) ── */
+  function initScrollLetters() {
+    if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+    gsap.registerPlugin(ScrollTrigger);
+    
+    const section = document.getElementById('gndecb-scroll-letters');
+    const boxes = document.querySelectorAll('.cin-letter-box');
+    if (!section || boxes.length === 0) return;
+    
+    // We set initial GSAP state here to ensure perfect cross-browser scrubbing
+    gsap.set(boxes, { opacity: 0, scale: 0.5, y: 50, filter: "blur(10px)" });
+
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: section,
+        start: "top top",
+        end: "+=4000", // Smooth long scroll
+        pin: true,
+        scrub: 1
+      }
+    });
+
+    boxes.forEach((box) => {
+      tl.to(box, {
+        opacity: 1,
+        scale: 1,
+        y: 0,
+        filter: "blur(0px)",
+        duration: 1,
+        ease: "power2.out"
+      });
+    });
+  }
+
   /* ── Init ── */
   document.addEventListener('DOMContentLoaded', () => {
     initLoadingScreen();
     initCinematicHero();
+    initScrollLetters();
     initCinReveal();
     initCinParticles();
     initGndecbStats();
