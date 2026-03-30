@@ -93,14 +93,19 @@
 #gndecb-logo {
   width: clamp(140px, 22vw, 280px);
   height: clamp(140px, 22vw, 280px);
-  object-fit: contain;
+  object-fit: cover;
   border-radius: 50%;
   will-change: transform, box-shadow;
   transition: box-shadow 0.3s;
-  /* fallback if no logo image */
-  background: radial-gradient(circle, rgba(59,130,246,0.15), transparent);
+  background: transparent;
   display: flex; align-items: center; justify-content: center;
   animation: floatAiry 4s ease-in-out infinite;
+  
+  /* Realism Effects */
+  clip-path: circle(49% at 50% 50%);
+  -webkit-clip-path: circle(49% at 50% 50%);
+  border: 1px solid rgba(212,175,55,0.15);
+  filter: drop-shadow(0 15px 35px rgba(212,175,55,0.3)) contrast(1.1) brightness(1.05);
 }
 .gndecb-logo-fallback {
   width: clamp(140px, 22vw, 280px);
