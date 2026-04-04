@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>System Architecture Status — GNDECB AIML</title>
+<link rel="stylesheet" href="css/variables.css"/>
+<link rel="stylesheet" href="css/ultra.css"/>
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+    body { background: #000; color: #fff; padding: 4rem 2rem; text-align: center; font-family: 'Outfit'; }
+    .status-grid { max-width: 800px; margin: 4rem auto; display: grid; gap: 2rem; text-align: left; }
+    .indicator { width: 12px; height: 12px; border-radius: 50%; display: inline-block; margin-right: 1rem; }
+    .indicator.green { background: #10b981; box-shadow: 0 0 10px #10b981; }
+    .indicator.orange { background: #fbbf24; box-shadow: 0 0 10px #fbbf24; }
+</style>
+</head>
+<body>
+    <h1 class="gradient-text" style="font-size: 4rem;">System Status</h1>
+    <p style="opacity: 0.5;">Real-time neural monitoring of GNDECB AIML Orchestrator v4.0</p>
+
+    <div class="status-grid">
+        <div class="ultra-glass" style="padding: 2.5rem; display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <strong style="font-size: 1.2rem; display: block; margin-bottom: 0.5rem;">Chatbot API (Lama 3)</strong>
+                <span style="font-size: 0.8rem; opacity: 0.5;">Operational • Latency 142ms</span>
+            </div>
+            <span class="indicator green"></span>
+        </div>
+        <div class="ultra-glass" style="padding: 2.5rem; display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <strong style="font-size: 1.2rem; display: block; margin-bottom: 0.5rem;">Image Gen Engine (SDXL)</strong>
+                <span style="font-size: 0.8rem; opacity: 0.5;">Load Balancing • Latency 3.2s</span>
+            </div>
+            <span class="indicator orange"></span>
+        </div>
+        <div class="ultra-glass" style="padding: 2.5rem; display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <strong style="font-size: 1.2rem; display: block; margin-bottom: 0.5rem;">Neural Temporal DB</strong>
+                <span style="font-size: 0.8rem; opacity: 0.5;">Synced • Reliability 99.9%</span>
+            </div>
+            <span class="indicator green"></span>
+        </div>
+        <div class="ultra-glass" style="padding: 2.5rem; display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <strong style="font-size: 1.2rem; display: block; margin-bottom: 0.5rem;">Content Delivery Edge</strong>
+                <span style="font-size: 0.8rem; opacity: 0.5;">Vercel Hub Global High</span>
+            </div>
+            <span class="indicator green"></span>
+        </div>
+    </div>
+
+    <a href="index.html" class="btn-ultra">Back to Hub</a>
+
+    <script>lucide.createIcons();</script>
+</body>
+</html>
