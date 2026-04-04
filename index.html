@@ -4,27 +4,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AIML Innovation Hub | GNDECB</title>
-    
-    <!-- Ultra-Premium Styles -->
     <link rel="stylesheet" href="css/variables.css">
     <link rel="stylesheet" href="css/ultra.css">
-    
-    <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        .card-glow {
+            position: absolute; inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+        .tilt-card:hover .card-glow { opacity: 1; }
+        .tilt-card { transform-style: preserve-3d; transition: transform 0.1s ease-out; }
+        .tilt-card > * { transform: translateZ(20px); }
+    </style>
 </head>
 <body class="ultra-theme">
 
-    <!-- 🌐 NAVIGATION (FLOATING) -->
     <nav class="ultra-nav ultra-glass">
         <a href="#hero" class="active">Home</a>
         <a href="#about">About</a>
         <a href="#department">AIML</a>
-        <a href="#innovation">Innovation</a>
-        <a href="#placements">Success</a>
+        <a href="#experience">AI Ops</a>
+        <a href="#innovation">Success</a>
         <a href="#events">Pulse</a>
     </nav>
 
-    <!-- 🚀 HERO SECTION (IMMERSIVE AI PRODUCT UI) -->
     <section id="hero" class="ultra-hero">
         <div class="hero-bg-glow"></div>
         <div class="hero-bg-glow" style="top: 60%; left: 80%; background: radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, transparent 70%);"></div>
@@ -35,7 +41,7 @@
             <p class="hero-subtitle" id="hero-typing-subtitle">Redefining engineering through data-driven architectural excellence and autonomous innovation.</p>
             
             <div style="margin-top: 4rem; display: flex; gap: 1.5rem; justify-content: center;">
-                <a href="#innovation" class="btn-ultra">Explore Platform</a>
+                <a href="#experience" class="btn-ultra">Live Neural Demo</a>
                 <a href="#about" class="btn-ultra" style="background: transparent; color: #fff; border: 1px solid var(--glass-border);">Vision 2030</a>
             </div>
         </div>
@@ -45,7 +51,6 @@
         </div>
     </section>
 
-    <!-- 🏛 ABOUT SECTION (APPLE-LIKE MINIMALISM) -->
     <section id="about" class="ultra-section ultra-reveal">
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: center;">
             <div class="ultra-glass" style="height: 500px;">
@@ -71,13 +76,11 @@
         </div>
     </section>
 
-    <!-- 🤖 AIML DEPARTMENT (HIGH-END TECH SHOWCASE) -->
     <section id="department" class="ultra-section ultra-reveal">
         <div style="text-align: center; max-width: 900px; margin: 0 auto 6rem;">
             <h2 class="neon-text">Machine Intelligence Department</h2>
             <p style="font-size: 1.5rem; opacity: 0.7;">Designing specialized architectures for the next generation of AI developers.</p>
         </div>
-        
         <div class="ultra-grid">
             <div class="ultra-glass" style="padding: 3rem;">
                 <h3 style="margin-bottom: 1.5rem;">AI Architectures</h3>
@@ -95,13 +98,59 @@
         </div>
     </section>
 
-    <!-- 🎓 INNOVATION (FORMERLY PLACEMENTS/SUCCESS) -->
+    <!-- ✨ AI EXPERIENCE CENTER (INTERACTIVE) -->
+    <section id="experience" class="ultra-section ultra-reveal">
+        <div style="text-align: center; margin-bottom: 6rem;">
+            <span class="neon-text" style="font-weight: 800; letter-spacing: 4px;">NEURAL INTERFACE</span>
+            <h2 style="margin-top: 1rem;">Interactive AI Experience</h2>
+            <p style="opacity: 0.6; font-size: 1.2rem;">Live interface previews of our department's proprietary model deployments.</p>
+        </div>
+        
+        <div class="ultra-grid" style="grid-template-columns: 1fr 1fr; gap: 3rem;">
+            <!-- Chatbot Card -->
+            <div class="tilt-card ultra-glass" style="padding: 3.5rem; min-height: 450px; display: flex; flex-direction: column;">
+                <div class="card-glow"></div>
+                <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem;">
+                    <div style="width: 12px; height: 12px; border-radius: 50%; background: #10b981; box-shadow: 0 0 10px #10b981;"></div>
+                    <span style="font-weight: 800; color: #fff;">AIRA NEURAL CHAT</span>
+                </div>
+                <div class="ultra-glass" style="flex: 1; background: rgba(0,0,0,0.3); border-radius: 12px; padding: 1.5rem; display: flex; flex-direction: column; overflow: hidden;">
+                    <div style="margin-bottom: 1rem; padding: 0.8rem 1.2rem; background: rgba(56, 189, 248, 0.1); border-radius: 12px; align-self: flex-start; max-width: 80%; font-size: 0.85rem;">Hello! Architecture analysis complete.</div>
+                    <div style="margin-bottom: 1rem; padding: 0.8rem 1.2rem; background: rgba(255, 255, 255, 0.05); border-radius: 12px; align-self: flex-end; max-width: 80%; font-size: 0.85rem;">Summarize AI Ethics...</div>
+                    <div style="margin-top: auto; display: flex; gap: 0.5rem;">
+                        <input type="text" placeholder="Neural prompt input..." style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 0.8rem; border-radius: 8px; flex: 1; font-size: 0.8rem;">
+                        <button class="btn-ultra" style="padding: 0 1rem; font-size: 0.8rem;">Send</button>
+                    </div>
+                </div>
+                <h3 style="margin-top: 2rem; color: var(--neon-cyan);">Llama-3 Architecture</h3>
+                <p class="text-secondary">Self-hosted department LLM for student research and knowledge retrieval.</p>
+            </div>
+
+            <!-- Image Gen Card -->
+            <div class="tilt-card ultra-glass" style="padding: 3.5rem; min-height: 450px; display: flex; flex-direction: column;">
+                <div class="card-glow"></div>
+                <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem;">
+                    <div style="width: 12px; height: 12px; border-radius: 50%; background: #a855f7; box-shadow: 0 0 10px #a855f7;"></div>
+                    <span style="font-weight: 800; color: #fff;">GNDECB PIXEL GEN</span>
+                </div>
+                <div class="ultra-glass" style="flex: 1; background: rgba(0,0,0,0.3); border-radius: 12px; overflow: hidden; position: relative;">
+                    <img src="assets/images/campus.png" style="width: 100%; height: 100%; object-fit: cover; opacity: 0.5; filter: hue-rotate(45deg) saturate(1.5);">
+                    <div style="position: absolute; bottom: 1rem; left: 1rem; right: 1rem; padding: 1rem; background: rgba(0,0,0,0.6); backdrop-filter: blur(10px); border-radius: 8px; font-size: 0.75rem; border: 1px solid rgba(255,255,255,0.1);">
+                        "Industrial AI Hub under cosmic lighting..."
+                    </div>
+                </div>
+                <h3 style="margin-top: 2rem; color: var(--neon-purple);">Stable Diffusion XL</h3>
+                <p class="text-secondary">Generative media research for engineering design and creative visualization.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 🎓 INNOVATION (SUCCESS STATS) -->
     <section id="innovation" class="ultra-section ultra-reveal">
         <div class="ultra-glass" style="padding: 6rem; text-align: center; border: 1px solid var(--neon-cyan);">
             <span style="color: var(--neon-cyan); font-weight: 800; letter-spacing: 4px;">SYSTEM PERFORMANCE</span>
             <h1 style="font-size: 8rem; margin: 2rem 0;" class="gradient-text">45.0 LPA</h1>
             <p style="font-size: 1.5rem; opacity: 0.6; max-width: 600px; margin: 0 auto 4rem;">Highest annual package verified for the 2024 academic cycle, with over 350+ corporate deployment invitations.</p>
-            
             <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem;">
                 <div><span style="font-size: 2.5rem; font-weight: 800;">150+</span><p style="opacity: 0.5;">Wins</p></div>
                 <div><span style="font-size: 2.5rem; font-weight: 800;">96%</span><p style="opacity: 0.5;">Deployment</p></div>
@@ -111,7 +160,7 @@
         </div>
     </section>
 
-    <!-- 🖼 GALLERY MOSAIC (TESLA DESIGN) -->
+    <!-- 🖼 GALLERY MOSAIC -->
     <section id="gallery" class="ultra-section ultra-reveal">
         <div style="display: grid; grid-template-columns: 2fr 1fr; grid-template-rows: 400px 400px; gap: 1.5rem;">
             <div class="ultra-glass"><img src="assets/images/recruiters.png" style="width: 100%; height: 100%; object-fit: contain; padding: 4rem; filter: invert(1);"></div>
@@ -130,46 +179,48 @@
         </div>
     </footer>
 
-    <!-- ────────────────────────────────────────────────────────
-         SCRIPTS
-    ──────────────────────────────────────────────────────── -->
     <script>
         // 1. TYPING EFFECT
         const subtitle = document.getElementById('hero-typing-subtitle');
         const text = subtitle.innerText;
         subtitle.innerText = '';
         let i = 0;
-        function type() {
-            if (i < text.length) {
-                subtitle.innerText += text.charAt(i);
-                i++;
-                setTimeout(type, 30);
-            }
-        }
+        function type() { if (i < text.length) { subtitle.innerText += text.charAt(i); i++; setTimeout(type, 30); } }
         setTimeout(type, 1500);
 
-        // 2. SCROLL REVEAL (APPLE-LIKE)
+        // 2. SCROLL REVEAL
         const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('active');
-                }
-            });
+            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
         }, { threshold: 0.1 });
-
         document.querySelectorAll('.ultra-reveal').forEach(el => observer.observe(el));
 
-        // 3. PARALLAX EFFECT
+        // 3. TILT & PARALLAX EFFECT
         document.addEventListener('mousemove', (e) => {
+            const x = (e.clientX - window.innerWidth / 2);
+            const y = (e.clientY - window.innerHeight / 2);
+
             const glows = document.querySelectorAll('.hero-bg-glow');
-            const x = (e.clientX - window.innerWidth / 2) / 30;
-            const y = (e.clientY - window.innerHeight / 2) / 30;
-            
-            glows.forEach((glow, i) => {
-                const moveX = x * (i + 1);
-                const moveY = y * (i + 1);
-                glow.style.transform = `translate(${moveX}px, ${moveY}px)`;
+            glows.forEach((glow, i) => { glow.style.transform = `translate(${x / 30 * (i+1)}px, ${y / 30 * (i+1)}px)`; });
+
+            document.querySelectorAll('.tilt-card').forEach(card => {
+                const rect = card.getBoundingClientRect();
+                const centerX = rect.left + rect.width / 2;
+                const centerY = rect.top + rect.height / 2;
+                const tiltX = (centerY - e.clientY) / 20;
+                const tiltY = (e.clientX - centerX) / 20;
+                card.style.transform = `perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
+                
+                const glow = card.querySelector('.card-glow');
+                if(glow) {
+                    const gx = ((e.clientX - rect.left) / rect.width) * 100;
+                    const gy = ((e.clientY - rect.top) / rect.height) * 100;
+                    glow.style.background = `radial-gradient(circle at ${gx}% ${gy}%, rgba(56, 189, 248, 0.3), transparent 70%)`;
+                }
             });
+        });
+
+        document.addEventListener('mouseleave', () => {
+             document.querySelectorAll('.tilt-card').forEach(card => card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg)`);
         });
     </script>
 </body>
