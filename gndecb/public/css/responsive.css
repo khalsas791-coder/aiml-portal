@@ -37,13 +37,7 @@
   .hero-stats { gap: var(--space-6); }
 
   /* Faculty */
-  .faculty-grid, .gndecb-faculty-grid { grid-template-columns: 1fr 1fr; }
-
-  /* Departments */
-  .gndecb-dept-grid { grid-template-columns: 1fr 1fr; }
-
-  /* GNDECB Stats */
-  .gndecb-stats-inner { grid-template-columns: 1fr 1fr; gap: var(--space-4); }
+  .faculty-grid { grid-template-columns: 1fr 1fr; }
 
   /* CGPA Calculator */
   .cgpa-row { grid-template-columns: 1fr 1fr; gap: var(--space-2); }
@@ -73,11 +67,7 @@
   .hero-title { font-size: 2rem; }
   .hero-stats { grid-template-columns: 1fr 1fr; display: grid; }
 
-  .faculty-grid, .gndecb-faculty-grid { grid-template-columns: 1fr; }
-
-  .gndecb-dept-grid { grid-template-columns: 1fr; }
-
-  .gndecb-stats-inner { grid-template-columns: 1fr; }
+  .faculty-grid { grid-template-columns: 1fr; }
 
   .form-row { grid-template-columns: 1fr; }
 
@@ -97,14 +87,5 @@
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
-  }
-}
-
-@media (max-width: 600px) {
-  #edit-profile-modal .modal-content > div[style*="grid-template-columns"] {
-    grid-template-columns: 1fr !important;
-  }
-  #upload-proj-modal .modal-content > div[style*="grid-template-columns"] {
-    grid-template-columns: 1fr !important;
   }
 }

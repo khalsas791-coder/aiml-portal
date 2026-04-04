@@ -42,16 +42,13 @@
       // Background parallax
       if (bgPara) bgPara.style.transform = `translateY(${scrollY * 0.15}px)`;
 
-      // GNDECB Navbar: show when past hero, hide when in AIML area
-      const gNav = document.getElementById('gndecb-navbar');
-      const aimlTop = document.getElementById('aiml-dept-wrapper');
-      if (gNav && aimlTop) {
-        const aimlOffset = aimlTop.getBoundingClientRect().top;
-        if (scrollY > window.innerHeight * 0.75 && aimlOffset > 0) {
-          gNav.classList.add('visible');
-          gNav.classList.remove('hidden-nav');
+      // Section Tab Bar Visibility: Show when past hero
+      const tabBar = document.getElementById('section-tab-bar');
+      if (tabBar) {
+        if (scrollY > window.innerHeight * 0.75) {
+          tabBar.classList.add('visible');
         } else {
-          gNav.classList.remove('visible');
+          tabBar.classList.remove('visible');
         }
       }
     }
@@ -118,17 +115,11 @@
   }
 
   /* ── Custom Loading Screen ── */
+  /* NOTE: Replaced by premium loading screen in personalize.js */
   function initLoadingScreen() {
-    const ls   = document.getElementById('cin-loading-screen');
-    const bar  = document.getElementById('cin-loader-bar');
-    if (!ls) return;
-    let w = 0;
-    const iv = setInterval(() => {
-      w += Math.random() * 18 + 5;
-      if (w >= 100) { w = 100; clearInterval(iv); }
-      if (bar) bar.style.width = w + '%';
-    }, 80);
-    setTimeout(() => { ls.classList.add('hidden'); }, 1600);
+    // Legacy cin-loading-screen — no longer used, premium-loading-screen handles this
+    const legacyLs = document.getElementById('cin-loading-screen');
+    if (legacyLs) legacyLs.style.display = 'none';
   }
 
   /* ── GNDECB Stats counter ── */
@@ -157,45 +148,10 @@
     els.forEach(el => io.observe(el));
   }
 
-  /* ── Scroll Letters Animation (GNDECB) ── */
-  function initScrollLetters() {
-    if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
-    gsap.registerPlugin(ScrollTrigger);
-    
-    const section = document.getElementById('gndecb-scroll-letters');
-    const boxes = document.querySelectorAll('.cin-letter-box');
-    if (!section || boxes.length === 0) return;
-    
-    // We set initial GSAP state here to ensure perfect cross-browser scrubbing
-    gsap.set(boxes, { opacity: 0, scale: 0.5, y: 50, filter: "blur(10px)" });
-
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: section,
-        start: "top top",
-        end: "+=4000", // Smooth long scroll
-        pin: true,
-        scrub: 1
-      }
-    });
-
-    boxes.forEach((box) => {
-      tl.to(box, {
-        opacity: 1,
-        scale: 1,
-        y: 0,
-        filter: "blur(0px)",
-        duration: 1,
-        ease: "power2.out"
-      });
-    });
-  }
-
   /* ── Init ── */
   document.addEventListener('DOMContentLoaded', () => {
     initLoadingScreen();
     initCinematicHero();
-    initScrollLetters();
     initCinReveal();
     initCinParticles();
     initGndecbStats();

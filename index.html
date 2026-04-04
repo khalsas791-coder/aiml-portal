@@ -1,817 +1,486 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>GNDECB | AIML Department</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
-<link rel="stylesheet" href="css/variables.css"/>
-<link rel="stylesheet" href="css/base.css"/>
-<link rel="stylesheet" href="css/components.css"/>
-<link rel="stylesheet" href="css/sections.css"/>
-<link rel="stylesheet" href="css/responsive.css"/>
-<link rel="stylesheet" href="css/cinematic.css"/>
-<style>
-/* New Section-Wise Tab System Styles */
-#section-tab-bar {
-  position: sticky;
-  top: 0;
-  z-index: 900;
-  background: rgba(2, 8, 23, 0.95);
-  backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 1rem 0;
-  overflow-x: auto;
-  white-space: nowrap;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-}
-/* Hide old scrollbar in tab bar */
-#section-tab-bar::-webkit-scrollbar { display: none; }
-#section-tab-bar { -ms-overflow-style: none; scrollbar-width: none; }
-
-.tab-bar-inner {
-  display: flex;
-  gap: 0.75rem;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 1.5rem;
-}
-.section-tab {
-  background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,255,255,0.08);
-  color: #94a3b8;
-  padding: 0.6rem 1.25rem;
-  border-radius: 2rem;
-  font-family: 'Inter', sans-serif;
-  font-size: 0.85rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-}
-.section-tab:hover {
-  background: rgba(255,255,255,0.08);
-  color: #fff;
-}
-.section-tab.active {
-  background: linear-gradient(135deg, rgba(59,130,246,0.15), rgba(6,182,212,0.15));
-  border-color: var(--neon-cyan);
-  color: var(--neon-cyan);
-  box-shadow: 0 0 20px rgba(6,182,212,0.2);
-}
-
-#section-content-area {
-  min-height: calc(100vh - 70px);
-  background: #020817; 
-}
-.tab-section {
-  display: none;
-  animation: fadeInTab 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-.tab-section.active {
-  display: block;
-}
-@keyframes fadeInTab {
-  from { opacity: 0; transform: translateY(30px); filter: blur(10px); }
-  to { opacity: 1; transform: translateY(0); filter: blur(0); }
-}
-
-/* Hide some legacy items since we are using tabs now */
-#scroll-progress-bar, #gndecb-navbar, .cinematic-bridge { display: none !important; }
-
-/* Let stats show cleanly */
-#gndecb-stats { border-bottom: none; }
-</style>
-</head>
-<body class="bg-black">
-
-<!-- Toast Container -->
-<div class="toast-container" id="toast-container"></div>
-
-<!-- Custom Cinematic Loading Screen -->
-<div id="cin-loading-screen">
-  <div class="loader-image-wrap" style="position: relative; width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem;">
-    <div class="loader-ring" style="position: absolute; inset: -8px; border: 2px solid rgba(255,255,255,0.1); border-top-color: #fff; border-radius: 50%; animation: spin 1s linear infinite;"></div>
-    <img src="assets/images/new_gold_logo.png" onerror="this.src='https://api.dicebear.com/7.x/avataaars/svg?seed=GNDECB'" alt="Logo" style="width: 60px; height: 60px; border-radius: 50%; object-fit: contain; background: #000; padding: 2px;" loading="lazy">
-  </div>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GNDECB | AI & Machine Learning Department</title>
   
-  <div class="loader-progress"><div class="loader-progress-bar" id="cin-loader-bar"></div></div>
-</div>
+  <meta name="description" content="Official portal of the Artificial Intelligence & Machine Learning Department at Guru Nanak Dev Engineering College, Bidar. Affiliated to VTU, NAAC A+ accredited.">
+  <meta name="keywords" content="GNDECB, AIML, AI, Machine Learning, Bidar, Engineering, VTU, College">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Outfit:wght@300;400;600;800&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/sections.css">
+  <link rel="stylesheet" href="css/sections2.css">
+  <link rel="stylesheet" href="css/cinematic.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <link rel="stylesheet" href="css/premium.css">
+</head>
+<body class="dark-theme">
 
-<!-- ═══════════════════════ GNDECB MAIN HERO ═══════════════════════ -->
-<section id="gndecb-hero">
-  <div class="sticky-hero">
-    <div class="gndecb-bg-parallax" id="gndecb-bg-para"></div>
-    <canvas id="gndecb-particles-canvas" class="gndecb-particles"></canvas>
-    <div class="gndecb-logo-wrap" id="gndecb-logo-el">
-      <img src="assets/images/logo.png" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" alt="GNDECB Logo" id="gndecb-logo" style="width: clamp(140px, 22vw, 280px); height: clamp(140px, 22vw, 280px); object-fit: contain; border-radius: 50%;" loading="lazy">
-      <div class="gndecb-logo-fallback" style="display:none;">GNDECB</div>
-    </div>
-    <div class="gndecb-title-wrap" id="gndecb-title-wrap">
-      <h1 class="gndecb-main-title" style="font-size: clamp(2.2rem, 5vw, 4.5rem); line-height:1.2; display:flex; flex-direction:column; align-items:center; text-align:center;">
-        <span style="font-size:0.4em; letter-spacing:0.15em; font-weight:400; color:var(--neon-cyan); text-transform:uppercase; margin-bottom:1rem; text-shadow: 0 0 10px rgba(6,182,212,0.5);">Welcome to</span>
-        GURU NANAK DEV <br/>ENGINEERING COLLEGE
-      </h1>
-    </div>
-    <div class="gndecb-scroll-hint" id="gndecb-scroll-hint">
-      <span>Scroll To Enter</span>
-      <div class="scroll-mouse-box"><div class="scroll-dot-inner"></div></div>
-    </div>
-  </div>
-</section>
+<div id="particles-js"></div>
 
-<!-- ═══════════════════════ GNDECB CINEMATIC SCROLL LETTERS ═══════════════════════ -->
-<section id="gndecb-scroll-letters" class="cin-letter-section">
-  <div class="cin-letter-parallax-bg"></div>
-  <div class="cin-letter-blobs">
-    <div class="blob blob-1"></div>
-    <div class="blob blob-2"></div>
-  </div>
-  <div class="cin-letter-col">
-    <div class="cin-letter-box">G</div>
-    <div class="cin-letter-box">N</div>
-    <div class="cin-letter-box">D</div>
-    <div class="cin-letter-box">E</div>
-    <div class="cin-letter-box">C</div>
-    <div class="cin-letter-box">B</div>
-  </div>
-</section>
-
-<!-- ═══════════════════════ STICKY TAB BAR (Appears after hero) ═══════════════════════ -->
-<nav id="section-tab-bar">
-  <div class="tab-bar-inner">
-    <div class="tab-bar-logo" style="display: flex; align-items: center; gap: 0.75rem; margin-right: 1.5rem; padding-left: 0.5rem; cursor: pointer;" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
-        <div style="width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; overflow: hidden; box-shadow: 0 0 15px rgba(255,255,255,0.3);">
-          <img src="assets/images/new_gold_logo.png" style="width: 100%; height: 100%; object-fit: contain;" alt="Logo">
-        </div>
-        <span style="font-family: 'Cormorant Garamond', serif; font-weight: 700; color: #fff; letter-spacing: 0.1em; font-size: 1.1rem;">GNDECB</span>
+<!-- ═══════════════════════ NAVIGATION ═══════════════════════ -->
+<nav class="glass navbar">
+  <div class="nav-container">
+    <div class="logo">
+      <span class="logo-g">GN</span><span class="logo-text">DECB <span class="gold-text">AIML</span></span>
     </div>
-    <button class="section-tab active" data-target="gndecb-leadership">Leadership</button>
-    <button class="section-tab" data-target="gndecb-departments">Departments</button>
-    <button class="section-tab" data-target="about">About AIML</button>
-    <button class="section-tab" data-target="courses">Curriculum</button>
-    <button class="section-tab" data-target="resources">Resources</button>
-    <button class="section-tab" data-target="events">Events</button>
-    <button class="section-tab" data-target="ai-tools">AI Tools</button>
-    <button class="section-tab" data-target="profiles">Profiles</button>
-    <button class="section-tab" data-target="cgpa">CGPA Calc</button>
-    <button class="section-tab" data-target="projects">Projects</button>
-    <button class="section-tab" data-target="contact">Contact</button>
+    <div id="section-tab-bar" class="nav-tabs">
+      <button class="section-tab active" data-target="about-gndecb">About College</button>
+      <button class="section-tab" data-target="aiml-overview">AIML Department</button>
+      <button class="section-tab" data-target="faculty-v2">Our Faculty</button>
+      <button class="section-tab" data-target="courses">Curriculum</button>
+      <button class="section-tab" data-target="achievements-v2">Achievements</button>
+      <button class="section-tab" data-target="placements-v2">Placements</button>
+      <button class="section-tab" data-target="facilities-v2">Facilities</button>
+      <button class="section-tab" data-target="projects-v2">Projects</button>
+      <button class="section-tab" data-target="resources-v2">Resources</button>
+      <button class="section-tab" data-target="ai-tools">AI Tools Hub</button>
+      <button class="section-tab" data-target="cgpa-v2">CGPA Calc</button>
+      <button class="section-tab" data-target="events-v2">Events</button>
+      <button class="section-tab" data-target="gallery-v2">Gallery</button>
+      <button class="section-tab" data-target="faq-v2">FAQ</button>
+      <button class="section-tab" data-target="contact-v2">Contact</button>
+    </div>
   </div>
 </nav>
 
+<!-- ═══════════════════════ HERO SECTION ═══════════════════════ -->
+<header id="gndecb-hero" class="hero-v2">
+  <div class="hero-overlay"></div>
+  <div class="hero-content cin-reveal">
+    <div class="hero-badge">Est. 1980 • NAAC A+</div>
+    <h1 class="hero-title">Shaping the Future <br><span class="gold-text">of Intellect.</span></h1>
+    <p class="hero-subtitle">Guru Nanak Dev Engineering College, Bidar — Department of AI & Machine Learning.</p>
+    <div class="hero-actions">
+      <button class="btn btn-primary" onclick="document.querySelector('[data-target=\'about-gndecb\']').click()">Explore Legacy</button>
+      <button class="btn btn-secondary" onclick="document.querySelector('[data-target=\'contact-v2\']').click()">Contact Us</button>
+    </div>
+  </div>
+</header>
+
 <!-- ═══════════════════════ TAB CONTENT AREA ═══════════════════════ -->
-<div id="section-content-area">
+<main id="section-content-area">
 
-  <!-- LEADERSHIP TAB -->
-  <section id="gndecb-leadership" class="tab-section active">
-    <!-- STATS (Included in Leadership tab) -->
-    <div id="gndecb-stats">
-      <div class="gndecb-stats-inner" style="max-width:1100px; margin: 0 auto 5rem; padding-top:2rem;">
-        <div class="cin-reveal"><div class="gndecb-stat-num gndecb-count" data-target="50" data-suffix="+">0</div><div class="gndecb-stat-label">Research Papers</div></div>
-        <div class="cin-reveal cin-reveal-delay-1"><div class="gndecb-stat-num gndecb-count" data-target="12">0</div><div class="gndecb-stat-label">Patents Filed</div></div>
-        <div class="cin-reveal cin-reveal-delay-2"><div class="gndecb-stat-num gndecb-count" data-target="96" data-suffix="%">0</div><div class="gndecb-stat-label">Placement Rate</div></div>
-        <div class="cin-reveal cin-reveal-delay-3"><div class="gndecb-stat-num gndecb-count" data-target="25" data-suffix="+">0</div><div class="gndecb-stat-label">Industry Partners</div></div>
+  <!-- 1. ABOUT COLLEGE -->
+  <section id="about-gndecb" class="tab-section active">
+    <div class="s2-section s2-container">
+      <div class="s2-header cin-reveal">
+        <span class="s2-eyebrow">40+ Years of Legacy</span>
+        <h2 class="s2-title">Guru Nanak Dev Engineering College</h2>
+        <p class="s2-subtitle">Established in 1980, Bidar's pride in technical education.</p>
       </div>
-    </div>
-    <div class="gndecb-section-glow"></div>
-    <div class="gndecb-section-header cin-reveal">
-      <span class="gndecb-eyebrow">Visionary Leadership</span>
-      <h2 class="gndecb-section-title">Our Directors & Deans</h2>
-      <div class="gold-bar"></div>
-    </div>
-    <div class="gndecb-faculty-grid" style="padding-bottom:5rem;">
-      <style>
-        .gndecb-faculty-card:hover .gndecb-faculty-name,
-        .gndecb-faculty-card:hover .gndecb-faculty-role { transform: translateY(0) !important; }
-        .gndecb-faculty-card:hover .gold-bar { transform: scaleX(1) !important; }
-        .gndecb-faculty-card:hover .gndecb-faculty-desc { opacity: 1 !important; transform: translateY(0) !important; }
-      </style>
-      <div class="gndecb-faculty-card cin-reveal">
-        <!-- Live working photo URL for immediate effect -->
-        <img class="gndecb-faculty-img" src="assets/images/dir.png" alt="Dr. Sardar Balbir Singh" loading="lazy">
-        
-        <div class="gndecb-faculty-overlay" style="align-items: center; text-align: center; padding-bottom: 2rem;">
-          <div class="gndecb-faculty-name" style="font-size: 1.5rem; color: #fff; transform: translateY(20px); transition: transform 0.4s; margin-bottom: 0.2rem;">Dr. Sardar Balbir Singh</div>
-          <div class="gndecb-faculty-role" style="font-size: 1.05rem; letter-spacing: 0.05em; margin-bottom: 0.5rem; font-weight: 600; color: #D4AF37; transform: translateY(20px); transition: transform 0.5s;">Chairman</div>
-          <div class="gold-bar" style="width: 80%; height: 2px; margin: 0.8rem auto; transform: scaleX(0); transition: transform 0.6s;"></div>
-          <div class="gndecb-faculty-desc" style="font-size: 0.95rem; color: #cbd5e1; font-weight: 400; line-height: 1.6; margin-top: 0.5rem; font-style: italic; opacity: 0; transform: translateY(10px); transition: opacity 0.8s, transform 0.8s;">
-            "Education is the sub-structure upon which we construct our future."
+
+      <div class="about-college-grid" style="display:grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;">
+        <div class="about-college-text cin-reveal">
+          <h3 style="font-family: 'Cormorant Garamond', serif; font-size: 2.2rem; color: var(--gold); margin-bottom: 2rem;">A Rich History of Excellence</h3>
+          <p style="margin-bottom: 1.5rem; color: var(--text-secondary); line-height: 1.8;">
+            Founded in <strong>1980</strong> under the visionary leadership of the Prabandhak Committee, GNDECB was established to provide quality technical education to the students of North-East Karnataka.
+          </p>
+          <p style="margin-bottom: 1.5rem; color: var(--text-secondary); line-height: 1.8;">
+            Our 0.5 million sq. ft. sprawling campus houses state-of-the-art infrastructure. GNDECB is <strong>Affiliated to VTU Belagavi</strong>, approved by <strong>AICTE</strong>, and ranked <strong>NAAC A+</strong>.
+          </p>
+          <div class="about-info-chips" style="display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 2rem;">
+            <span class="tag tag-blue">🏛 Est. 1980</span>
+            <span class="tag tag-cyan">🎓 VTU Affiliated</span>
+            <span class="tag tag-gold">⭐ NAAC A+</span>
           </div>
         </div>
-      </div>
-      <div class="gndecb-faculty-card cin-reveal cin-reveal-delay-1">
-        <!-- Live working photo URL for immediate effect -->
-        <img class="gndecb-faculty-img" src="assets/images/vc.png" alt="Dr. Reshma Kaur" loading="lazy">
-        
-        <div class="gndecb-faculty-overlay" style="align-items: center; text-align: center; padding-bottom: 2rem;">
-          <div class="gndecb-faculty-name" style="font-size: 1.5rem; color: #fff; transform: translateY(20px); transition: transform 0.4s; margin-bottom: 0.2rem;">Dr. Reshma Kaur</div>
-          <div class="gndecb-faculty-role" style="font-size: 1.05rem; letter-spacing: 0.05em; margin-bottom: 0.5rem; font-weight: 600; color: #D4AF37; transform: translateY(20px); transition: transform 0.5s;">Vice ChairPerson</div>
-          <div class="gold-bar" style="width: 80%; height: 2px; margin: 0.8rem auto; transform: scaleX(0); transition: transform 0.6s;"></div>
-          <div class="gndecb-faculty-desc" style="font-size: 0.95rem; color: #cbd5e1; font-weight: 400; line-height: 1.6; margin-top: 0.5rem; font-style: normal; opacity: 0; transform: translateY(10px); transition: opacity 0.8s, transform 0.8s;">
-            Enlightenment of education is the move from twilight to light.
-          </div>
-        </div>
-      </div>
-      <div class="gndecb-faculty-card cin-reveal cin-reveal-delay-2">
-        <!-- Live working photo URL for immediate effect -->
-        <img class="gndecb-faculty-img" src="assets/images/priciple.png" alt="Dr. Veena S. Soraganvi" loading="lazy">
-        
-        <div class="gndecb-faculty-overlay" style="align-items: center; text-align: center; padding-bottom: 2rem;">
-          <div class="gndecb-faculty-name" style="font-size: 1.5rem; color: #fff; transform: translateY(20px); transition: transform 0.4s; margin-bottom: 0.2rem;">Dr. Veena S. Soraganvi</div>
-          <div class="gndecb-faculty-role" style="font-size: 1.05rem; letter-spacing: 0.05em; margin-bottom: 0.5rem; font-weight: 600; color: #D4AF37; transform: translateY(20px); transition: transform 0.5s;">Principal</div>
-          <div class="gold-bar" style="width: 80%; height: 2px; margin: 0.8rem auto; transform: scaleX(0); transition: transform 0.6s;"></div>
-          <div class="gndecb-faculty-desc" style="font-size: 0.95rem; color: #cbd5e1; font-weight: 400; line-height: 1.6; margin-top: 0.5rem; font-style: normal; opacity: 0; transform: translateY(10px); transition: opacity 0.8s, transform 0.8s;">
-            Not to dominate minds, but to unlock them.
-          </div>
-        </div>
-      </div>
-      <div class="gndecb-faculty-card cin-reveal cin-reveal-delay-3">
-        <!-- Live working photo URL for immediate effect -->
-        <img class="gndecb-faculty-img" src="assets/images/rd.png" alt="Col. Ravideep Singh" loading="lazy">
-        
-        <div class="gndecb-faculty-overlay" style="align-items: center; text-align: center; padding-bottom: 2rem;">
-          <div class="gndecb-faculty-name" style="font-size: 1.5rem; color: #fff; transform: translateY(20px); transition: transform 0.4s; margin-bottom: 0.2rem;">Col. Ravideep Singh</div>
-          <div class="gndecb-faculty-role" style="font-size: 1.05rem; letter-spacing: 0.05em; margin-bottom: 0.5rem; font-weight: 600; color: #D4AF37; transform: translateY(20px); transition: transform 0.5s;">Director Administration</div>
-          <div class="gold-bar" style="width: 80%; height: 2px; margin: 0.8rem auto; transform: scaleX(0); transition: transform 0.6s;"></div>
-          <div class="gndecb-faculty-desc" style="font-size: 0.95rem; color: #cbd5e1; font-weight: 400; line-height: 1.6; margin-top: 0.5rem; font-style: normal; opacity: 0; transform: translateY(10px); transition: opacity 0.8s, transform 0.8s;">
-            The future belongs to those who believe in the beauty of their dreams.
-          </div>
+        <div class="about-college-visual cin-reveal cin-reveal-delay-1">
+          <img src="assets/images/campus.png" alt="GNDECB Campus" style="width:100%; border-radius: 24px; box-shadow: 0 40px 80px rgba(0,0,0,0.6);">
         </div>
       </div>
     </div>
   </section>
 
-  <!-- DEPARTMENTS TAB -->
-  <section id="gndecb-departments" class="tab-section" style="padding-top:5rem;">
-    <div class="gndecb-section-header cin-reveal">
-      <span class="gndecb-eyebrow">Centers of Excellence</span>
-      <h2 class="gndecb-section-title">Departments</h2>
-      <div class="gold-bar"></div>
-    </div>
-    <div class="gndecb-dept-grid" style="padding-bottom:5rem;">
-      <div class="gndecb-dept-card cin-reveal">
-        <div class="gndecb-dept-icon">🧠</div>
-        <div class="gndecb-dept-name">Artificial Intelligence & ML</div>
-        <div class="gndecb-dept-desc">Focusing on Deep Learning, NLP, and Autonomous Systems. Prepare for the future of tech.</div>
-      </div>
-      <div class="gndecb-dept-card cin-reveal cin-reveal-delay-1">
-        <div class="gndecb-dept-icon">💻</div>
-        <div class="gndecb-dept-name">Computer Science & Engg</div>
-        <div class="gndecb-dept-desc">Core software engineering, advanced algorithms, and full-stack development.</div>
-      </div>
-      <div class="gndecb-dept-card cin-reveal cin-reveal-delay-2">
-        <div class="gndecb-dept-icon">📊</div>
-        <div class="gndecb-dept-name">Information Science</div>
-        <div class="gndecb-dept-desc">Master Data Analytics, Cloud Computing, and cutting-edge Cybersecurity frameworks.</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ABOUT AIML TAB -->
-  <section id="about" class="tab-section" style="padding:var(--space-24) var(--space-6);">
-    <div class="about-grid" style="max-width:1200px; margin: 0 auto;">
-      <div class="reveal-left">
-        <div class="section-badge">✨ Who We Are</div>
-        <h2 class="section-title" style="text-align:left;">Pioneering AI Research &amp; Education</h2>
-        <p style="color:var(--text-secondary);line-height:1.8;margin-bottom:var(--space-6);">
-          Founded with a vision to create world-class AI engineers, our AIML department combines rigorous academics with hands-on innovation. We prepare students not just for jobs, but for the future.
-        </p>
-        <div class="about-highlight-list">
-          <div class="about-highlight"><div class="about-highlight-icon" style="background:rgba(59,130,246,.15);color:var(--neon-blue)">🎓</div><div><strong>NAAC A+ Accredited</strong><p style="font-size:.85rem;color:var(--text-secondary);margin-top:2px;">Recognized excellence in AI/ML education and research output.</p></div></div>
-          <div class="about-highlight"><div class="about-highlight-icon" style="background:rgba(6,182,212,.15);color:var(--neon-cyan)">🔬</div><div><strong>3 Specialized Labs</strong><p style="font-size:.85rem;color:var(--text-secondary);margin-top:2px;">AI Research Lab, CV Lab, and Deep Learning GPU Cluster (NVIDIA A100).</p></div></div>
-          <div class="about-highlight"><div class="about-highlight-icon" style="background:rgba(139,92,246,.15);color:var(--neon-purple)">🤝</div><div><strong>Industry Partnerships</strong><p style="font-size:.85rem;color:var(--text-secondary);margin-top:2px;">MoUs with Google, Microsoft, NVIDIA, and 30+ tech companies.</p></div></div>
-        </div>
-      </div>
-      <div class="about-visual reveal-right">
-        <svg class="about-neural-svg" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <radialGradient id="cg1" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#3b82f6" stop-opacity=".9"/><stop offset="100%" stop-color="#8b5cf6" stop-opacity=".2"/></radialGradient>
-            <radialGradient id="cg2" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#06b6d4" stop-opacity=".9"/><stop offset="100%" stop-color="#06b6d4" stop-opacity=".0"/></radialGradient>
-          </defs>
-          <line x1="80" y1="100" x2="200" y2="80" stroke="#3b82f6" stroke-opacity=".3" stroke-width="1.5"/>
-          <line x1="80" y1="200" x2="200" y2="80" stroke="#3b82f6" stroke-opacity=".3" stroke-width="1.5"/>
-          <line x1="80" y1="300" x2="200" y2="200" stroke="#06b6d4" stroke-opacity=".3" stroke-width="1.5"/>
-          <line x1="80" y1="200" x2="200" y2="200" stroke="#06b6d4" stroke-opacity=".3" stroke-width="1.5"/>
-          <line x1="80" y1="100" x2="200" y2="200" stroke="#8b5cf6" stroke-opacity=".2" stroke-width="1"/>
-          <line x1="200" y1="80" x2="320" y2="150" stroke="#3b82f6" stroke-opacity=".3" stroke-width="1.5"/>
-          <line x1="200" y1="200" x2="320" y2="150" stroke="#06b6d4" stroke-opacity=".3" stroke-width="1.5"/>
-          <line x1="200" y1="200" x2="320" y2="250" stroke="#8b5cf6" stroke-opacity=".3" stroke-width="1.5"/>
-          <circle cx="80" cy="100" r="14" fill="url(#cg1)"/><circle cx="80" cy="200" r="14" fill="url(#cg1)"/><circle cx="80" cy="300" r="14" fill="url(#cg1)"/>
-          <circle cx="200" cy="80" r="18" fill="url(#cg2)"/><circle cx="200" cy="200" r="18" fill="url(#cg2)"/><circle cx="200" cy="320" r="18" fill="url(#cg2)"/>
-          <circle cx="320" cy="150" r="22" fill="url(#cg1)" opacity=".8"/><circle cx="320" cy="250" r="22" fill="url(#cg1)" opacity=".8"/>
-          <circle cx="200" cy="200" r="120" stroke="#3b82f6" stroke-opacity=".06" stroke-width="1" stroke-dasharray="4 8"/>
-        </svg>
-      </div>
-    </div>
-  </section>
-
-  <!-- COURSES TAB -->
-  <section id="courses" class="tab-section" style="padding:var(--space-24) var(--space-6);">
-    <div class="section-header reveal">
-      <div class="section-badge">📖 Curriculum</div>
-      <h2 class="section-title">8-Semester Program</h2>
-    </div>
-    <div data-tabs style="max-width:1200px; margin: 0 auto;">
-      <div class="tabs">
-        <button class="tab-btn active" data-tab="s1">Sem 1</button>
-        <button class="tab-btn" data-tab="s2">Sem 2</button>
-        <button class="tab-btn" data-tab="s3">Sem 3</button>
-      </div>
-      <div class="tab-panel active" data-panel="s1">
-        <div class="subjects-grid">
-          <div class="subject-card"><span class="subject-code">AIML101</span><span class="subject-name">Engineering Mathematics I</span></div>
-          <div class="subject-card"><span class="subject-code">AIML102</span><span class="subject-name">Programming in Python</span></div>
-          <div class="subject-card"><span class="subject-code">AIML103</span><span class="subject-name">Introduction to AI</span></div>
-        </div>
-      </div>
-      <div class="tab-panel" data-panel="s2">
-        <div class="subjects-grid">
-          <div class="subject-card"><span class="subject-code">AIML201</span><span class="subject-name">Mathematics for ML</span></div>
-          <div class="subject-card"><span class="subject-code">AIML202</span><span class="subject-name">Statistics &amp; Probability</span></div>
-          <div class="subject-card"><span class="subject-code">AIML203</span><span class="subject-name">OOP with Java</span></div>
-        </div>
-      </div>
-      <div class="tab-panel" data-panel="s3">
-        <div class="subjects-grid">
-          <div class="subject-card"><span class="subject-code">AIML301</span><span class="subject-name">Machine Learning Fundamentals</span></div>
-          <div class="subject-card"><span class="subject-code">AIML302</span><span class="subject-name">Data Mining &amp; Analytics</span></div>
-          <div class="subject-card"><span class="subject-code">AIML303</span><span class="subject-name">ML Lab (Scikit-learn)</span></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- RESOURCES TAB -->
-  <section id="resources" class="tab-section" style="padding:var(--space-24) var(--space-6);">
-    <div class="section-header reveal" style="display:flex; flex-direction:column; align-items:center;">
-      <div class="section-badge">📚 Downloads</div>
-      <h2 class="section-title">Student Resources</h2>
-      <button class="btn btn-primary" style="margin-top:1rem; display:none;" id="upload-note-btn" onclick="if(window.auth) window.auth.showNoteModal()">Upload Note 📄</button>
-    </div>
-    <div class="resource-grid" id="notes-grid" style="max-width:1200px; margin: 0 auto; display: grid; gap: 1.5rem; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
-      <!-- Notes loaded dynamically here -->
-      <div class="card resource-card reveal"><div class="resource-card-icon" style="background:rgba(59,130,246,.12);color:var(--neon-blue)">📘</div><h3>Machine Learning — Sem 5 Notes</h3><div class="resource-download-btn">⬇ Download PDF →</div></div>
-    </div>
-  </section>
-  </section>
-
-  <!-- AI TOOLS TAB -->
-  <section id="ai-tools" class="tab-section" style="padding:var(--space-24) var(--space-6);">
-    <div class="section-header reveal">
-      <div class="section-badge">🛠️ Tools</div>
-      <h2 class="section-title">AI Tools Hub</h2>
-    </div>
-    
-    <div class="ai-tools-container" style="max-width:1200px; margin: 0 auto; display: grid; gap: 2rem;">
-      <!-- API Key Input for Tools -->
-      <div class="card glass-strong" style="padding:1.5rem; text-align:center;">
-        <h3 style="margin-bottom:1rem; color:var(--neon-cyan);">Connect OpenAI</h3>
-        <input type="password" id="openai-key-input" class="input-glass" placeholder="Enter your OpenAI API Key (sk-...)" style="max-width:400px; display:inline-block;" />
-        <button id="save-openai-key-btn" class="btn btn-primary">Save Key</button>
-        <p style="font-size:0.85rem; color:var(--text-secondary); margin-top:0.5rem;">Your key is stored locally and used for chatbot & tools.</p>
+  <!-- 2. AIML DEPARTMENT -->
+  <section id="aiml-overview" class="tab-section">
+    <div class="s2-section s2-container">
+      <div class="s2-header cin-reveal">
+        <span class="s2-eyebrow">The Intellect Era</span>
+        <h2 class="s2-title">Department of AIML</h2>
+        <p class="s2-subtitle">Engineering the future with intelligent systems.</p>
       </div>
 
-      <div class="tools-grid-layout" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
-        <!-- Tool 1: AI Image Generator -->
-        <div class="card glass-strong tool-widget" style="padding: 1.5rem;">
-          <h3 style="margin-bottom: 0.5rem">🎨 AI Image Generator</h3>
-          <p style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 1rem;">Powered by DALL·E</p>
-          <textarea id="ai-image-prompt" class="input-glass" rows="2" placeholder="Describe the image you want to create..." style="width: 100%; margin-bottom: 1rem;"></textarea>
-          <button id="btn-ai-image" class="btn btn-secondary" style="width: 100%;">Generate Image ✨</button>
-          <div id="out-ai-image" class="tool-output" style="margin-top: 1rem; display: none; background: rgba(0,0,0,0.5); border-radius: 8px; overflow: hidden; justify-content: center; align-items: center; min-height: 150px;"></div>
-        </div>
-
-        <!-- Tool 2: Text Summarizer -->
-        <div class="card glass-strong tool-widget" style="padding: 1.5rem;">
-          <h3 style="margin-bottom: 0.5rem">📝 Text Summarizer</h3>
-          <p style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 1rem;">Powered by GPT-4</p>
-          <textarea id="ai-summary-prompt" class="input-glass" rows="4" placeholder="Paste long text here to summarize..." style="width: 100%; margin-bottom: 1rem;"></textarea>
-          <button id="btn-ai-summary" class="btn btn-secondary" style="width: 100%;">Summarize Text ✨</button>
-          <div id="out-ai-summary" class="tool-output" style="margin-top: 1rem; display: none; padding: 1rem; background: rgba(0,0,0,0.3); border-radius: 8px; font-size: 0.9rem; border: 1px solid rgba(255,255,255,0.1);"></div>
-        </div>
-
-        <!-- Tool 3: Code Explainer -->
-        <div class="card glass-strong tool-widget" style="padding: 1.5rem;">
-          <h3 style="margin-bottom: 0.5rem">💻 Code Explainer</h3>
-          <p style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 1rem;">Powered by GPT-4</p>
-          <textarea id="ai-code-prompt" class="input-glass" rows="4" placeholder="Paste your code here..." style="width: 100%; margin-bottom: 1rem; font-family: monospace;"></textarea>
-          <button id="btn-ai-code" class="btn btn-secondary" style="width: 100%;">Explain Code ✨</button>
-          <div id="out-ai-code" class="tool-output" style="margin-top: 1rem; display: none; padding: 1rem; background: rgba(0,0,0,0.3); border-radius: 8px; font-size: 0.85rem; border: 1px solid rgba(255,255,255,0.1); font-family: monospace; white-space: pre-wrap;"></div>
-        </div>
-
-        <!-- Tool 4: Career Suggestion Tool -->
-        <div class="card glass-strong tool-widget" style="padding: 1.5rem;">
-          <h3 style="margin-bottom: 0.5rem">🎯 Career Suggestion Tool</h3>
-          <p style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 1rem;">Powered by GPT-4</p>
-          <textarea id="ai-career-prompt" class="input-glass" rows="2" placeholder="List your skills (e.g., Python, React, NLP)..." style="width: 100%; margin-bottom: 1rem;"></textarea>
-          <button id="btn-ai-career" class="btn btn-secondary" style="width: 100%;">Get Suggestions ✨</button>
-          <div id="out-ai-career" class="tool-output" style="margin-top: 1rem; display: none; padding: 1rem; background: rgba(0,0,0,0.3); border-radius: 8px; font-size: 0.9rem; border: 1px solid rgba(255,255,255,0.1);"></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- CGPA TAB -->
-  <section id="cgpa" class="tab-section" style="padding:var(--space-24) var(--space-6);">
-    <div class="section-header reveal">
-      <div class="section-badge">⚡ Smart Tool</div>
-      <h2 class="section-title">CGPA Calculator</h2>
-    </div>
-    <div class="cgpa-wrapper" style="max-width:1200px; margin: 0 auto;">
-      <div class="cgpa-form-section">
-        <div class="card" style="padding:var(--space-6);">
-          <div class="cgpa-rows" id="cgpa-rows"></div>
-          <button class="btn btn-secondary btn-sm mt-3" id="cgpa-add-btn">+ Add Subject</button>
-        </div>
-      </div>
-      <div class="cgpa-result-panel">
-        <div class="card glass-strong cgpa-gauge-wrapper" style="text-align: center; padding: 2rem;">
-          <div class="cgpa-circle" style="position: relative; width: 160px; margin: 0 auto 1rem;">
-            <svg viewBox="0 0 160 160" width="160" height="160" style="transform: rotate(-90deg);">
-              <defs><linearGradient id="cgpaGradient" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#06b6d4"/></linearGradient></defs>
-              <circle class="cgpa-circle-bg" cx="80" cy="80" r="70" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="10"/>
-              <circle class="cgpa-circle-fill" id="cgpa-circle-fill" cx="80" cy="80" r="70" fill="none" stroke="url(#cgpaGradient)" stroke-width="10" stroke-dasharray="440" stroke-dashoffset="440" stroke-linecap="round" style="transition: stroke-dashoffset 1s cubic-bezier(0.4, 0, 0.2, 1);"/>
-            </svg>
-            <div class="cgpa-value-center" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; font-weight: 800;">
-              <span id="cgpa-big-number">0.00</span>
+      <div class="about-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;">
+        <div class="cin-reveal">
+          <h3 style="font-size: 1.8rem; color: #fff; margin-bottom: 1.5rem;">Branch Overview</h3>
+          <p style="color:var(--text-secondary); line-height:1.8; margin-bottom: 2rem;">
+            The AIML department focuses on foundational AI principles, advanced data analytics, and deep learning architectures.
+          </p>
+          <div class="about-highlight-list">
+            <div class="about-highlight" style="display:flex; gap:1.5rem; margin-bottom:2rem;">
+               <div class="icon-box" style="font-size:2rem;">👨‍💻</div>
+               <div><strong>Modern Careers</strong><p style="font-size:0.85rem; color:var(--text-secondary);">Graduates excel as Data Scientists, AI Architects, and ML Engineers.</p></div>
+            </div>
+            <div class="about-highlight" style="display:flex; gap:1.5rem;">
+               <div class="icon-box" style="font-size:2rem;">🤖</div>
+               <div><strong>AI-Driven Labs</strong><p style="font-size:0.85rem; color:var(--text-secondary);">Dedicated clusters for training large-scale models and computer vision pipelines.</p></div>
             </div>
           </div>
-          <div style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem;">Grade: <span id="cgpa-grade" style="color:var(--neon-cyan)">–</span></div>
-          
-          <div style="display: flex; justify-content: space-around; background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 8px;">
-            <div>
-              <div style="font-size: 0.8rem; color: var(--text-secondary);">Credits</div>
-              <div id="cgpa-total-credits" style="font-size: 1.25rem; font-weight: 600;">0</div>
-            </div>
-            <div>
-              <div style="font-size: 0.8rem; color: var(--text-secondary);">Subjects</div>
-              <div id="cgpa-subject-count" style="font-size: 1.25rem; font-weight: 600;">0</div>
-            </div>
-            <div>
-              <div style="font-size: 0.8rem; color: var(--text-secondary);">Estimate</div>
-              <div id="cgpa-percentage" style="font-size: 1.25rem; font-weight: 600;">0%</div>
+        </div>
+        <div class="about-visual cin-reveal cin-reveal-delay-1">
+          <img src="assets/images/aiml_lab.png" alt="AI Lab" style="width: 100%; border-radius: 24px;">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. OUR FACULTY -->
+  <section id="faculty-v2" class="tab-section">
+    <div class="s2-section s2-container">
+      <div class="s2-header cin-reveal">
+        <span class="s2-eyebrow">Expert Mentors</span>
+        <h2 class="s2-title">Our Faculty</h2>
+      </div>
+      <div class="faculty-grid-wrap" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2.5rem; margin-top: 3rem;">
+        <div class="card glass-strong faculty-card-v2 cin-reveal">
+          <img src="assets/images/priciple.png" alt="Dr. Veena S. Soraganvi" style="width:100%; height:320px; object-fit:cover; border-radius:16px;">
+          <div style="padding: 2rem;">
+            <div style="font-size:1.4rem; font-weight:700;">Dr. Veena S. Soraganvi</div>
+            <div style="color:var(--neon-cyan); font-size:0.9rem; margin-bottom:1rem;">Principal & Head — Ph.D.</div>
+            <p class="text-secondary" style="font-size:0.85rem;">Expertise in Neural Networks and Academic Leadership.</p>
+          </div>
+        </div>
+        <div class="card glass-strong faculty-card-v2 cin-reveal cin-reveal-delay-1">
+          <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Prof1" alt="Prof. Sanjay Raman" style="width:100%; height:320px; object-fit:cover; border-radius:16px; background:#fff;">
+          <div style="padding: 2rem;">
+            <div style="font-size:1.4rem; font-weight:700;">Prof. Sanjay Raman</div>
+            <div style="color:var(--neon-purple); font-size:0.9rem; margin-bottom:1rem;">Associate Professor — M.Tech</div>
+            <p class="text-secondary" style="font-size:0.85rem;">Specialist in NLP and Large Language Models.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. CURRICULUM -->
+  <section id="courses" class="tab-section">
+    <div class="s2-section s2-container">
+      <div class="s2-header cin-reveal">
+        <span class="s2-eyebrow">Academic Roadmap</span>
+        <h2 class="s2-title">Course Curriculum</h2>
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; margin-top: 3rem;">
+        <div class="card glass-strong cin-reveal" style="padding: 2.5rem;">
+          <h4 style="color:var(--neon-cyan); margin-bottom: 1.5rem;">Foundational Years</h4>
+          <ul class="text-secondary" style="list-style:circle; padding-left:1.5rem; font-size:0.95rem; line-height:2.2;">
+            <li>Programming with Python & C++</li>
+            <li>Data Structures & Algorithms</li>
+            <li>Mathematical Logic for AI</li>
+            <li>Statistics & Probability</li>
+          </ul>
+        </div>
+        <div class="card glass-strong cin-reveal cin-reveal-delay-1" style="padding: 2.5rem;">
+          <h4 style="color:var(--neon-purple); margin-bottom: 1.5rem;">Advanced AI Specialization</h4>
+          <ul class="text-secondary" style="list-style:circle; padding-left:1.5rem; font-size:0.95rem; line-height:2.2;">
+            <li>Neural Networks & Deep Learning</li>
+            <li>Natural Language Processing</li>
+            <li>Image Search & Analysis</li>
+            <li>Autonomous Systems</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. ACHIEVEMENTS -->
+  <section id="achievements-v2" class="tab-section">
+    <div class="s2-section s2-container">
+      <div class="s2-header cin-reveal">
+        <span class="s2-eyebrow">Excellence</span>
+        <h2 class="s2-title">Department Success</h2>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; margin-top: 3rem;">
+        <div class="achievement-card card glass-strong text-center cin-reveal" style="padding: 2.5rem;">
+          <div class="gndecb-count" data-target="150" data-suffix="+" style="font-size:3rem; font-weight:800; color:#fff;">0</div>
+          <div style="color:var(--neon-cyan); font-weight: 600; margin-top: 1rem;">Hackathon Wins</div>
+        </div>
+        <div class="achievement-card card glass-strong text-center cin-reveal cin-reveal-delay-1" style="padding: 2.5rem;">
+          <div class="gndecb-count" data-target="96" data-suffix="%" style="font-size:3rem; font-weight:800; color:#fff;">0</div>
+          <div style="color:var(--neon-purple); font-weight: 600; margin-top: 1rem;">Placement Rate</div>
+        </div>
+        <div class="achievement-card card glass-strong text-center cin-reveal cin-reveal-delay-2" style="padding: 2.5rem;">
+          <div class="gndecb-count" data-target="500" data-suffix="+" style="font-size:3rem; font-weight:800; color:#fff;">0</div>
+          <div style="color:var(--gold); font-weight: 600; margin-top: 1rem;">Global Certs</div>
+        </div>
+        <div class="achievement-card card glass-strong text-center cin-reveal cin-reveal-delay-3" style="padding: 2.5rem;">
+          <div class="gndecb-count" data-target="12" style="font-size:3rem; font-weight:800; color:#fff;">0</div>
+          <div style="color:var(--neon-cyan); font-weight: 600; margin-top: 1rem;">Patents Filed</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. PLACEMENTS -->
+  <section id="placements-v2" class="tab-section">
+    <div class="s2-section s2-container">
+      <div class="s2-header cin-reveal">
+        <span class="s2-eyebrow">Industrial Sync</span>
+        <h2 class="s2-title">Placement Records</h2>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; margin-top: 3rem;">
+        <div class="card glass-strong cin-reveal" style="padding: 2rem; text-align: center;">
+          <h4 style="color:var(--neon-cyan); font-size: 2rem;">45.0 LPA</h4>
+          <p class="text-sm text-secondary">Highest Package 2024</p>
+        </div>
+        <div class="card glass-strong cin-reveal cin-reveal-delay-1" style="padding: 2rem; text-align: center;">
+          <h4 style="color:var(--neon-purple); font-size: 2rem;">6.5 LPA</h4>
+          <p class="text-sm text-secondary">Average Package</p>
+        </div>
+        <div class="card glass-strong cin-reveal cin-reveal-delay-2" style="padding: 2rem; text-align: center;">
+          <h4 style="color:var(--gold); font-size: 2rem;">350+</h4>
+          <p class="text-sm text-secondary">Annual Offers</p>
+        </div>
+      </div>
+      <div class="card glass-strong cin-reveal" style="padding: 4rem; margin-top: 2rem; text-align: center;">
+         <h4 style="margin-bottom: 2rem; color: var(--gold);">Our Global Recruiters</h4>
+         <img src="assets/images/recruiters.png" alt="Companies" style="width: 100%; max-width: 900px; filter: grayscale(1) invert(1);">
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. FACILITIES -->
+  <section id="facilities-v2" class="tab-section">
+    <div class="s2-section s2-container">
+      <div class="s2-header cin-reveal">
+        <span class="s2-eyebrow">Smart Tech</span>
+        <h2 class="s2-title">World-Class Facilities</h2>
+      </div>
+      <div style="display: grid; grid-template-columns: 2fr 1fr; grid-template-rows: 300px 300px; gap: 1.5rem; margin-top: 3rem;">
+        <div class="card glass-strong cin-reveal" style="overflow: hidden; position: relative;">
+          <img src="assets/images/aiml_lab.png" alt="Lab" style="width: 100%; height: 100%; object-fit: cover;">
+          <div style="position: absolute; bottom: 0; padding: 2rem; background: linear-gradient(transparent, rgba(0,0,0,0.8)); width: 100%;">
+            <h4 style="color:#fff;">AI & Deep Learning Lab</h4>
+          </div>
+        </div>
+        <div class="card glass-strong cin-reveal cin-reveal-delay-1" style="overflow: hidden;"><img src="assets/images/library.png" alt="Library" style="width: 100%; height: 100%; object-fit: cover;"></div>
+        <div class="card glass-strong cin-reveal cin-reveal-delay-2" style="overflow: hidden;"><img src="assets/images/hostel.png" alt="Hostel" style="width: 100%; height: 100%; object-fit: cover;"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. PROJECTS -->
+  <section id="projects-v2" class="tab-section">
+    <div class="s2-section s2-container">
+      <div class="s2-header cin-reveal">
+        <span class="s2-eyebrow">Showcase</span>
+        <h2 class="s2-title">Recent Projects</h2>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2.5rem; margin-top: 3rem;">
+        <div class="card glass-strong project-card cin-reveal">
+          <img src="assets/images/hackathon.png" alt="Project" style="width:100%; border-radius:12px; margin-bottom:1.5rem;">
+          <h3 style="color:var(--neon-cyan);">Smart Health Monitor</h3>
+          <p class="text-secondary">AI-based triage system for medical diagnosis.</p>
+        </div>
+        <div class="card glass-strong project-card cin-reveal cin-reveal-delay-1">
+          <img src="assets/images/aiml_lab.png" alt="Project" style="width:100%; border-radius:12px; margin-bottom:1.5rem;">
+          <h3 style="color:var(--neon-purple);">Autonomous Navigator</h3>
+          <p class="text-secondary">Pathfinding robot using LiDAR and CNNs.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9. RESOURCES -->
+  <section id="resources-v2" class="tab-section">
+    <div class="s2-section s2-container">
+      <div class="s2-header cin-reveal">
+        <span class="s2-eyebrow">Academic Hub</span>
+        <h2 class="s2-title">Department Resources</h2>
+      </div>
+      <div style="max-width: 800px; margin: 3rem auto 0; display: grid; gap: 1.5rem;">
+        <div class="card glass-strong cin-reveal" style="display: flex; justify-content: space-between; align-items: center; padding: 1.5rem;">
+          <div><h4 style="margin-bottom:0.25rem;">AIML Syllabus (2022 Scheme)</h4><p class="text-secondary text-sm">VTU Official Curriculum.</p></div>
+          <button class="btn btn-secondary btn-sm">PDF Download ↓</button>
+        </div>
+        <div class="card glass-strong cin-reveal cin-reveal-delay-1" style="display: flex; justify-content: space-between; align-items: center; padding: 1.5rem;">
+          <div><h4 style="margin-bottom:0.25rem;">Machine Learning Lab Manual</h4><p class="text-secondary text-sm">Official Record Book.</p></div>
+          <button class="btn btn-secondary btn-sm">PDF Download ↓</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10. AI TOOLS HUB -->
+  <section id="ai-tools" class="tab-section">
+    <div class="s2-section s2-container">
+      <div class="s2-header cin-reveal">
+        <span class="s2-eyebrow">Smart Services</span>
+        <h2 class="s2-title">AI Knowledge Hub</h2>
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; margin-top: 3rem;">
+        <div class="card glass-strong cin-reveal" style="padding: 2.5rem;">
+          <h3 style="margin-bottom: 1.5rem;">🎨 Image Generator</h3>
+          <textarea id="ai-img-prompt" class="input-glass w-full" rows="3" placeholder="Describe a futuristic campus..."></textarea>
+          <button class="btn btn-primary w-full mt-4">Generate Preview ✨</button>
+        </div>
+        <div class="card glass-strong cin-reveal cin-reveal-delay-1" style="padding: 2.5rem;">
+          <h3 style="margin-bottom: 1.5rem;">📝 AI Summarizer</h3>
+          <textarea id="ai-sum-prompt" class="input-glass w-full" rows="3" placeholder="Paste notes here..."></textarea>
+          <button class="btn btn-secondary w-full mt-4">Summarize Text ✨</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 11. CGPA CALCULATOR -->
+  <section id="cgpa-v2" class="tab-section">
+    <div class="s2-section s2-container">
+      <div class="s2-header cin-reveal">
+        <span class="s2-eyebrow">Practical Tools</span>
+        <h2 class="s2-title">Performance Calculator</h2>
+      </div>
+      <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 3rem; margin-top: 3rem;">
+        <div class="card glass-strong" style="padding: 2.5rem;">
+          <div id="cgpa-rows">
+            <div style="display: flex; gap: 1rem; margin-bottom: 1rem;">
+              <input type="text" placeholder="Course Name" class="input-glass" style="flex: 2;">
+              <input type="number" placeholder="Credits" class="input-glass" style="flex: 1;">
+              <select class="input-glass" style="flex: 1;"><option value="10">O (10)</option><option value="9">A+ (9)</option><option value="8">A (8)</option></select>
             </div>
           </div>
-          <div style="display: flex; gap: 1rem; margin-top: 2rem; justify-content: center;">
-            <button class="btn btn-primary btn-sm" id="cgpa-export-btn">Download</button>
-            <button class="btn btn-secondary btn-sm" id="cgpa-clear-btn">Clear All</button>
-          </div>
+          <button class="btn btn-secondary btn-sm mt-4">+ Add Row</button>
+        </div>
+        <div class="card glass-strong text-center" style="padding: 3rem; border: 1px solid var(--neon-cyan);">
+          <div class="text-secondary mb-4">Final Score</div>
+          <div style="font-size: 5rem; font-weight: 900; color:#fff;">0.00</div>
+          <button class="btn btn-primary w-full mt-6">Calculate Now ✨</button>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- PROJECTS TAB -->
-  <section id="projects" class="tab-section" style="padding:var(--space-24) var(--space-6);">
-    <div class="section-header reveal" style="display:flex; flex-direction:column; align-items:center;">
-      <div class="section-badge">📁 Showcase</div>
-      <h2 class="section-title">Student Projects</h2>
-      <button class="btn btn-primary" style="margin-top:1rem; display:none;" id="upload-proj-init-btn" onclick="if(window.auth) window.auth.showProjModal()">Upload Project 📁</button>
-    </div>
-    <div style="text-align:center; margin-bottom:2rem;">
-      <button class="filter-btn active" data-filter="all">All</button>
-      <button class="filter-btn" data-filter="web-ai">Web+AI</button>
-      <button class="filter-btn" data-filter="cv">Computer Vision</button>
-      <button class="filter-btn" data-filter="nlp">NLP</button>
-      <button class="filter-btn" data-filter="data">Data Science</button>
-      <button class="filter-btn" data-filter="robotics">Robotics</button>
-    </div>
-    <div class="projects-grid" id="projects-grid" style="max-width:1200px; margin: 0 auto; display: grid; gap: 2rem; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));"></div>
-    
-    <!-- Project Modal Wrapper -->
-    <div id="project-modal" class="modal-overlay">
-      <div class="modal-content glass-strong">
-        <button class="modal-close" onclick="closeProjectModal()">✕</button>
-        <div id="project-modal-body"></div>
+  <!-- 12. EVENTS -->
+  <section id="events-v2" class="tab-section">
+    <div class="s2-section s2-container">
+      <div class="s2-header cin-reveal">
+        <span class="s2-eyebrow">Academic Pulse</span>
+        <h2 class="s2-title">Upcoming Symposiums</h2>
       </div>
-    </div>
-  </section>
-
-  <!-- CONTACT TAB -->
-  <section id="contact" class="tab-section" style="padding:var(--space-24) var(--space-6);">
-    <div class="section-header reveal">
-      <div class="section-badge">📬 Get in Touch</div>
-      <h2 class="section-title">Contact Us</h2>
-    </div>
-    <div class="contact-grid" style="max-width:1200px; margin: 0 auto;">
-      <div class="contact-info reveal-left">
-        <div class="contact-item"><div class="contact-item-icon">📍</div><div><h4>Address</h4><p>AI Block, GNDECB Campus</p></div></div>
-        <div class="contact-item"><div class="contact-item-icon">📞</div><div><h4>Phone</h4><p>+91-98765-43210</p></div></div>
-        <div class="contact-item"><div class="contact-item-icon">✉️</div><div><h4>Email</h4><p>info@gndecb.ac.in</p></div></div>
-      </div>
-      <div class="reveal-right">
-        <form class="contact-form" id="contact-form">
-          <input class="input-glass" type="text" placeholder="Name" required/>
-          <input class="input-glass" type="email" placeholder="Email" required/>
-          <textarea class="input-glass" rows="4" placeholder="Message" required></textarea>
-          <button type="submit" class="btn btn-primary" style="width:100%;">Send Message 🚀</button>
-        </form>
-      </div>
-    </div>
-  </section>
-
-  <!-- EVENTS TAB -->
-  <section id="events" class="tab-section" style="padding:var(--space-24) var(--space-6);">
-    <div class="section-header reveal">
-      <div class="section-badge">📅 Updates</div>
-      <h2 class="section-title">Events & Workshops</h2>
-    </div>
-    <div class="timeline-container" style="max-width: 800px; margin: 0 auto; position: relative;">
-      <style>
-        .timeline-container::before {
-          content: ''; position: absolute; top: 0; bottom: 0; left: 50%; width: 2px;
-          background: rgba(255,255,255,0.1); transform: translateX(-50%);
-        }
-        .timeline-item {
-          display: flex; justify-content: space-between; align-items: center; margin-bottom: 3rem; position: relative;
-        }
-        .timeline-item:nth-child(even) { flex-direction: row-reverse; }
-        .timeline-content {
-          width: 45%; padding: 1.5rem; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; backdrop-filter: blur(10px);
-          transition: transform 0.3s, box-shadow 0.3s;
-        }
-        .timeline-content:hover {
-          transform: translateY(-5px); box-shadow: 0 10px 30px rgba(6, 182, 212, 0.2); border-color: rgba(6, 182, 212, 0.5);
-        }
-        .timeline-dot {
-          width: 20px; height: 20px; background: var(--neon-cyan); border-radius: 50%; position: absolute; left: 50%; transform: translateX(-50%);
-          box-shadow: 0 0 15px var(--neon-cyan);
-        }
-        .timeline-date { position: absolute; top: -30px; font-weight: bold; color: var(--neon-cyan); font-size: 0.9rem; }
-        .timeline-item:nth-child(even) .timeline-date { right: 0; }
-        .timeline-item:nth-child(odd) .timeline-date { left: 0; }
-        .timeline-image { width: 100%; height: 150px; object-fit: cover; border-radius: 8px; margin-bottom: 1rem; }
-        @media (max-width: 768px) {
-          .timeline-container::before { left: 20px; }
-          .timeline-item, .timeline-item:nth-child(even) { flex-direction: column !important; align-items: flex-end; margin-bottom: 2rem; }
-          .timeline-content { width: calc(100% - 50px); padding: 1.5rem; }
-          .timeline-dot { left: 20px; }
-          .timeline-date { position: relative; top: 0; left: 0 !important; right: auto !important; margin-bottom: 0.5rem; display: block; }
-        }
-      </style>
-
-      <!-- Past Event 1 -->
-      <div class="timeline-item reveal">
-        <div class="timeline-dot" style="background: var(--text-muted); box-shadow: none;"></div>
-        <div class="timeline-content" style="opacity: 0.6;">
-          <div class="timeline-date" style="color: var(--text-muted);">Past: Oct 15 - 17, 2026</div>
-          <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=400&h=200&fit=crop" class="timeline-image" alt="Hackathon" / loading="lazy">
-          <h3 style="margin-bottom:0.5rem;">AI Hackathon 2026</h3>
-          <p class="text-secondary text-sm">48-hour coding marathon focused on solving real-world problems using Generative AI.</p>
+      <div style="max-width: 800px; margin: 3rem auto 0;">
+        <div class="card glass-strong cin-reveal mb-6" style="padding: 1.5rem; display: flex; align-items: center; gap:3rem;">
+          <div style="text-align: center; width: 100px;"><div style="font-size: 2.2rem; font-weight: 800;">MAY</div><div style="color:var(--gold);">12-14</div></div>
+          <div><h3>Gurushrishti 2024</h3><p class="text-secondary">National Level Technical Symposium.</p></div>
         </div>
-        <div style="width: 45%;"></div>
-      </div>
-
-      <!-- Upcoming Event 1 -->
-      <div class="timeline-item reveal delay-1">
-        <div class="timeline-dot" style="background: var(--neon-cyan); box-shadow: 0 0 15px var(--neon-cyan);"></div>
-        <div class="timeline-content">
-          <div class="timeline-date" style="color: var(--neon-cyan);">Upcoming: Nov 5, 2026</div>
-          <img src="https://images.unsplash.com/photo-1485827404727-8a370b561c21?q=80&w=400&h=200&fit=crop" class="timeline-image" alt="Robotics" / loading="lazy">
-          <h3 style="margin-bottom:0.5rem;">Robotics & Computer Vision</h3>
-          <p class="text-secondary text-sm">Hands-on session with robotic arms and applying YOLOv8 for real-time object detection.</p>
-        </div>
-        <div style="width: 45%;"></div>
-      </div>
-
-      <!-- Upcoming Event 2 -->
-      <div class="timeline-item reveal delay-2">
-        <div class="timeline-dot" style="background: var(--neon-purple); box-shadow: 0 0 15px var(--neon-purple);"></div>
-        <div class="timeline-content">
-          <div class="timeline-date" style="color: var(--neon-purple);">Upcoming: Dec 12, 2026</div>
-          <img src="https://images.unsplash.com/photo-1591696205602-2f950c417cb9?q=80&w=400&h=200&fit=crop" class="timeline-image" alt="NLP" / loading="lazy">
-          <h3 style="margin-bottom:0.5rem;">Expert Talk: Future of NLP</h3>
-          <p class="text-secondary text-sm">Guest lecture by Dr. S. Raman on the future of LLMs and parameter-efficient fine-tuning.</p>
-        </div>
-        <div style="width: 45%;"></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- PROFILES TAB -->
-  <section id="profiles" class="tab-section" style="padding:var(--space-24) var(--space-6);">
-    <div class="section-header reveal">
-      <div class="section-badge">👨‍🎓 Stars</div>
-      <h2 class="section-title">Student Profiles</h2>
-    </div>
-    
-    <div style="max-width:1200px; margin: 0 auto; display: flex; justify-content: flex-end; margin-bottom: 2rem;">
-      <button id="auth-btn" class="btn btn-primary" onclick="if(window.auth) window.auth.showLoginModal()">Login / Signup</button>
-      <button id="edit-profile-btn" class="btn btn-secondary" style="display:none; margin-left:1rem;" onclick="if(window.auth) window.auth.showEditModal()">Edit Profile</button>
-      <button id="logout-btn" class="btn btn-secondary" style="display:none; margin-left:1rem;" onclick="if(window.auth) window.auth.logout()">Logout</button>
-    </div>
-
-    <div class="profiles-grid" id="profiles-grid" style="max-width:1200px; margin: 0 auto; display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:2rem;">
-      <!-- Static fallback profiles until Firebase loads or if DB is empty -->
-      <div class="card glass-strong text-center reveal hover-float">
-        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Priya" alt="Priya" style="width:100px; height:100px; border-radius:50%; margin:0 auto 1rem; border:3px solid var(--neon-purple); background:#fff; object-fit:cover;" / loading="lazy">
-        <h3>Priya Sharma</h3>
-        <p class="text-secondary text-sm mb-2">President, AI Club</p>
-        <div class="flex flex-wrap" style="gap:0.5rem; justify-content:center; margin-bottom:1rem;"><span class="tag tag-blue">NLP</span><span class="tag tag-cyan">Python</span></div>
-        <div style="display:flex; gap:0.5rem; justify-content:center;">
-           <a href="#" class="btn btn-secondary btn-sm" style="padding:0.4rem;" title="Projects">📁</a>
-           <a href="#" class="btn btn-secondary btn-sm" style="padding:0.4rem;" title="LinkedIn">🔗</a>
-           <a href="#" class="btn btn-secondary btn-sm" style="padding:0.4rem;" title="Resume">📄</a>
-        </div>
-      </div>
-      <div class="card glass-strong text-center reveal hover-float delay-1">
-        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Rahul" alt="Rahul" style="width:100px; height:100px; border-radius:50%; margin:0 auto 1rem; border:3px solid var(--neon-blue); background:#fff; object-fit:cover;" / loading="lazy">
-        <h3>Rahul Verma</h3>
-        <p class="text-secondary text-sm mb-2">Lead Researcher</p>
-        <div class="flex flex-wrap" style="gap:0.5rem; justify-content:center; margin-bottom:1rem;"><span class="tag tag-cyan">Computer Vision</span><span class="tag tag-purple">C++</span></div>
-        <div style="display:flex; gap:0.5rem; justify-content:center;">
-           <a href="#" class="btn btn-secondary btn-sm" style="padding:0.4rem;" title="Projects">📁</a>
-           <a href="#" class="btn btn-secondary btn-sm" style="padding:0.4rem;" title="LinkedIn">🔗</a>
-           <a href="#" class="btn btn-secondary btn-sm" style="padding:0.4rem;" title="Resume">📄</a>
-        </div>
-      </div>
-      <div class="card glass-strong text-center reveal hover-float delay-2">
-        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Simran" alt="Simran" style="width:100px; height:100px; border-radius:50%; margin:0 auto 1rem; border:3px solid var(--neon-cyan); background:#fff; object-fit:cover;" / loading="lazy">
-        <h3>Simran Kaur</h3>
-        <p class="text-secondary text-sm mb-2">Data Science Enthusiast</p>
-        <div class="flex flex-wrap" style="gap:0.5rem; justify-content:center; margin-bottom:1rem;"><span class="tag tag-purple">ML</span><span class="tag tag-blue">TensorFlow</span></div>
-        <div style="display:flex; gap:0.5rem; justify-content:center;">
-           <a href="#" class="btn btn-secondary btn-sm" style="padding:0.4rem;" title="Projects">📁</a>
-           <a href="#" class="btn btn-secondary btn-sm" style="padding:0.4rem;" title="LinkedIn">🔗</a>
-           <a href="#" class="btn btn-secondary btn-sm" style="padding:0.4rem;" title="Resume">📄</a>
+        <div class="card glass-strong cin-reveal cin-reveal-delay-1 mb-6" style="padding: 1.5rem; display: flex; align-items: center; gap:3rem;">
+          <div style="text-align: center; width: 100px;"><div style="font-size: 2.2rem; font-weight: 800;">JUN</div><div style="color:var(--neon-cyan);">08</div></div>
+          <div><h3>AI Research Summit</h3><p class="text-secondary">Guest lecture from IIT researchers.</p></div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Modals for Auth / Profile -->
-  <div id="auth-modal" class="modal-overlay">
-    <div class="modal-content glass-strong" style="max-width:400px; text-align:center;">
-      <button class="modal-close" onclick="document.getElementById('auth-modal').classList.remove('active')">✕</button>
-      <h3 style="margin-bottom:1.5rem; font-size:1.5rem;" id="auth-title">Student Login</h3>
-      <input type="email" id="auth-email" class="input-glass" placeholder="Email Address" style="margin-bottom:1rem; width:100%;">
-      <input type="password" id="auth-pwd" class="input-glass" placeholder="Password" style="margin-bottom:1.5rem; width:100%;">
-      <button class="btn btn-primary" id="auth-action-btn" style="width:100%; margin-bottom:1rem;" onclick="if(window.auth) window.auth.handleAuth()">Login</button>
-      <p style="font-size:0.9rem; color:var(--text-secondary);">
-        <span id="auth-toggle-text">New student?</span> 
-        <a href="#" style="color:var(--neon-cyan);" onclick="if(window.auth) window.auth.toggleAuthMode()">Sign up here</a>
-      </p>
-    </div>
-  </div>
-
-  <div id="edit-profile-modal" class="modal-overlay">
-    <div class="modal-content glass-strong" style="max-width:600px;">
-      <button class="modal-close" onclick="document.getElementById('edit-profile-modal').classList.remove('active')">✕</button>
-      <h3 style="margin-bottom:1.5rem; font-size:1.5rem;">Edit Profile</h3>
-      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1.2rem;">
-        <input type="text" id="prof-name" class="input-glass" placeholder="Full Name (e.g. Rahul Verma)">
-        <input type="text" id="prof-role" class="input-glass" placeholder="Headline (e.g. AI Dev)">
-        <input type="text" id="prof-skills" class="input-glass" placeholder="Skills (comma separated, e.g. Python, React)" style="grid-column: span 2;">
-        <input type="url" id="prof-linkedin" class="input-glass" placeholder="LinkedIn URL (https://...)">
-        <input type="url" id="prof-projects" class="input-glass" placeholder="GitHub/Portfolio URL">
-        
-        <!-- File Uploads -->
-        <div style="grid-column: span 2; padding:1rem; border:1px solid rgba(255,255,255,0.1); border-radius:8px;">
-           <label style="display:block; margin-bottom:0.5rem; font-size:0.9rem; color:var(--text-secondary);">Upload Resume (PDF)</label>
-           <input type="file" id="prof-resume-file" accept="application/pdf" class="input-glass" style="width:100%;">
-           <div id="prof-resume-prog" style="height:4px; background:var(--neon-cyan); width:0%; transition:width 0.3s; margin-top:0.5rem;"></div>
+  <!-- 13. GALLERY -->
+  <section id="gallery-v2" class="tab-section">
+    <div class="s2-section s2-container">
+      <div class="s2-header cin-reveal">
+        <span class="s2-eyebrow">Campus Life</span>
+        <h2 class="s2-title">Visual Tour</h2>
+      </div>
+      <div class="gallery-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-top: 3rem;">
+        <div class="card glass-strong cin-reveal" style="height: 300px; overflow: hidden; position: relative; cursor: pointer;">
+          <img src="assets/images/campus.png" alt="Campus" style="width: 100%; height: 100%; object-fit: cover;">
+          <div style="position: absolute; inset: 0; background: rgba(0,0,0,0.5); opacity: 0; display: flex; align-items: center; justify-content: center; transition: 0.3s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0">Main Building</div>
         </div>
-
-        <div style="grid-column: span 2; padding:1rem; border:1px solid rgba(255,255,255,0.1); border-radius:8px;">
-           <label style="display:block; margin-bottom:0.5rem; font-size:0.9rem; color:var(--text-secondary);">Upload Profile Photo (Image)</label>
-           <input type="file" id="prof-photo-file" accept="image/*" class="input-glass" style="width:100%;" onchange="if(window.auth) window.auth.previewFile(this, 'prof-photo-preview')">
-           <img id="prof-photo-preview" src="" style="display:none; width:100px; height:100px; object-fit:cover; border-radius:50%; margin-top:1rem; border:2px solid var(--neon-cyan);">
-           <div id="prof-photo-prog" style="height:4px; background:var(--neon-purple); width:0%; transition:width 0.3s; margin-top:0.5rem;"></div>
+        <div class="card glass-strong cin-reveal cin-reveal-delay-1" style="height: 300px; overflow: hidden; position: relative; cursor: pointer;">
+          <img src="assets/images/aiml_lab.png" alt="Lab" style="width: 100%; height: 100%; object-fit: cover;">
+          <div style="position: absolute; inset: 0; background: rgba(0,0,0,0.5); opacity: 0; display: flex; align-items: center; justify-content: center; transition: 0.3s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0">AI Lab</div>
         </div>
       </div>
-      <button class="btn btn-secondary" id="save-prof-btn" style="width:100%; margin-top:2rem;" onclick="if(window.auth) window.auth.saveProfile()">Save Profile</button>
     </div>
-  </div>
+  </section>
 
-  <!-- Upload Note Modal -->
-  <div id="upload-note-modal" class="modal-overlay">
-    <div class="modal-content glass-strong" style="max-width:500px;">
-      <button class="modal-close" onclick="document.getElementById('upload-note-modal').classList.remove('active')">✕</button>
-      <h3 style="margin-bottom:1.5rem; font-size:1.5rem;">Upload Note (PDF)</h3>
-      <input type="text" id="note-title" class="input-glass" placeholder="Note Title (e.g. ML Sem 5 Notes)" style="margin-bottom:1rem; width:100%;">
-      <input type="text" id="note-subject" class="input-glass" placeholder="Subject tag (e.g. Machine Learning)" style="margin-bottom:1.5rem; width:100%;">
-      <input type="file" id="note-file" accept="application/pdf" class="input-glass" style="margin-bottom:0.5rem; width:100%;" onchange="if(window.auth) window.auth.previewFile(this, 'note-preview-text')">
-      <div id="note-preview-text" style="font-size:0.85rem; color:var(--neon-cyan); margin-bottom:0.5rem; display:none;"></div>
-      <div id="note-prog" style="height:4px; background:var(--neon-cyan); width:0%; transition:width 0.3s; margin-bottom:1.5rem;"></div>
-      <button class="btn btn-primary" id="save-note-btn" style="width:100%;" onclick="if(window.auth) window.auth.uploadNote()">Upload to Storage</button>
-    </div>
-  </div>
-
-  <!-- Upload Project Modal -->
-  <div id="upload-proj-modal" class="modal-overlay">
-    <div class="modal-content glass-strong" style="max-width:600px;">
-      <button class="modal-close" onclick="document.getElementById('upload-proj-modal').classList.remove('active')">✕</button>
-      <h3 style="margin-bottom:1.5rem; font-size:1.5rem;">Upload Project</h3>
-      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem;">
-        <input type="text" id="proj-title" class="input-glass" placeholder="Project Name" style="grid-column: span 2;">
-        <input type="text" id="proj-desc" class="input-glass" placeholder="Short Description" style="grid-column: span 2;">
-        <input type="text" id="proj-team" class="input-glass" placeholder="Team Members">
-        <input type="text" id="proj-stack" class="input-glass" placeholder="Tech Stack (comma separated)">
-        <input type="url" id="proj-github" class="input-glass" placeholder="GitHub URL">
-        <input type="url" id="proj-demo" class="input-glass" placeholder="Live Demo URL (optional)">
-        <div style="grid-column: span 2; padding:1rem; border:1px solid rgba(255,255,255,0.1); border-radius:8px;">
-           <label style="display:block; margin-bottom:0.5rem; font-size:0.9rem; color:var(--text-secondary);">Upload Project Image</label>
-           <input type="file" id="proj-img-file" accept="image/*" class="input-glass" style="width:100%;" onchange="if(window.auth) window.auth.previewFile(this, 'proj-img-preview')">
-           <img id="proj-img-preview" src="" style="display:none; width:100%; max-height:200px; object-fit:contain; border-radius:8px; margin-top:1rem;">
-           <div id="proj-img-prog" style="height:4px; background:var(--neon-cyan); width:0%; transition:width 0.3s; margin-top:0.5rem;"></div>
+  <!-- 14. FAQ -->
+  <section id="faq-v2" class="tab-section">
+    <div class="s2-section s2-container">
+      <div class="s2-header cin-reveal">
+        <span class="s2-eyebrow">Support</span>
+        <h2 class="s2-title">Help Center</h2>
+      </div>
+      <div style="max-width: 800px; margin: 3rem auto 0;">
+        <div class="card glass-strong mb-4 cin-reveal" style="padding: 1.5rem;">
+          <h4 style="color:var(--neon-cyan); margin-bottom: 0.5rem;">What is the branch code?</h4>
+          <p class="text-secondary text-sm">The official code is AL under VTU Belagavi.</p>
+        </div>
+        <div class="card glass-strong mb-4 cin-reveal cin-reveal-delay-1" style="padding: 1.5rem;">
+          <h4 style="color:var(--neon-cyan); margin-bottom: 0.5rem;">Does the department help with projects?</h4>
+          <p class="text-secondary text-sm">Yes, we provide 24/7 lab access and faculty mentorship for research projects.</p>
         </div>
       </div>
-      <button class="btn btn-secondary" id="save-proj-btn" style="width:100%; margin-top:1.5rem;" onclick="if(window.auth) window.auth.uploadProject()">Submit Project</button>
     </div>
-  </div>
+  </section>
 
-</div>
+  <!-- 15. CONTACT -->
+  <section id="contact-v2" class="tab-section">
+    <div class="s2-section s2-container">
+      <div class="s2-header cin-reveal">
+        <span class="s2-eyebrow">Connect</span>
+        <h2 class="s2-title">Get In Touch</h2>
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; margin-top: 4rem;">
+        <div class="cin-reveal">
+          <div style="margin-bottom: 2rem;"><h4>📍 Location</h4><p class="text-secondary">Guru Nanak Dev Engineering College, Mailoor Road, Bidar, KA 585403</p></div>
+          <div style="margin-bottom: 2rem;"><h4>📧 Email</h4><p class="text-secondary">aiml.hod@gndecb.ac.in</p></div>
+          <div style="margin-bottom: 2rem;"><h4>📞 Call</h4><p class="text-secondary">+91 84822 26949</p></div>
+          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m13!1d3794.887258385285!2d77.51473131494747!3d17.91572598776606!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bb963628e811f5d%3A0x67a33fc286dbdf93!2sGuru%20Nanak%20Dev%20Engineering%20College%2C%20Bidar!5e0!3m2!1sen!2sin!4v1712247000000!5m2!1sen!2sin" width="100%" height="250" style="border:0; border-radius:24px;" allowfullscreen="" loading="lazy"></iframe>
+        </div>
+        <div class="cin-reveal cin-reveal-delay-1">
+          <form class="card glass-strong" style="padding: 3rem;">
+            <input type="text" class="input-glass w-full mb-4" placeholder="Name">
+            <input type="email" class="input-glass w-full mb-4" placeholder="Email">
+            <textarea class="input-glass w-full mb-6" rows="4" placeholder="Message"></textarea>
+            <button class="btn btn-primary w-full" type="button">Submit Feedback 🚀</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
 
 <footer>
-  <div class="footer-inner">
-    <div class="footer-bottom">
-      <span>© 2026 GNDECB AIML Department.</span>
-    </div>
+  <div class="footer-inner s2-container" style="padding: 4rem 0; text-align: center; border-top: 1px solid rgba(255,255,255,0.05);">
+    <p class="text-secondary">© 2026 GNDECB AIML Department. Bidar, India.</p>
   </div>
 </footer>
 
-<!-- ═══════════════════════ CHATBOT WIDGET ═══════════════════════ -->
-<!-- VOICE FAB -->
-<button class="chatbot-fab" id="voice-fab" title="Voice Assistant" style="bottom: 90px; background: var(--neon-purple); display:flex; align-items:center; justify-content:center;">🎤<div class="chatbot-pulse" style="border-color:var(--neon-purple)"></div></button>
-
-<button class="chatbot-fab" id="chatbot-fab" title="Chat with AIRA">🤖<div class="chatbot-pulse"></div></button>
-<div class="chatbot-panel glass-strong outline-none" id="chatbot-panel" style="display:none; transition: all 0.3s; opacity:0; transform: translateY(20px);">
-  <div class="chatbot-header">
-    <div class="chatbot-avatar">🤖</div>
-    <div><div class="chatbot-name">AIRA</div><div class="chatbot-status">● Online</div></div>
-    <button class="chatbot-close-btn" id="chatbot-close" onclick="document.getElementById('chatbot-panel').style.opacity='0'; document.getElementById('chatbot-panel').style.transform='translateY(20px)'; setTimeout(()=>document.getElementById('chatbot-panel').style.display='none',300);">✕</button>
-  </div>
-  <div class="chatbot-messages" id="chatbot-messages"></div>
-  <div class="chatbot-input-area">
-    <textarea class="chatbot-input" id="chatbot-input" placeholder="Ask something..." rows="1"></textarea>
-    <button class="chatbot-send-btn" id="chatbot-send">▶</button>
-  </div>
+<!-- ═══════════════════════ CHATBOT ═══════════════════════ -->
+<button class="chatbot-fab" id="chatbot-fab">🤖</button>
+<div class="chatbot-panel glass-strong" id="chatbot-panel" style="display:none; position: fixed; bottom: 80px; right: 20px; width: 350px; z-index:9999; flex-direction: column;">
+  <div class="chatbot-header">AIRA Assistant <button onclick="document.getElementById('chatbot-panel').style.display='none'">✕</button></div>
+  <div class="chatbot-messages" id="chatbot-messages" style="height: 300px; padding: 1rem; overflow-y:auto;"></div>
+  <div class="chatbot-input-area"><input type="text" id="chatbot-input" placeholder="Ask AI..." class="input-glass" style="width:80%"><button id="chatbot-send">▶</button></div>
 </div>
-
-<!-- ═══════════════════════ SCRIPTS ═══════════════════════ -->
-<!-- GSAP & ScrollTrigger -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 
 <script src="js/particles.js"></script>
 <script src="js/animations.js"></script>
-<script src="js/cgpa.js"></script>
-<script src="js/gallery.js"></script>
-<script src="js/chatbot.js"></script>
-<script src="js/ai-tools.js"></script>
 <script src="js/app.js"></script>
 <script src="js/cinematic.js"></script>
-<script src="js/voice-assistant.js"></script>
-<!-- Firebase & Custom Auth Module -->
-<script type="module" src="js/auth.js"></script>
 <script>
-document.addEventListener('DOMContentLoaded',function(){
-  
-  // Custom chatbot fab logic
-  document.getElementById('chatbot-fab').addEventListener('click', function() {
-    const cp = document.getElementById('chatbot-panel');
-    cp.style.display = 'flex';
-    setTimeout(() => {
-        cp.style.opacity = '1';
-        cp.style.transform = 'translateY(0)';
-    }, 10);
-  });
-
-  // TAB LOGIC (Show/Hide Sections)
+document.addEventListener('DOMContentLoaded', function() {
   const tabs = document.querySelectorAll('.section-tab');
   const sections = document.querySelectorAll('.tab-section');
-  const tabBar = document.getElementById('section-tab-bar');
-
   tabs.forEach(tab => {
     tab.addEventListener('click', () => {
-      // Remove active class from all
       tabs.forEach(t => t.classList.remove('active'));
       sections.forEach(s => s.classList.remove('active'));
-      
-      // Add active to clicked
       tab.classList.add('active');
-      const targetId = tab.getAttribute('data-target');
-      document.getElementById(targetId).classList.add('active');
-
-      // Scroll so the tab bar is exactly at the top (if user scrolled down inside a tall section)
-      const tabRect = tabBar.getBoundingClientRect();
-      if(tabRect.top < 0 || window.scrollY > document.getElementById('gndecb-hero').offsetHeight) {
-         window.scrollTo({
-           top: document.getElementById('gndecb-hero').offsetHeight,
-           behavior: 'smooth'
-         });
-      }
-
-      // Re-trigger IntersectionObserver animations for the newly visible section
-      initCinReveal();
-      initGndecbStats();
+      document.getElementById(tab.getAttribute('data-target')).classList.add('active');
+      window.scrollTo({ top: document.getElementById('gndecb-hero').offsetHeight, behavior: 'smooth' });
+      if(window.initCinReveal) initCinReveal();
     });
   });
-
+  document.getElementById('chatbot-fab').addEventListener('click', () => {
+    const cp = document.getElementById('chatbot-panel');
+    cp.style.display = (cp.style.display==='none') ? 'flex' : 'none';
+  });
 });
 </script>
 </body>

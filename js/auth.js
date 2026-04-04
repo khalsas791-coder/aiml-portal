@@ -62,7 +62,7 @@ export async function handleAuth() {
     else alert(err.message);
   }
 }
-function onLoginSuccess() {
+async function onLoginSuccess() {
   document.getElementById('auth-modal').classList.remove('active');
   if(window.showToast) showToast("Logged in successfully!", "success");
   
@@ -71,15 +71,37 @@ function onLoginSuccess() {
   document.getElementById('logout-btn').style.display = 'inline-block';
   document.getElementById('upload-note-btn').style.display = 'inline-block';
   document.getElementById('upload-proj-init-btn').style.display = 'inline-block';
+
+  // Fetch user profile for personalization
+  if(currentUser && db) {
+    try {
+      const docSnap = await getDoc(doc(db, 'students', currentUser.uid));
+      const data = docSnap.exists() ? docSnap.data() : {};
+      const name = data.name || currentUser.displayName || currentUser.email.split('@')[0];
+      const photoUrl = data.photo || null;
+      // Fire personalization event
+      window.dispatchEvent(new CustomEvent('aiml-user-login', {
+        detail: { name, email: currentUser.email, photoUrl, uid: currentUser.uid }
+      }));
+    } catch(e) {
+      const name = currentUser.displayName || currentUser.email.split('@')[0];
+      window.dispatchEvent(new CustomEvent('aiml-user-login', {
+        detail: { name, email: currentUser.email, photoUrl: null, uid: currentUser.uid }
+      }));
+    }
+  }
 }
 export async function logout() {
   if(auth) await signOut(auth);
+  currentUser = null;
   document.getElementById('auth-btn').style.display = 'inline-block';
   document.getElementById('edit-profile-btn').style.display = 'none';
   document.getElementById('logout-btn').style.display = 'none';
   document.getElementById('upload-note-btn').style.display = 'none';
   document.getElementById('upload-proj-init-btn').style.display = 'none';
   if(window.showToast) showToast("Logged out.", "info");
+  // Fire logout event for personalization
+  window.dispatchEvent(new CustomEvent('aiml-user-logout'));
 }
 
 // --- PROFILE LOGIC ---
