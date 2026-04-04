@@ -3,739 +3,140 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Admin Dashboard — GNDECB AIML</title>
+<title>Static Admin Dashboard — GNDECB AIML</title>
+
+<!-- Standard Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet"/>
+
+<!-- Styles -->
 <link rel="stylesheet" href="css/variables.css"/>
+<link rel="stylesheet" href="css/base.css"/>
+<link rel="stylesheet" href="css/components.css"/>
+<link rel="stylesheet" href="css/sections.css"/>
 <link rel="stylesheet" href="css/premium.css"/>
+
 <style>
-  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-  html { font-size: 16px; -webkit-font-smoothing: antialiased; }
-  body.admin-page { color: var(--text-primary); overflow-x: hidden; }
-  ::-webkit-scrollbar { width: 5px; }
-  ::-webkit-scrollbar-track { background: #020817; }
-  ::-webkit-scrollbar-thumb { background: linear-gradient(180deg,#3b82f6,#8b5cf6); border-radius: 99px; }
-  a { color: inherit; text-decoration: none; }
-  input[type=text], input[type=email], input[type=password], input[type=url], input[type=date], textarea, select { font-family: 'Inter', sans-serif; }
-  textarea.admin-modal-input { resize: vertical; min-height: 80px; }
-  select.admin-modal-input { cursor: pointer; }
-
-  /* Tabs */
-  .admin-tab-content { display: none; }
-  .admin-tab-content.active { display: block; }
-
-  /* User Status Tag */
-  .status-badge {
-    display: inline-flex; align-items: center; gap: 4px;
-    padding: 2px 8px; border-radius: 99px;
-    font-size: 0.7rem; font-weight: 600;
+  :root {
+    --admin-bg: #020617;
+    --admin-sidebar: #0f172a;
+    --admin-accent: #fbbf24; /* Gold */
+    --admin-border: rgba(255,255,255,0.08);
   }
-  .status-active { background: rgba(16,185,129,.12); color: #10b981; border: 1px solid rgba(16,185,129,.25); }
-  .status-inactive { background: rgba(100,116,139,.12); color: #64748b; border: 1px solid rgba(100,116,139,.25); }
-
-  /* Mini chart */
-  #visitors-chart { display: flex; align-items: flex-end; gap: 4px; height: 60px; }
-  .chart-bar-mini {
-    flex: 1;
-    background: linear-gradient(180deg, #3b82f6, #06b6d4);
-    border-radius: 3px 3px 0 0;
-    transition: height 0.8s cubic-bezier(0.22,1,0.36,1);
-    opacity: 0.7;
-    min-height: 6px;
-  }
-  .chart-bar-mini:hover { opacity: 1; }
-
-  /* Responsive */
-  @media (max-width: 900px) {
-    .admin-main { margin-left: 0 !important; }
-  }
-
-  /* Notifications */
-  .admin-toast {
-    position: fixed; bottom: 2rem; right: 2rem; z-index: 10000;
-    background: rgba(8, 15, 32, 0.95); border: 1px solid var(--neon-cyan);
-    color: #fff; padding: 1rem 1.5rem; border-radius: 12px; backdrop-filter: blur(20px);
-    box-shadow: 0 10px 40px rgba(0,0,0,0.5); display: flex; align-items: center; gap: 12px;
-    transform: translateY(150%); transition: transform 0.4s cubic-bezier(0.16,1,0.3,1);
-  }
-  .admin-toast.show { transform: translateY(0); }
-  .admin-toast.success { border-color: #10b981; }
-  .admin-toast.error { border-color: #ef4444; }
+  
+  body { background: var(--admin-bg); color: #fff; font-family: 'Outfit', sans-serif; height: 100vh; overflow: hidden; display: flex; }
+  
+  /* Sidebar */
+  .sidebar { width: 260px; background: var(--admin-sidebar); border-right: 1px solid var(--admin-border); display: flex; flex-direction: column; overflow-y: auto; }
+  .sidebar-header { padding: 2rem; border-bottom: 1px solid var(--admin-border); }
+  .sidebar-nav { padding: 1rem 0; }
+  .sidebar-btn { width: 100%; text-align: left; padding: 1rem 2rem; background: none; border: none; color: #94a3b8; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 0.75rem; font-size: 0.9rem; }
+  .sidebar-btn:hover { background: rgba(255,255,255,0.03); color: #fff; }
+  .sidebar-btn.active { background: rgba(251,191,36,0.1); color: var(--admin-accent); border-left: 3px solid var(--admin-accent); }
+  
+  /* Main Content */
+  .main { flex: 1; display: flex; flex-direction: column; height: 100%; position: relative; }
+  .topbar { height: 70px; background: var(--admin-sidebar); border-bottom: 1px solid var(--admin-border); display: flex; align-items: center; justify-content: space-between; padding: 0 3rem; }
+  .content-area { flex: 1; overflow-y: auto; padding: 3rem; }
+  
+  /* Form Elements */
+  .edit-panel { background: rgba(255,255,255,0.02); border: 1px solid var(--admin-border); border-radius: 16px; padding: 2.5rem; display: none; margin-bottom: 2rem; }
+  .edit-panel.active { display: block; animation: fadeIn 0.4s easeOut; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  
+  .form-group { margin-bottom: 2rem; }
+  label { display: block; color: #94a3b8; font-size: 0.85rem; margin-bottom: 0.75rem; font-weight: 500; text-transform: uppercase; letter-spacing: 1px; }
+  input, textarea, select { width: 100%; background: #1e293b; border: 1px solid var(--admin-border); border-radius: 12px; padding: 1rem; color: #fff; font-size: 1rem; transition: 0.3s; }
+  input:focus, textarea:focus { border-color: var(--admin-accent); outline: none; background: #0f172a; }
+  textarea { min-height: 120px; resize: vertical; line-height: 1.6; }
+  
+  /* Section Header */
+  .section-title { font-family: 'Cormorant Garamond', serif; font-size: 2.2rem; color: var(--admin-accent); margin-bottom: 1rem; }
+  .section-desc { color: #94a3b8; margin-bottom: 3rem; }
+  
+  /* Buttons */
+  .btn-publish { background: var(--admin-accent); color: #000; padding: 0.75rem 1.5rem; border: none; border-radius: 99px; font-weight: 700; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 0.6rem; }
+  .btn-publish:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(251,191,36,0.3); }
+  
+  /* Split View */
+  #split-preview { width: 400px; height: 100%; border-left: 1px solid var(--admin-border); background: #000; }
+  iframe { width: 100%; height: 100%; border: none; }
+  
+  /* Login Overlay */
+  #login-overlay { position: fixed; inset: 0; background: var(--admin-bg); z-index: 9999; display: flex; align-items: center; justify-content: center; }
+  .login-card { background: var(--admin-sidebar); padding: 4rem; border-radius: 24px; border: 1px solid var(--admin-border); width: 450px; text-align: center; }
+  
+  /* Notification */
+  #toast { position: fixed; bottom: 2rem; right: 2rem; background: #10b981; color: #fff; padding: 1rem 2rem; border-radius: 12px; transform: translateY(200%); transition: 0.4s; z-index: 10001; font-weight: 600; }
+  #toast.show { transform: translateY(0); }
 </style>
 </head>
-<body class="admin-page">
+<body>
 
-<!-- ═══════════════ ADMIN LOGIN ═══════════════ -->
-<div id="admin-login-page" class="admin-login-page">
-  <div class="admin-login-bg"></div>
-  <div class="admin-login-box">
-    <div class="admin-login-logo">
-      <img src="assets/images/new_gold_logo.png" onerror="this.src='assets/images/logo.png'" alt="Logo">
-      <span>GNDECB</span>
-    </div>
-    <h1 class="admin-login-title">Admin Portal</h1>
-    <p class="admin-login-sub">Secure access for administrators only</p>
-    <input type="email" id="al-email" class="admin-login-input" placeholder="Admin Email" autocomplete="off">
-    <input type="password" id="al-pass" class="admin-login-input" placeholder="Password">
-    <button class="admin-login-btn" onclick="adminLogin()">Sign In to Dashboard</button>
-    <p class="admin-login-err" id="al-err">Invalid credentials. Please try again.</p>
-    <a href="index.html" class="admin-back-link">← Back to main site</a>
+<div id="login-overlay">
+  <div class="login-card">
+    <div style="font-size: 3rem; margin-bottom: 1.5rem;">👑</div>
+    <h1 style="margin-bottom: 0.5rem;">Admin Access</h1>
+    <p style="color: #94a3b8; margin-bottom: 2.5rem;">GNDECB AIML Static Portal Controller</p>
+    <input type="password" id="admin-pass" placeholder="Enter Administration Passphrase" style="text-align: center; margin-bottom: 1.5rem;">
+    <button class="btn-publish" style="width: 100%; justify-content: center;" onclick="checkAccess()">Enter Dashboard</button>
   </div>
 </div>
 
-<!-- ═══════════════ ADMIN DASHBOARD ═══════════════ -->
-<div id="admin-dashboard" style="display:none;">
-  <div class="admin-layout">
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <div style="color: var(--admin-accent); font-weight: 800; font-size: 1.2rem; letter-spacing: 2px;">GNDECB <span style="color:#fff">ADMIN</span></div>
+  </div>
+  <nav class="sidebar-nav" id="sidebar-nav">
+    <button class="sidebar-btn active" data-target="hero">🚀 Hero Section</button>
+    <button class="sidebar-btn" data-target="about">🏛 About College</button>
+    <button class="sidebar-btn" data-target="aiml">🤖 AIML Dept</button>
+    <button class="sidebar-btn" data-target="faculty">🎓 Faculty Grid</button>
+    <button class="sidebar-btn" data-target="courses">📚 Curriculum</button>
+    <button class="sidebar-btn" data-target="achievements">🏆 Achievements</button>
+    <button class="sidebar-btn" data-target="placements">💼 Placements</button>
+    <button class="sidebar-btn" data-target="facilities">🏫 Facilities</button>
+    <button class="sidebar-btn" data-target="projects">📁 Projects</button>
+    <button class="sidebar-btn" data-target="resources">💾 Resources</button>
+    <button class="sidebar-btn" data-target="ai-tools">✨ AI Tools Hub</button>
+    <button class="sidebar-btn" data-target="cgpa">🧮 CGPA Calc</button>
+    <button class="sidebar-btn" data-target="events">📅 Events Hub</button>
+    <button class="sidebar-btn" data-target="gallery">🖼 Photo Gallery</button>
+    <button class="sidebar-btn" data-target="faq">❓ FAQ Center</button>
+    <button class="sidebar-btn" data-target="contact">📞 Contact Us</button>
+    <button class="sidebar-btn" data-target="global" style="border-top: 1px solid var(--admin-border);">🌍 Global Settings</button>
+  </nav>
+  <div style="margin-top:auto; padding: 2rem; border-top: 1px solid var(--admin-border); font-size: 0.75rem; color: #64748b;">
+    Static CMS v3.0 (Pure Vanilla)
+  </div>
+</aside>
 
-    <!-- Sidebar -->
-    <aside class="admin-sidebar" id="admin-sidebar">
-      <div class="admin-sidebar-header">
-        <img src="assets/images/new_gold_logo.png" onerror="this.src='assets/images/logo.png'" class="admin-sidebar-logo" alt="Logo">
-        <div class="admin-sidebar-brand">
-          GNDECB
-          <small>Admin Dashboard</small>
-        </div>
-      </div>
-      <nav class="admin-nav">
-        <div class="admin-nav-section">Main</div>
-        <button class="admin-nav-link active" onclick="showAdminTab('overview', this)">
-          <span class="nav-icon">📊</span> Overview
-        </button>
-        <button class="admin-nav-link" onclick="showAdminTab('analytics', this)">
-          <span class="nav-icon">📈</span> Analytics
-        </button>
-
-        <div class="admin-nav-section">Content</div>
-        <button class="admin-nav-link" onclick="showAdminTab('notes', this)">
-          <span class="nav-icon">📚</span> Notes
-          <span class="admin-nav-badge" id="badge-notes">0</span>
-        </button>
-        <button class="admin-nav-link" onclick="showAdminTab('events', this)">
-          <span class="nav-icon">📅</span> Events
-          <span class="admin-nav-badge" id="badge-events">0</span>
-        </button>
-        <button class="admin-nav-link" onclick="showAdminTab('projects', this)">
-          <span class="nav-icon">📁</span> Projects
-          <span class="admin-nav-badge" id="badge-projects">0</span>
-        </button>
-        <button class="admin-nav-link" onclick="showAdminTab('faculty', this)">
-          <span class="nav-icon">🎓</span> Faculty
-        </button>
-        <button class="admin-nav-link" onclick="showAdminTab('testimonials', this)">
-          <span class="nav-icon">💬</span> Testimonials
-        </button>
-        <button class="admin-nav-link" onclick="showAdminTab('gallery', this)">
-          <span class="nav-icon">🖼️</span> Gallery
-        </button>
-        <button class="admin-nav-link" onclick="showAdminTab('faq', this)">
-          <span class="nav-icon">❓</span> FAQ
-        </button>
-        <button class="admin-nav-link" onclick="showAdminTab('siteconfig', this)">
-          <span class="nav-icon">⚙️</span> Site Config
-        </button>
-
-        <div class="admin-nav-section">Users</div>
-        <button class="admin-nav-link" onclick="showAdminTab('users', this)">
-          <span class="nav-icon">👥</span> Registered Users
-          <span class="admin-nav-badge" id="badge-users">0</span>
-        </button>
-
-        <div class="admin-nav-section">Settings</div>
-        <button class="admin-nav-link" onclick="adminLogout()">
-          <span class="nav-icon">🚪</span> Logout
-        </button>
-      </nav>
-      <div class="admin-sidebar-footer">
-        GNDECB AIML • Admin v2.0
-      </div>
-    </aside>
-
-    <!-- Main Content -->
-    <main class="admin-main">
-      <!-- Topbar -->
-      <header class="admin-topbar">
-        <button class="admin-menu-toggle" onclick="document.getElementById('admin-sidebar').classList.toggle('open')">☰</button>
-        <div class="admin-topbar-title" id="admin-topbar-title">Overview</div>
-        <div class="admin-topbar-user">
-          <span id="admin-topbar-email" style="font-size:0.78rem;color:rgba(148,163,184,0.7)"></span>
-          <div class="admin-topbar-avatar" id="admin-topbar-initials">A</div>
-        </div>
-      </header>
-
-      <div class="admin-content">
-
-        <!-- ── OVERVIEW TAB ── -->
-        <div id="tab-overview" class="admin-tab-content active">
-          <div class="admin-page-title">Dashboard Overview</div>
-          <div class="admin-page-subtitle">Real-time stats and quick actions</div>
-
-          <div class="admin-stats-grid">
-            <div class="admin-stat-card" style="--accent: linear-gradient(90deg,#3b82f6,#06b6d4)">
-              <div class="admin-stat-icon">👥</div>
-              <div class="admin-stat-value" id="stat-users">0</div>
-              <div class="admin-stat-label">Registered Users</div>
-              <div class="admin-stat-change up">↑ Live count</div>
-            </div>
-            <div class="admin-stat-card" style="--accent: linear-gradient(90deg,#8b5cf6,#ec4899)">
-              <div class="admin-stat-icon">📚</div>
-              <div class="admin-stat-value" id="stat-notes">0</div>
-              <div class="admin-stat-label">Notes Uploaded</div>
-            </div>
-            <div class="admin-stat-card" style="--accent: linear-gradient(90deg,#10b981,#06b6d4)">
-              <div class="admin-stat-icon">📁</div>
-              <div class="admin-stat-value" id="stat-projects">0</div>
-              <div class="admin-stat-label">Projects</div>
-            </div>
-            <div class="admin-stat-card" style="--accent: linear-gradient(90deg,#f59e0b,#ef4444)">
-              <div class="admin-stat-icon">📅</div>
-              <div class="admin-stat-value" id="stat-events">0</div>
-              <div class="admin-stat-label">Events Listed</div>
-            </div>
-            <div class="admin-stat-card" style="--accent: linear-gradient(90deg,#06b6d4,#3b82f6)">
-              <div class="admin-stat-icon">👁</div>
-              <div class="admin-stat-value" id="stat-visits">0</div>
-              <div class="admin-stat-label">Total Visits</div>
-              <div class="admin-stat-change up">↑ All time</div>
-            </div>
-            <div class="admin-stat-card" style="--accent: linear-gradient(90deg,#8b5cf6,#3b82f6)">
-              <div class="admin-stat-icon">🔥</div>
-              <div class="admin-stat-value" id="stat-top-section">—</div>
-              <div class="admin-stat-label">Most Viewed Section</div>
-            </div>
-          </div>
-
-          <!-- Quick Actions -->
-          <div class="admin-panel">
-            <div class="admin-panel-header">
-              <div class="admin-panel-title">⚡ Quick Actions</div>
-            </div>
-            <div class="admin-panel-body" style="display:flex; flex-wrap:wrap; gap:0.75rem;">
-              <button class="admin-btn admin-btn-primary" onclick="showAdminTab('notes', document.querySelector('.admin-nav-link:nth-child(5)')); openNoteModal()">+ Add Note</button>
-              <button class="admin-btn admin-btn-primary" onclick="showAdminTab('events', document.querySelector('.admin-nav-link:nth-child(6)')); openEventModal()">+ Add Event</button>
-              <button class="admin-btn admin-btn-primary" onclick="showAdminTab('projects', document.querySelector('.admin-nav-link:nth-child(7)')); openProjectModal()">+ Add Project</button>
-              <button class="admin-btn admin-btn-ghost" onclick="showAdminTab('users', document.querySelector('.admin-nav-link:nth-child(9)'))">View Users →</button>
-              <button class="admin-btn admin-btn-ghost" onclick="showAdminTab('analytics', document.querySelector('.admin-nav-link:nth-child(2)'))">View Analytics →</button>
-            </div>
-          </div>
-
-          <!-- Recent Users -->
-          <div class="admin-panel">
-            <div class="admin-panel-header">
-              <div class="admin-panel-title">👥 Recent Users</div>
-            </div>
-            <div class="admin-panel-body">
-              <table class="admin-table">
-                <thead>
-                  <tr>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Role</th>
-                    <th>Status</th>
-                  </tr>
-                </thead>
-                <tbody id="recent-users-body">
-                  <tr><td colspan="4" style="color:rgba(148,163,184,0.4); text-align:center; padding:2rem;">Loading users...</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-
-        <!-- ── ANALYTICS TAB ── -->
-        <div id="tab-analytics" class="admin-tab-content">
-          <div class="admin-page-title">Analytics</div>
-          <div class="admin-page-subtitle">Track visits, sections, and user activity</div>
-
-          <div class="admin-stats-grid">
-            <div class="admin-stat-card" style="--accent: linear-gradient(90deg,#06b6d4,#3b82f6)">
-              <div class="admin-stat-icon">👁</div>
-              <div class="admin-stat-value" id="a-stat-visits">0</div>
-              <div class="admin-stat-label">Total Page Visits</div>
-            </div>
-            <div class="admin-stat-card" style="--accent: linear-gradient(90deg,#10b981,#06b6d4)">
-              <div class="admin-stat-icon">📅</div>
-              <div class="admin-stat-value" id="a-stat-today">0</div>
-              <div class="admin-stat-label">Today's Visits</div>
-            </div>
-            <div class="admin-stat-card" style="--accent: linear-gradient(90deg,#8b5cf6,#ec4899)">
-              <div class="admin-stat-icon">🔥</div>
-              <div class="admin-stat-value" id="a-stat-top">—</div>
-              <div class="admin-stat-label">Top Section</div>
-            </div>
-          </div>
-
-          <!-- Section Views -->
-          <div class="admin-panel">
-            <div class="admin-panel-header">
-              <div class="admin-panel-title">📊 Section View Counts</div>
-            </div>
-            <div class="admin-panel-body">
-              <div class="analytics-bar-chart" id="section-analytics-chart">
-                <div style="color:rgba(148,163,184,0.4); font-size:0.85rem; text-align:center;">Loading analytics...</div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Visit Trend (last 7 days) -->
-          <div class="admin-panel">
-            <div class="admin-panel-header">
-              <div class="admin-panel-title">📈 Visit Trend (Last 7 Days)</div>
-            </div>
-            <div class="admin-panel-body">
-              <div id="visitors-chart" style="align-items:flex-end; gap:6px;"></div>
-              <div style="display:flex; justify-content:space-between; margin-top:0.5rem; font-size:0.7rem; color:rgba(148,163,184,0.4);" id="visitors-chart-labels"></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- ── NOTES TAB ── -->
-        <div id="tab-notes" class="admin-tab-content">
-          <div class="admin-page-title">Notes Management</div>
-          <div class="admin-page-subtitle">Add, edit, or delete student notes</div>
-          <div style="margin-bottom:1.5rem;">
-            <button class="admin-btn admin-btn-primary" onclick="openNoteModal()">+ Add Note</button>
-          </div>
-          <div class="admin-panel">
-            <div class="admin-panel-body" style="padding:0;">
-              <table class="admin-table">
-                <thead>
-                  <tr>
-                    <th>Title</th>
-                    <th>Subject</th>
-                    <th>Uploaded By</th>
-                    <th>Date</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody id="notes-admin-body">
-                  <tr><td colspan="5" style="text-align:center; padding:2rem; color:rgba(148,163,184,0.4)">Loading...</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-
-        <!-- ── EVENTS TAB ── -->
-        <div id="tab-events" class="admin-tab-content">
-          <div class="admin-page-title">Events Management</div>
-          <div class="admin-page-subtitle">Manage upcoming and past events</div>
-          <div style="margin-bottom:1.5rem;">
-            <button class="admin-btn admin-btn-primary" onclick="openEventModal()">+ Add Event</button>
-          </div>
-          <div class="admin-panel">
-            <div class="admin-panel-body" style="padding:0;">
-              <table class="admin-table">
-                <thead>
-                  <tr>
-                    <th>Title</th>
-                    <th>Date</th>
-                    <th>Type</th>
-                    <th>Description</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody id="events-admin-body">
-                  <tr><td colspan="5" style="text-align:center; padding:2rem; color:rgba(148,163,184,0.4)">Loading...</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-
-        <!-- ── PROJECTS TAB ── -->
-        <div id="tab-projects" class="admin-tab-content">
-          <div class="admin-page-title">Projects Management</div>
-          <div class="admin-page-subtitle">Manage student project submissions</div>
-          <div style="margin-bottom:1.5rem;">
-            <button class="admin-btn admin-btn-primary" onclick="openProjectModal()">+ Add Project</button>
-          </div>
-          <div class="admin-panel">
-            <div class="admin-panel-body" style="padding:0;">
-              <table class="admin-table">
-                <thead>
-                  <tr>
-                    <th>Project Name</th>
-                    <th>Team</th>
-                    <th>Stack</th>
-                    <th>Category</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody id="projects-admin-body">
-                  <tr><td colspan="5" style="text-align:center; padding:2rem; color:rgba(148,163,184,0.4)">Loading...</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-
-        <!-- ── USERS TAB ── -->
-        <div id="tab-users" class="admin-tab-content">
-          <div class="admin-page-title">Registered Users</div>
-          <div class="admin-page-subtitle">View all student accounts</div>
-          <div class="admin-panel">
-            <div class="admin-panel-body" style="padding:0;">
-              <table class="admin-table">
-                <thead>
-                  <tr>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Role</th>
-                    <th>Skills</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody id="users-admin-body">
-                  <tr><td colspan="6" style="text-align:center; padding:2rem; color:rgba(148,163,184,0.4)">Loading users...</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-
-        <!-- ── FACULTY TAB ── -->
-        <div id="tab-faculty" class="admin-tab-content">
-          <div class="admin-page-title">Faculty Management</div>
-          <div class="admin-page-subtitle">Manage department leadership and lecturers</div>
-          <div style="margin-bottom:1.5rem;">
-            <button class="admin-btn admin-btn-primary" onclick="openFacultyModal()">+ Add Faculty Member</button>
-          </div>
-          <div class="admin-panel">
-            <div class="admin-panel-body" style="padding:0;">
-              <table class="admin-table">
-                <thead>
-                  <tr>
-                    <th>Name</th>
-                    <th>Role</th>
-                    <th>Education</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody id="faculty-admin-body">
-                  <tr><td colspan="4" style="text-align:center; padding:2rem; color:rgba(148,163,184,0.4)">Loading...</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-
-        <!-- ── TESTIMONIALS TAB ── -->
-        <div id="tab-testimonials" class="admin-tab-content">
-          <div class="admin-page-title">Testimonials Management</div>
-          <div class="admin-page-subtitle">Student feedback and reviews</div>
-          <div style="margin-bottom:1.5rem;">
-            <button class="admin-btn admin-btn-primary" onclick="openTestimonialModal()">+ Add Testimonial</button>
-          </div>
-          <div class="admin-panel">
-            <div class="admin-panel-body" style="padding:0;">
-              <table class="admin-table">
-                <thead>
-                  <tr>
-                    <th>Name</th>
-                    <th>Role</th>
-                    <th>Feedback</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody id="testimonials-admin-body">
-                  <tr><td colspan="4" style="text-align:center; padding:2rem; color:rgba(148,163,184,0.4)">Loading...</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-
-        <!-- ── GALLERY TAB ── -->
-        <div id="tab-gallery" class="admin-tab-content">
-          <div class="admin-page-title">Gallery Management</div>
-          <div class="admin-page-subtitle">Manage campus photos and event gallery</div>
-          <div style="margin-bottom:1.5rem;">
-            <button class="admin-btn admin-btn-primary" onclick="openGalleryModal()">+ Add Image</button>
-          </div>
-          <div class="admin-panel">
-            <div class="admin-panel-body" style="padding:0;">
-              <table class="admin-table">
-                <thead>
-                  <tr>
-                    <th>Image</th>
-                    <th>Title</th>
-                    <th>Category</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody id="gallery-admin-body">
-                  <tr><td colspan="4" style="text-align:center; padding:2rem; color:rgba(148,163,184,0.4)">Loading...</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-
-        <!-- ── FAQ TAB ── -->
-        <div id="tab-faq" class="admin-tab-content">
-          <div class="admin-page-title">FAQ Management</div>
-          <div class="admin-page-subtitle">Common questions and answers</div>
-          <div style="margin-bottom:1.5rem;">
-            <button class="admin-btn admin-btn-primary" onclick="openFaqModal()">+ Add FAQ</button>
-          </div>
-          <div class="admin-panel">
-            <div class="admin-panel-body" style="padding:0;">
-              <table class="admin-table">
-                <thead>
-                  <tr>
-                    <th>Question</th>
-                    <th>Answer</th>
-                    <th>Category</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody id="faq-admin-body">
-                  <tr><td colspan="4" style="text-align:center; padding:2rem; color:rgba(148,163,184,0.4)">Loading...</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-
-        <!-- ── SITECONFIG TAB ── -->
-        <div id="tab-siteconfig" class="admin-tab-content">
-          <div class="admin-page-title">Site Configuration</div>
-          <div class="admin-page-subtitle">Control global site content like HOD message and Vision</div>
-          <div class="admin-panel">
-            <div class="admin-panel-header"><div class="admin-panel-title">👤 HOD / Leadership Message</div></div>
-            <div class="admin-panel-body">
-              <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
-                <div><label class="admin-modal-label">HOD Name</label><input type="text" id="config-hod-name" class="admin-modal-input"></div>
-                <div><label class="admin-modal-label">HOD Designation</label><input type="text" id="config-hod-role" class="admin-modal-input"></div>
-                <div style="grid-column:span 2;"><label class="admin-modal-label">Message Text</label><textarea id="config-hod-msg" class="admin-modal-input"></textarea></div>
-                <div style="grid-column:span 2;"><label class="admin-modal-label">HOD Image URL</label><input type="url" id="config-hod-img" class="admin-modal-input"></div>
-              </div>
-              <button class="admin-btn admin-btn-primary" style="margin-top:1rem;" onclick="saveSiteConfig('hod')">Update HOD Info</button>
-            </div>
-          </div>
-          <div class="admin-panel">
-            <div class="admin-panel-header"><div class="admin-panel-title">🔭 Vision &amp; Mission</div></div>
-            <div class="admin-panel-body">
-              <label class="admin-modal-label">Vision Text</label><textarea id="config-vision" class="admin-modal-input"></textarea>
-              <label class="admin-modal-label">Mission Points (one per line)</label><textarea id="config-mission" class="admin-modal-input" style="min-height:120px;"></textarea>
-              <button class="admin-btn admin-btn-primary" style="margin-top:1rem;" onclick="saveSiteConfig('vision')">Update Vision/Mission</button>
-            </div>
-          </div>
-        </div>
-
-      </div><!-- /admin-content -->
-    </main>
-  </div><!-- /admin-layout -->
-</div><!-- /admin-dashboard -->
-
-<!-- ══════════ MODALS ══════════ -->
-
-<!-- Note Modal -->
-<div id="note-admin-modal" class="admin-modal-overlay">
-  <div class="admin-modal-box">
-    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:1.5rem;">
-      <div class="admin-modal-title" style="margin-bottom:0;" id="note-modal-title">Add Note</div>
-      <button class="admin-btn admin-btn-ghost admin-btn-sm" onclick="closeModal('note-admin-modal')">✕</button>
-    </div>
-    <input type="hidden" id="note-edit-id">
-    <label class="admin-modal-label">Note Title</label>
-    <input type="text" id="n-title" class="admin-modal-input" placeholder="e.g. Machine Learning — Sem 5">
-    <label class="admin-modal-label">Subject</label>
-    <input type="text" id="n-subject" class="admin-modal-input" placeholder="e.g. Machine Learning">
-    <label class="admin-modal-label">PDF URL (Google Drive or Direct Link)</label>
-    <input type="url" id="n-url" class="admin-modal-input" placeholder="https://...">
-    <div class="admin-modal-footer">
-      <button class="admin-btn admin-btn-ghost" onclick="closeModal('note-admin-modal')">Cancel</button>
-      <button class="admin-btn admin-btn-primary" onclick="saveNote()">Save Note</button>
+<main class="main">
+  <div class="topbar">
+    <div id="active-title">Hero Section Editor</div>
+    <div style="display: flex; gap: 1rem;">
+      <button class="btn-publish" style="background: rgba(255,255,255,0.05); color: #fff;" onclick="previewChanges()">👁 Preview</button>
+      <button class="btn-publish" onclick="exportWebsite()">💾 Download index.html</button>
+      <button class="btn-publish" style="background: var(--neon-cyan); color: #000;" id="github-publish-btn" onclick="publishToGitHub()">🚀 Publish Live</button>
     </div>
   </div>
-</div>
 
-<!-- Event Modal -->
-<div id="event-admin-modal" class="admin-modal-overlay">
-  <div class="admin-modal-box">
-    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:1.5rem;">
-      <div class="admin-modal-title" style="margin-bottom:0;" id="event-modal-title">Add Event</div>
-      <button class="admin-btn admin-btn-ghost admin-btn-sm" onclick="closeModal('event-admin-modal')">✕</button>
-    </div>
-    <input type="hidden" id="event-edit-id">
-    <label class="admin-modal-label">Event Title</label>
-    <input type="text" id="ev-title" class="admin-modal-input" placeholder="AI Hackathon 2026">
-    <label class="admin-modal-label">Date</label>
-    <input type="date" id="ev-date" class="admin-modal-input">
-    <label class="admin-modal-label">Type</label>
-    <select id="ev-type" class="admin-modal-input">
-      <option value="upcoming">Upcoming</option>
-      <option value="past">Past</option>
-    </select>
-    <label class="admin-modal-label">Description</label>
-    <textarea id="ev-desc" class="admin-modal-input" placeholder="Event details..."></textarea>
-    <label class="admin-modal-label">Image URL (optional)</label>
-    <input type="url" id="ev-img" class="admin-modal-input" placeholder="https://...">
-    <div class="admin-modal-footer">
-      <button class="admin-btn admin-btn-ghost" onclick="closeModal('event-admin-modal')">Cancel</button>
-      <button class="admin-btn admin-btn-primary" onclick="saveEvent()">Save Event</button>
+  <div class="content-area" id="editor-forms">
+    <!-- Forms will be dynamically populated here by static-admin.js -->
+    <div id="loading" style="text-align: center; margin-top: 10rem;">
+        <div class="loader"></div>
+        <p style="color:#94a3b8; margin-top: 1rem;">Syncing with index.html...</p>
     </div>
   </div>
+</main>
+
+<div id="split-preview">
+    <iframe id="preview-frame" src="index.html"></iframe>
 </div>
 
-<!-- Project Modal -->
-<div id="project-admin-modal" class="admin-modal-overlay">
-  <div class="admin-modal-box" style="max-width:640px;">
-    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:1.5rem;">
-      <div class="admin-modal-title" style="margin-bottom:0;" id="project-modal-title">Add Project</div>
-      <button class="admin-btn admin-btn-ghost admin-btn-sm" onclick="closeModal('project-admin-modal')">✕</button>
-    </div>
-    <input type="hidden" id="project-edit-id">
-    <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem;">
-      <div>
-        <label class="admin-modal-label">Project Name</label>
-        <input type="text" id="p-title" class="admin-modal-input" placeholder="Smart Agriculture AI">
-      </div>
-      <div>
-        <label class="admin-modal-label">Team Members</label>
-        <input type="text" id="p-team" class="admin-modal-input" placeholder="Rahul, Priya">
-      </div>
-      <div>
-        <label class="admin-modal-label">Tech Stack</label>
-        <input type="text" id="p-stack" class="admin-modal-input" placeholder="Python, TensorFlow, React">
-      </div>
-      <div>
-        <label class="admin-modal-label">Category</label>
-        <select id="p-category" class="admin-modal-input">
-          <option value="web-ai">Web + AI</option>
-          <option value="cv">Computer Vision</option>
-          <option value="nlp">NLP</option>
-          <option value="data">Data Science</option>
-          <option value="robotics">Robotics</option>
-        </select>
-      </div>
-      <div style="grid-column:span 2;">
-        <label class="admin-modal-label">Description</label>
-        <textarea id="p-desc" class="admin-modal-input" placeholder="Short project description..."></textarea>
-      </div>
-      <div>
-        <label class="admin-modal-label">GitHub URL</label>
-        <input type="url" id="p-github" class="admin-modal-input" placeholder="https://github.com/...">
-      </div>
-      <div>
-        <label class="admin-modal-label">Demo URL (optional)</label>
-        <input type="url" id="p-demo" class="admin-modal-input" placeholder="https://...">
-      </div>
-      <div style="grid-column:span 2;">
-        <label class="admin-modal-label">Image URL (optional)</label>
-        <input type="url" id="p-img" class="admin-modal-input" placeholder="https://...">
-      </div>
-    </div>
-    <div class="admin-modal-footer">
-      <button class="admin-btn admin-btn-ghost" onclick="closeModal('project-admin-modal')">Cancel</button>
-      <button class="admin-btn admin-btn-primary" onclick="saveProject()">Save Project</button>
-    </div>
-  </div>
-</div>
+<div id="toast">Changes Saved Locally!</div>
 
-<!-- Faculty Modal -->
-<div id="faculty-admin-modal" class="admin-modal-overlay">
-  <div class="admin-modal-box">
-    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:1.5rem;">
-      <div class="admin-modal-title" style="margin-bottom:0;" id="faculty-modal-title">Add Faculty</div>
-      <button class="admin-btn admin-btn-ghost admin-btn-sm" onclick="closeModal('faculty-admin-modal')">✕</button>
-    </div>
-    <input type="hidden" id="faculty-edit-id">
-    <label class="admin-modal-label">Name</label><input type="text" id="f-name" class="admin-modal-input">
-    <label class="admin-modal-label">Role/Designation</label><input type="text" id="f-role" class="admin-modal-input">
-    <label class="admin-modal-label">Education/Qualifications</label><input type="text" id="f-edu" class="admin-modal-input">
-    <label class="admin-modal-label">Image URL</label><input type="url" id="f-img" class="admin-modal-input">
-    <div class="admin-modal-footer">
-      <button class="admin-btn admin-btn-ghost" onclick="closeModal('faculty-admin-modal')">Cancel</button>
-      <button class="admin-btn admin-btn-primary" onclick="saveFaculty()">Save Member</button>
-    </div>
-  </div>
-</div>
-
-<!-- Testimonial Modal -->
-<div id="testimonial-admin-modal" class="admin-modal-overlay">
-  <div class="admin-modal-box">
-    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:1.5rem;">
-      <div class="admin-modal-title" style="margin-bottom:0;" id="testimonial-modal-title">Add Testimonial</div>
-      <button class="admin-btn admin-btn-ghost admin-btn-sm" onclick="closeModal('testimonial-admin-modal')">✕</button>
-    </div>
-    <input type="hidden" id="testimonial-edit-id">
-    <label class="admin-modal-label">Student Name</label><input type="text" id="t-name" class="admin-modal-input">
-    <label class="admin-modal-label">Role/Company (e.g. Software Eng at Google)</label><input type="text" id="t-role" class="admin-modal-input">
-    <label class="admin-modal-label">Feedback</label><textarea id="t-feedback" class="admin-modal-input"></textarea>
-    <label class="admin-modal-label">Photo URL</label><input type="url" id="t-img" class="admin-modal-input">
-    <div class="admin-modal-footer">
-      <button class="admin-btn admin-btn-ghost" onclick="closeModal('testimonial-admin-modal')">Cancel</button>
-      <button class="admin-btn admin-btn-primary" onclick="saveTestimonial()">Save Testimonial</button>
-    </div>
-  </div>
-</div>
-
-<!-- Gallery Modal -->
-<div id="gallery-admin-modal" class="admin-modal-overlay">
-  <div class="admin-modal-box">
-    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:1.5rem;">
-      <div class="admin-modal-title" style="margin-bottom:0;" id="gallery-modal-title">Add Image</div>
-      <button class="admin-btn admin-btn-ghost admin-btn-sm" onclick="closeModal('gallery-admin-modal')">✕</button>
-    </div>
-    <input type="hidden" id="gallery-edit-id">
-    <label class="admin-modal-label">Image Title</label><input type="text" id="g-title" class="admin-modal-input">
-    <label class="admin-modal-label">Category</label>
-    <select id="g-category" class="admin-modal-input">
-      <option value="campus">Campus</option>
-      <option value="lab">Labs</option>
-      <option value="event">Events</option>
-      <option value="classroom">Classrooms</option>
-    </select>
-    <label class="admin-modal-label">Image URL</label><input type="url" id="g-img" class="admin-modal-input">
-    <div class="admin-modal-footer">
-      <button class="admin-btn admin-btn-ghost" onclick="closeModal('gallery-admin-modal')">Cancel</button>
-      <button class="admin-btn admin-btn-primary" onclick="saveGallery()">Save Image</button>
-    </div>
-  </div>
-</div>
-
-<!-- FAQ Modal -->
-<div id="faq-admin-modal" class="admin-modal-overlay">
-  <div class="admin-modal-box">
-    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:1.5rem;">
-      <div class="admin-modal-title" style="margin-bottom:0;" id="faq-modal-title">Add FAQ</div>
-      <button class="admin-btn admin-btn-ghost admin-btn-sm" onclick="closeModal('faq-admin-modal')">✕</button>
-    </div>
-    <input type="hidden" id="faq-edit-id">
-    <label class="admin-modal-label">Question</label><input type="text" id="faq-q" class="admin-modal-input">
-    <label class="admin-modal-label">Answer</label><textarea id="faq-a" class="admin-modal-input"></textarea>
-    <label class="admin-modal-label">Category</label><input type="text" id="faq-cat" class="admin-modal-input" placeholder="e.g. Admissions">
-    <div class="admin-modal-footer">
-      <button class="admin-btn admin-btn-ghost" onclick="closeModal('faq-admin-modal')">Cancel</button>
-      <button class="admin-btn admin-btn-primary" onclick="saveFaq()">Save FAQ</button>
-    </div>
-  </div>
-</div>
-
-<!-- Confirmation Modal -->
-<div id="confirm-modal" class="admin-modal-overlay">
-  <div class="admin-modal-box" style="max-width:400px; text-align:center;">
-    <div style="font-size:3rem; margin-bottom:1rem;">⚠️</div>
-    <div class="admin-modal-title">Are you sure?</div>
-    <p style="color:var(--text-secondary); margin-bottom:2rem;">This action cannot be undone. Are you sure you want to delete this item?</p>
-    <div style="display:flex; gap:1rem;">
-      <button class="admin-btn admin-btn-ghost" style="flex:1;" onclick="closeModal('confirm-modal')">No, Keep it</button>
-      <button class="admin-btn admin-btn-danger" style="flex:1;" id="confirm-delete-btn">Yes, Delete</button>
-    </div>
-  </div>
-</div>
-
-<!-- Toast Notifications -->
-<div id="admin-toast" class="admin-toast">
-  <span id="toast-icon">✅</span>
-  <span id="toast-msg">Success!</span>
-</div>
-
-<!-- Scripts -->
-<script type="module" src="js/admin.js"></script>
+<script src="js/static-admin.js"></script>
 </body>
 </html>
