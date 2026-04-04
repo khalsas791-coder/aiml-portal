@@ -19,6 +19,19 @@
         .tilt-card { transform-style: preserve-3d; transition: transform 0.1s ease-out; }
         .tilt-card > * { transform: translateZ(20px); }
         
+        /* Scrollytelling CSS */
+        .scrolly-container { position: relative; display: flex; flex-direction: row-reverse; min-height: 300vh; background: #000; }
+        .scrolly-sticky-visual { position: sticky; top: 0; width: 50vw; height: 100vh; overflow: hidden; background: #000; }
+        .scrolly-media { position: absolute; inset: 0; opacity: 0; transition: opacity 1.2s cubic-bezier(0.2, 0.8, 0.2, 1); scale: 1.1; }
+        .scrolly-media.active { opacity: 0.6; scale: 1; }
+        .scrolly-media img { width: 100%; height: 100%; object-fit: cover; }
+        .scrolly-overlay { position: absolute; inset: 0; background: linear-gradient(90deg, #000 5%, transparent 50%); }
+        .scrolly-steps { width: 50vw; padding: 0 5rem; z-index: 10; }
+        .scrolly-step { height: 100vh; display: flex; flex-direction: column; justify-content: center; opacity: 0.2; transition: opacity 0.8s; }
+        .scrolly-step.active { opacity: 1; }
+        .scrolly-step h1 { font-size: 5rem; margin: 1rem 0; }
+        .scrolly-step p { font-size: 1.4rem; color: #94a3b8; max-width: 500px; line-height: 1.8; }
+
         .floating {
             animation: float 4s ease-in-out infinite;
         }
@@ -205,6 +218,36 @@
         </div>
     </section>
 
+    <!-- 🎭 SCROLLYTELLING: THE JOURNEY (STICKY EXPERIENCE) -->
+    <section id="journey" class="scrolly-container">
+        <!-- Sticky Media Layer (Left) -->
+        <div class="scrolly-sticky-visual">
+            <div id="scrolly-media-1" class="scrolly-media active"><img src="assets/images/aiml_lab.png" alt="Labs"></div>
+            <div id="scrolly-media-2" class="scrolly-media"><img src="assets/images/hackathon.png" alt="Projects"></div>
+            <div id="scrolly-media-3" class="scrolly-media"><img src="assets/images/recruiters.png" alt="Placements" style="filter: invert(1) grayscale(1);"></div>
+            <div class="scrolly-overlay"></div>
+        </div>
+
+        <!-- Scrolling Steps (Right) -->
+        <div class="scrolly-steps">
+            <div class="scrolly-step ultra-reveal" data-step="1">
+                <span class="neon-text">Step 01</span>
+                <h1 class="gradient-text">Neural Labs</h1>
+                <p>Immerse yourself in our NVIDIA-powered AI Research Center. We provide the specialized hardware required for massive-scale deep learning experimentation.</p>
+            </div>
+            <div class="scrolly-step ultra-reveal" data-step="2">
+                <span class="neon-text">Step 02</span>
+                <h1 class="gradient-text">Project Hub</h1>
+                <p>From autonomous rovers to medical AI diagnostic tools, our students architect live solutions for world-scale challenges.</p>
+            </div>
+            <div class="scrolly-step ultra-reveal" data-step="3">
+                <span class="neon-text">Step 03</span>
+                <h1 class="gradient-text">Industry Sync</h1>
+                <p>Our curriculum is synchronized with global tech giants, ensuring 96% of our graduates are deployed into high-impact roles immediately upon maturity.</p>
+            </div>
+        </div>
+    </section>
+
     <!-- 🎓 INNOVATION (SUCCESS STATS) -->
     <section id="innovation" class="ultra-section ultra-reveal">
         <div class="ultra-glass" style="padding: 6rem; text-align: center; border: 1px solid var(--neon-cyan);">
@@ -283,7 +326,25 @@
              document.querySelectorAll('.tilt-card').forEach(card => card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg)`);
         });
 
-        // 4. INIT ICONS
+        // 4. SCROLLYTELLING LOGIC
+        const scrollyObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const step = entry.target.getAttribute('data-step');
+                    // Activate Step Content
+                    document.querySelectorAll('.scrolly-step').forEach(s => s.classList.remove('active'));
+                    entry.target.classList.add('active');
+                    // Activate Content Media
+                    document.querySelectorAll('.scrolly-media').forEach(m => m.classList.remove('active'));
+                    const media = document.getElementById(`scrolly-media-${step}`);
+                    if(media) media.classList.add('active');
+                }
+            });
+        }, { threshold: 0.6 });
+
+        document.querySelectorAll('.scrolly-step').forEach(step => scrollyObserver.observe(step));
+
+        // 5. INIT ICONS
         lucide.createIcons();
     </script>
 </body>
