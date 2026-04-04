@@ -3,139 +3,210 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Static Admin Dashboard — GNDECB AIML</title>
+<title>Enterprise Admin Console — GNDECB AIML</title>
 
 <!-- Standard Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Inter:wght@300;400;600&display=swap" rel="stylesheet"/>
 
-<!-- Styles -->
-<link rel="stylesheet" href="css/variables.css"/>
-<link rel="stylesheet" href="css/base.css"/>
-<link rel="stylesheet" href="css/components.css"/>
-<link rel="stylesheet" href="css/sections.css"/>
-<link rel="stylesheet" href="css/premium.css"/>
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- Lucide Icons -->
+<script src="https://unpkg.com/lucide@latest"></script>
 
 <style>
   :root {
-    --admin-bg: #020617;
-    --admin-sidebar: #0f172a;
-    --admin-accent: #fbbf24; /* Gold */
-    --admin-border: rgba(255,255,255,0.08);
+    --adm-bg: #020617;
+    --adm-sidebar: #0f172a;
+    --adm-card: rgba(255, 255, 255, 0.02);
+    --adm-accent: #38bdf8;
+    --adm-border: rgba(255, 255, 255, 0.08);
   }
   
-  body { background: var(--admin-bg); color: #fff; font-family: 'Outfit', sans-serif; height: 100vh; overflow: hidden; display: flex; }
+  body { background: var(--adm-bg); color: #fff; font-family: 'Inter', sans-serif; display: flex; height: 100vh; overflow: hidden; margin: 0; }
   
   /* Sidebar */
-  .sidebar { width: 260px; background: var(--admin-sidebar); border-right: 1px solid var(--admin-border); display: flex; flex-direction: column; overflow-y: auto; }
-  .sidebar-header { padding: 2rem; border-bottom: 1px solid var(--admin-border); }
-  .sidebar-nav { padding: 1rem 0; }
-  .sidebar-btn { width: 100%; text-align: left; padding: 1rem 2rem; background: none; border: none; color: #94a3b8; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 0.75rem; font-size: 0.9rem; }
-  .sidebar-btn:hover { background: rgba(255,255,255,0.03); color: #fff; }
-  .sidebar-btn.active { background: rgba(251,191,36,0.1); color: var(--admin-accent); border-left: 3px solid var(--admin-accent); }
+  .adm-sidebar { width: 280px; background: var(--adm-sidebar); border-right: 1px solid var(--adm-border); display: flex; flex-direction: column; overflow-y: auto; }
+  .adm-brand { padding: 2.5rem; border-bottom: 1px solid var(--adm-border); font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 1.2rem; color: var(--adm-accent); }
+  .adm-nav { padding: 1rem 0; flex: 1; }
+  .adm-btn { width: 100%; padding: 1.2rem 2.5rem; text-align: left; background: none; border: none; color: #94a3b8; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 1rem; font-weight: 500; }
+  .adm-btn:hover { background: rgba(255,255,255,0.03); color: #fff; }
+  .adm-btn.active { background: rgba(56, 189, 248, 0.1); color: var(--adm-accent); border-left: 4px solid var(--adm-accent); }
   
-  /* Main Content */
-  .main { flex: 1; display: flex; flex-direction: column; height: 100%; position: relative; }
-  .topbar { height: 70px; background: var(--admin-sidebar); border-bottom: 1px solid var(--admin-border); display: flex; align-items: center; justify-content: space-between; padding: 0 3rem; }
-  .content-area { flex: 1; overflow-y: auto; padding: 3rem; }
+  /* Content Area */
+  .adm-main { flex: 1; display: flex; flex-direction: column; height: 100%; position: relative; }
+  .adm-topbar { height: 70px; background: var(--adm-sidebar); border-bottom: 1px solid var(--adm-border); display: flex; align-items: center; justify-content: space-between; padding: 0 3rem; }
+  .adm-content { flex: 1; overflow-y: auto; padding: 3rem; }
   
-  /* Form Elements */
-  .edit-panel { background: rgba(255,255,255,0.02); border: 1px solid var(--admin-border); border-radius: 16px; padding: 2.5rem; display: none; margin-bottom: 2rem; }
-  .edit-panel.active { display: block; animation: fadeIn 0.4s easeOut; }
+  /* Dashboard Modules */
+  .adm-module { display: none; animation: fadeIn 0.4s ease-out; }
+  .adm-module.active { display: block; }
   @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
   
+  /* Cards & Stats */
+  .grid-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 3rem; }
+  .stat-card { background: var(--adm-card); border: 1px solid var(--adm-border); border-radius: 16px; padding: 2rem; position: relative; overflow: hidden; }
+  .stat-val { font-size: 2.5rem; font-weight: 800; font-family: 'Outfit', sans-serif; margin-bottom: 0.5rem; }
+  .stat-label { color: #94a3b8; font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+  
+  /* Tables */
+  table { width: 100%; border-collapse: collapse; background: var(--adm-card); border-radius: 16px; overflow: hidden; border: 1px solid var(--adm-border); }
+  th { text-align: left; background: rgba(255,255,255,0.03); padding: 1.5rem; color: #94a3b8; font-size: 0.8rem; }
+  td { padding: 1.5rem; border-bottom: 1px solid var(--adm-border); }
+  .badge { background: rgba(56, 189, 248, 0.1); color: var(--adm-accent); padding: 0.3rem 0.8rem; border-radius: 99px; font-size: 0.75rem; font-weight: 700; }
+  
+  /* Form UI */
   .form-group { margin-bottom: 2rem; }
-  label { display: block; color: #94a3b8; font-size: 0.85rem; margin-bottom: 0.75rem; font-weight: 500; text-transform: uppercase; letter-spacing: 1px; }
-  input, textarea, select { width: 100%; background: #1e293b; border: 1px solid var(--admin-border); border-radius: 12px; padding: 1rem; color: #fff; font-size: 1rem; transition: 0.3s; }
-  input:focus, textarea:focus { border-color: var(--admin-accent); outline: none; background: #0f172a; }
-  textarea { min-height: 120px; resize: vertical; line-height: 1.6; }
+  label { display: block; color: #94a3b8; font-size: 0.8rem; margin-bottom: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+  input, textarea, select { width: 100%; background: #1e293b; border: 1px solid var(--adm-border); border-radius: 12px; padding: 1rem; color: #fff; font-size: 1rem; }
+  input:focus { border-color: var(--adm-accent); outline: none; }
   
-  /* Section Header */
-  .section-title { font-family: 'Cormorant Garamond', serif; font-size: 2.2rem; color: var(--admin-accent); margin-bottom: 1rem; }
-  .section-desc { color: #94a3b8; margin-bottom: 3rem; }
-  
-  /* Buttons */
-  .btn-publish { background: var(--admin-accent); color: #000; padding: 0.75rem 1.5rem; border: none; border-radius: 99px; font-weight: 700; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 0.6rem; }
-  .btn-publish:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(251,191,36,0.3); }
-  
-  /* Split View */
-  #split-preview { width: 400px; height: 100%; border-left: 1px solid var(--admin-border); background: #000; }
-  iframe { width: 100%; height: 100%; border: none; }
-  
-  /* Login Overlay */
-  #login-overlay { position: fixed; inset: 0; background: var(--admin-bg); z-index: 9999; display: flex; align-items: center; justify-content: center; }
-  .login-card { background: var(--admin-sidebar); padding: 4rem; border-radius: 24px; border: 1px solid var(--admin-border); width: 450px; text-align: center; }
-  
-  /* Notification */
+  .btn-publish { background: var(--adm-accent); color: #000; padding: 0.75rem 2rem; border-radius: 99px; border: none; font-weight: 800; cursor: pointer; transition: 0.3s; }
+  .btn-publish:hover { box-shadow: 0 10px 30px rgba(56, 189, 248, 0.4); transform: translateY(-2px); }
+
+  /* Notification Bar */
   #toast { position: fixed; bottom: 2rem; right: 2rem; background: #10b981; color: #fff; padding: 1rem 2rem; border-radius: 12px; transform: translateY(200%); transition: 0.4s; z-index: 10001; font-weight: 600; }
   #toast.show { transform: translateY(0); }
+
+  /* Login */
+  #login-barrier { position: fixed; inset: 0; background: var(--adm-bg); z-index: 9999; display: flex; align-items: center; justify-content: center; }
+  .login-box { background: var(--adm-sidebar); padding: 5rem; border-radius: 32px; border: 1px solid var(--adm-border); width: 450px; text-align: center; }
 </style>
 </head>
 <body>
 
-<div id="login-overlay">
-  <div class="login-card">
-    <div style="font-size: 3rem; margin-bottom: 1.5rem;">👑</div>
-    <h1 style="margin-bottom: 0.5rem;">Admin Access</h1>
-    <p style="color: #94a3b8; margin-bottom: 2.5rem;">GNDECB AIML Static Portal Controller</p>
-    <input type="password" id="admin-pass" placeholder="Enter Administration Passphrase" style="text-align: center; margin-bottom: 1.5rem;">
-    <button class="btn-publish" style="width: 100%; justify-content: center;" onclick="checkAccess()">Enter Dashboard</button>
-  </div>
+<div id="login-barrier">
+    <div class="login-box">
+        <h1 style="font-family: 'Outfit', sans-serif; margin-bottom: 1rem;">Enterprise Console</h1>
+        <p style="color: #94a3b8; margin-bottom: 3rem;">GNDECB AIML Neural Orchestrator</p>
+        <input type="password" id="console-pass" placeholder="Enter Command Key" style="text-align: center; margin-bottom: 2rem;">
+        <button class="btn-publish" style="width: 100%;" onclick="accessConsole()">Authenticate</button>
+    </div>
 </div>
 
-<aside class="sidebar">
-  <div class="sidebar-header">
-    <div style="color: var(--admin-accent); font-weight: 800; font-size: 1.2rem; letter-spacing: 2px;">GNDECB <span style="color:#fff">ADMIN</span></div>
-  </div>
-  <nav class="sidebar-nav" id="sidebar-nav">
-    <button class="sidebar-btn active" data-target="hero">🚀 Hero Section</button>
-    <button class="sidebar-btn" data-target="about">🏛 About College</button>
-    <button class="sidebar-btn" data-target="aiml">🤖 AIML Dept</button>
-    <button class="sidebar-btn" data-target="faculty">🎓 Faculty Grid</button>
-    <button class="sidebar-btn" data-target="courses">📚 Curriculum</button>
-    <button class="sidebar-btn" data-target="achievements">🏆 Achievements</button>
-    <button class="sidebar-btn" data-target="placements">💼 Placements</button>
-    <button class="sidebar-btn" data-target="facilities">🏫 Facilities</button>
-    <button class="sidebar-btn" data-target="projects">📁 Projects</button>
-    <button class="sidebar-btn" data-target="resources">💾 Resources</button>
-    <button class="sidebar-btn" data-target="ai-tools">✨ AI Tools Hub</button>
-    <button class="sidebar-btn" data-target="cgpa">🧮 CGPA Calc</button>
-    <button class="sidebar-btn" data-target="events">📅 Events Hub</button>
-    <button class="sidebar-btn" data-target="gallery">🖼 Photo Gallery</button>
-    <button class="sidebar-btn" data-target="faq">❓ FAQ Center</button>
-    <button class="sidebar-btn" data-target="contact">📞 Contact Us</button>
-    <button class="sidebar-btn" data-target="global" style="border-top: 1px solid var(--admin-border);">🌍 Global Settings</button>
-  </nav>
-  <div style="margin-top:auto; padding: 2rem; border-top: 1px solid var(--admin-border); font-size: 0.75rem; color: #64748b;">
-    Static CMS v3.0 (Pure Vanilla)
-  </div>
+<aside class="adm-sidebar">
+    <div class="adm-brand">AIML <span style="font-weight: 300; opacity: 0.5;">ADMIN</span></div>
+    <nav class="adm-nav">
+        <button class="adm-btn active" data-tab="dashboard"><i data-lucide="layout-dashboard"></i> Dashboard</button>
+        <button class="adm-btn" data-tab="content"><i data-lucide="edit-3"></i> Content Hub</button>
+        <button class="adm-btn" data-tab="media"><i data-lucide="image"></i> Media Manager</button>
+        <button class="adm-btn" data-tab="users"><i data-lucide="users"></i> User Matrix</button>
+        <button class="adm-btn" data-tab="events"><i data-lucide="calendar"></i> Event Manager</button>
+        <button class="adm-btn" data-tab="notifications"><i data-lucide="bell"></i> Global Alerts</button>
+        <button class="adm-btn" data-tab="backup"><i data-lucide="database"></i> Snapshots</button>
+    </nav>
+    <div style="padding: 2rem; border-top: 1px solid var(--adm-border); font-size: 0.7rem; color: #64748b;">
+        Console v4.0.1 (Production)
+    </div>
 </aside>
 
-<main class="main">
-  <div class="topbar">
-    <div id="active-title">Hero Section Editor</div>
-    <div style="display: flex; gap: 1rem;">
-      <button class="btn-publish" style="background: rgba(255,255,255,0.05); color: #fff;" onclick="previewChanges()">👁 Preview</button>
-      <button class="btn-publish" onclick="exportWebsite()">💾 Download index.html</button>
-      <button class="btn-publish" style="background: var(--neon-cyan); color: #000;" id="github-publish-btn" onclick="publishToGitHub()">🚀 Publish Live</button>
+<main class="adm-main">
+    <div class="adm-topbar">
+        <div id="active-module-title" style="font-weight: 800; font-family: 'Outfit', sans-serif;">System Overview</div>
+        <div style="display: flex; gap: 1rem;">
+            <button class="btn-publish" style="background: rgba(255,255,255,0.05); color: #fff;" onclick="window.open('index.html')">View Site</button>
+            <button class="btn-publish" id="deployment-btn" onclick="triggerSnapshot()">Export index.html</button>
+        </div>
     </div>
-  </div>
 
-  <div class="content-area" id="editor-forms">
-    <!-- Forms will be dynamically populated here by static-admin.js -->
-    <div id="loading" style="text-align: center; margin-top: 10rem;">
-        <div class="loader"></div>
-        <p style="color:#94a3b8; margin-top: 1rem;">Syncing with index.html...</p>
+    <div class="adm-content">
+        <!-- 💹 MODULE: DASHBOARD (ANALYTICS) -->
+        <div id="module-dashboard" class="adm-module active">
+            <div class="grid-stats">
+                <div class="stat-card">
+                    <div class="stat-label">Neural Sessions / 24h</div>
+                    <div class="stat-val">12,492</div>
+                    <div style="color: #10b981; font-size: 0.8rem;">↑ 12.5% vs yesterday</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Active Hub Users</div>
+                    <div class="stat-val">842</div>
+                    <div style="color: var(--adm-accent); font-size: 0.8rem;">Live synchronized</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Media Assets</div>
+                    <div class="stat-val">52GB</div>
+                    <div style="color: #64748b; font-size: 0.8rem;">Vercel CDN optimized</div>
+                </div>
+            </div>
+            
+            <div class="stat-card" style="height: 400px; margin-bottom: 3rem;">
+                <canvas id="analyticsChart"></canvas>
+            </div>
+        </div>
+
+        <!-- 📝 MODULE: CONTENT HUB -->
+        <div id="module-content" class="adm-module">
+            <div style="display: flex; gap: 2rem;">
+                <div id="content-sidebar" style="width: 250px; border-right: 1px solid var(--adm-border);">
+                    <!-- Dynamic Section Links -->
+                </div>
+                <div id="content-form-area" style="flex:1;">
+                    <div style="text-align:center; padding: 5rem; opacity:0.3;">Select a section to begin synchronization...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 🖼 MODULE: MEDIA MANAGER -->
+        <div id="module-media" class="adm-module">
+            <div class="grid-stats" id="media-grid" style="grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));">
+                <!-- Assets will render here -->
+            </div>
+            <div class="form-group" style="margin-top: 3rem;">
+                <label>External Asset URL to Index</label>
+                <div style="display: flex; gap: 1rem;">
+                    <input type="text" id="asset-url-input" placeholder="https://cdn.example.com/image.jpg">
+                    <button class="btn-publish" onclick="addAssetLink()">Add Asset</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 👩‍💻 MODULE: USER MATRIX -->
+        <div id="module-users" class="adm-module">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Identity</th>
+                        <th>Status</th>
+                        <th>Role</th>
+                        <th>Last Probe</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="user-rows">
+                    <!-- Dynamic rows -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 📅 MODULE: EVENT MANAGER -->
+        <div id="module-events" class="adm-module">
+            <div class="dash-card" style="padding: 3rem; margin-bottom: 3rem;">
+                <h3 style="margin-bottom: 2rem;">Schedule Neural Symposium</h3>
+                <div class="form-group">
+                    <input type="text" placeholder="Event Intelligence Label (Title)">
+                </div>
+                <div class="form-group">
+                    <input type="datetime-local">
+                </div>
+                <button class="btn-publish">Commit to Timeline</button>
+            </div>
+        </div>
+
+        <!-- 💾 MODULE: SNAPSHOTS -->
+        <div id="module-backup" class="adm-module">
+            <div class="stat-card">
+                <h3>Temporal Repository</h3>
+                <p style="color: #94a3b8; margin: 1.5rem 0;">Save a persistent snapshot of the current portal architecture.</p>
+                <button class="btn-publish" onclick="triggerSnapshot()">Create Backup Snapshot</button>
+            </div>
+        </div>
     </div>
-  </div>
 </main>
 
-<div id="split-preview">
-    <iframe id="preview-frame" src="index.html"></iframe>
-</div>
-
-<div id="toast">Changes Saved Locally!</div>
+<div id="toast">Interface Logged.</div>
 
 <script src="js/static-admin.js"></script>
 </body>

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Student Intel Hub — GNDECB AIML</title>
+
+<!-- Standard Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Inter:wght@300;400;600&display=swap" rel="stylesheet"/>
+
+<!-- Styles -->
+<link rel="stylesheet" href="css/variables.css"/>
+<link rel="stylesheet" href="css/ultra.css"/>
+
+<style>
+  :root {
+    --dash-bg: #020617;
+    --dash-sidebar: rgba(15, 23, 42, 0.4);
+    --dash-accent: #38bdf8;
+    --dash-border: rgba(255,255,255,0.08);
+  }
+  
+  body { background: var(--dash-bg); color: #fff; font-family: 'Inter', sans-serif; display: flex; height: 100vh; overflow: hidden; }
+  
+  /* Sidebar */
+  .dash-sidebar { width: 280px; background: var(--dash-sidebar); backdrop-filter: blur(20px); border-right: 1px solid var(--dash-border); display: flex; flex-direction: column; padding: 2rem 0; }
+  .dash-logo { padding: 0 2rem 3rem; font-family: 'Outfit', sans-serif; font-weight: 800; color: var(--dash-accent); font-size: 1.2rem; display: flex; align-items: center; gap: 0.75rem; }
+  .dash-nav { flex: 1; }
+  .dash-btn { width: 100%; border: none; background: none; color: #94a3b8; padding: 1.2rem 2rem; cursor: pointer; text-align: left; transition: 0.3s; display: flex; align-items: center; gap: 1rem; font-weight: 600; }
+  .dash-btn:hover { background: rgba(255,255,255,0.03); color: #fff; }
+  .dash-btn.active { background: rgba(56, 189, 248, 0.1); color: var(--dash-accent); border-right: 3px solid var(--dash-accent); }
+  
+  /* Main Content */
+  .dash-main { flex: 1; display: flex; flex-direction: column; padding: 3rem 4rem; overflow-y: auto; }
+  .dash-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4rem; }
+  .dash-title { font-family: 'Outfit', sans-serif; font-size: 2.5rem; font-weight: 800; }
+  
+  /* Cards */
+  .dash-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+  .dash-card { background: rgba(255,255,255,0.02); border: 1px solid var(--dash-border); border-radius: 20px; padding: 2rem; transition: 0.4s; }
+  .dash-card:hover { transform: translateY(-5px); border-color: rgba(255,255,255,0.15); box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
+  
+  /* Activity List */
+  .activity-item { display: flex; gap: 1.5rem; padding: 1.5rem 0; border-bottom: 1px solid var(--dash-border); }
+  .activity-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--dash-accent); margin-top: 0.5rem; }
+  
+  /* Profile Badge */
+  .profile-badge { display: flex; align-items: center; gap: 1rem; background: rgba(255,255,255,0.03); padding: 0.5rem 1rem; border-radius: 99px; border: 1px solid var(--dash-border); }
+  .avatar { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(var(--neon-cyan), var(--neon-purple)); }
+  
+  /* Animations */
+  .reveal-dash { animation: revealDash 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); }
+  @keyframes revealDash { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+</style>
+</head>
+<body>
+
+<aside class="dash-sidebar">
+    <div class="dash-logo">
+        <div style="width: 30px; height: 30px; background: #fff; border-radius: 8px;"></div>
+        GNDECB <span style="font-weight: 300; opacity: 0.5;">STUDENT</span>
+    </div>
+    <nav class="dash-nav">
+        <button class="dash-btn active">📊 Activity Hub</button>
+        <button class="dash-btn">📁 Saved Projects</button>
+        <button class="dash-btn">📝 Research Notes</button>
+        <button class="dash-btn">👩‍🎓 Profile Intel</button>
+        <button class="dash-btn">⚙️ AI Settings</button>
+    </nav>
+    <div style="margin-top: auto; padding: 2rem; font-size: 0.75rem; color: #64748b;">
+        Authenticated via Neural Link v2.4
+    </div>
+</aside>
+
+<main class="dash-main reveal-dash">
+    <header class="dash-header">
+        <div>
+            <p style="color: var(--dash-accent); font-weight: 800; letter-spacing: 2px; font-size: 0.8rem; margin-bottom: 0.5rem;">INTEL HUB</p>
+            <h1 class="dash-title">AI Agent Dashboard</h1>
+        </div>
+        <div class="profile-badge">
+            <div class="avatar"></div>
+            <span style="font-weight: 600;">Student_0X492</span>
+        </div>
+    </header>
+
+    <div class="dash-grid">
+        <!-- Projects Summary -->
+        <div class="dash-card">
+            <h3 style="margin-bottom: 1.5rem;">Active Deployments</h3>
+            <div style="font-size: 3rem; font-weight: 800;">12</div>
+            <p style="opacity: 0.5; margin-top: 0.5rem;">Total projects verified</p>
+        </div>
+        
+        <!-- Notes Summary -->
+        <div class="dash-card">
+            <h3 style="margin-bottom: 1.5rem;">Research Tokens</h3>
+            <div style="font-size: 3rem; font-weight: 800; color: var(--neon-purple);">4,281</div>
+            <p style="opacity: 0.5; margin-top: 0.5rem;">Notes synchronized across cloud</p>
+        </div>
+    </div>
+
+    <!-- Recent Activity -->
+    <div style="margin-top: 4rem;">
+        <h2 style="font-size: 1.5rem; margin-bottom: 2rem;">Activity Feed</h2>
+        <div class="dash-card" style="padding: 1rem 2.5rem;">
+            <div class="activity-item">
+                <div class="activity-dot"></div>
+                <div>
+                    <h4 style="margin-bottom: 0.3rem;">Project Compiled</h4>
+                    <p style="font-size: 0.9rem; opacity: 0.5;">Stable Diffusion Fine-tuning pipeline finalized (12 mins ago)</p>
+                </div>
+            </div>
+            <div class="activity-item">
+                <div class="activity-dot" style="background: var(--neon-purple);"></div>
+                <div>
+                    <h4 style="margin-bottom: 0.3rem;">Neural Sync Complete</h4>
+                    <p style="font-size: 0.9rem; opacity: 0.5;">Llama-3 knowledge retrieval node updated (2 hours ago)</p>
+                </div>
+            </div>
+            <div class="activity-item" style="border-bottom: none;">
+                <div class="activity-dot" style="background: #fbbf24;"></div>
+                <div>
+                    <h4 style="margin-bottom: 0.3rem;">Deployment Warning</h4>
+                    <p style="font-size: 0.9rem; opacity: 0.5;">NVIDIA GPU node 4 needs thermal recalibration (Yesterday)</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Saved Projects Grid -->
+    <div style="margin-top: 4rem;">
+        <h2 style="font-size: 1.5rem; margin-bottom: 2rem;">Saved Project Blueprints</h2>
+        <div class="dash-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
+            <div class="dash-card">
+                <div style="height: 120px; background: rgba(56, 189, 248, 0.1); border-radius: 12px; margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: center;">
+                    <span style="font-weight: 800; font-size: 2rem; opacity: 0.2;">01</span>
+                </div>
+                <h4 style="margin-bottom: 0.5rem;">Cybernetic Rover UI</h4>
+                <p style="font-size: 0.85rem; opacity: 0.5;">React + ROS interface for mobile robotics control.</p>
+            </div>
+            <div class="dash-card">
+                <div style="height: 120px; background: rgba(168, 85, 247, 0.1); border-radius: 12px; margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: center;">
+                    <span style="font-weight: 800; font-size: 2rem; opacity: 0.2;">02</span>
+                </div>
+                <h4 style="margin-bottom: 0.5rem;">Aura Med-X Diagnostic</h4>
+                <p style="font-size: 0.85rem; opacity: 0.5;">TensorFlow breast cancer detection model using MRI scans.</p>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script src="js/animations.js"></script>
+</body>
+</html>
