@@ -3,211 +3,76 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Enterprise Admin Console — GNDECB AIML</title>
-
-<!-- Standard Fonts -->
-<link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Inter:wght@300;400;600&display=swap" rel="stylesheet"/>
-
-<!-- Chart.js -->
+<title>Enterprise Neural Orchestrator — GNDECB AIML</title>
+<link rel="stylesheet" href="css/variables.css"/>
+<link rel="stylesheet" href="css/ultra.css"/>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-<!-- Lucide Icons -->
 <script src="https://unpkg.com/lucide@latest"></script>
-
+<script type="module" src="js/admin-core.js" defer></script>
 <style>
   :root {
     --adm-bg: #020617;
     --adm-sidebar: #0f172a;
-    --adm-card: rgba(255, 255, 255, 0.02);
     --adm-accent: #38bdf8;
     --adm-border: rgba(255, 255, 255, 0.08);
   }
-  
   body { background: var(--adm-bg); color: #fff; font-family: 'Inter', sans-serif; display: flex; height: 100vh; overflow: hidden; margin: 0; }
-  
-  /* Sidebar */
   .adm-sidebar { width: 280px; background: var(--adm-sidebar); border-right: 1px solid var(--adm-border); display: flex; flex-direction: column; overflow-y: auto; }
-  .adm-brand { padding: 2.5rem; border-bottom: 1px solid var(--adm-border); font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 1.2rem; color: var(--adm-accent); }
+  .adm-brand { padding: 2.5rem; border-bottom: 1px solid var(--adm-border); font-family: 'Outfit'; font-weight: 800; font-size: 1.2rem; color: var(--adm-accent); }
   .adm-nav { padding: 1rem 0; flex: 1; }
-  .adm-btn { width: 100%; padding: 1.2rem 2.5rem; text-align: left; background: none; border: none; color: #94a3b8; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 1rem; font-weight: 500; }
+  .adm-btn { width: 100%; padding: 1.2rem 2.5rem; text-align: left; background: none; border: none; color: #94a3b8; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 1rem; font-weight: 500; font-family: 'Inter'; }
   .adm-btn:hover { background: rgba(255,255,255,0.03); color: #fff; }
   .adm-btn.active { background: rgba(56, 189, 248, 0.1); color: var(--adm-accent); border-left: 4px solid var(--adm-accent); }
-  
-  /* Content Area */
-  .adm-main { flex: 1; display: flex; flex-direction: column; height: 100%; position: relative; }
-  .adm-topbar { height: 70px; background: var(--adm-sidebar); border-bottom: 1px solid var(--adm-border); display: flex; align-items: center; justify-content: space-between; padding: 0 3rem; }
-  .adm-content { flex: 1; overflow-y: auto; padding: 3rem; }
-  
-  /* Dashboard Modules */
-  .adm-module { display: none; animation: fadeIn 0.4s ease-out; }
-  .adm-module.active { display: block; }
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-  
-  /* Cards & Stats */
-  .grid-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 3rem; }
-  .stat-card { background: var(--adm-card); border: 1px solid var(--adm-border); border-radius: 16px; padding: 2rem; position: relative; overflow: hidden; }
-  .stat-val { font-size: 2.5rem; font-weight: 800; font-family: 'Outfit', sans-serif; margin-bottom: 0.5rem; }
-  .stat-label { color: #94a3b8; font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
-  
-  /* Tables */
-  table { width: 100%; border-collapse: collapse; background: var(--adm-card); border-radius: 16px; overflow: hidden; border: 1px solid var(--adm-border); }
-  th { text-align: left; background: rgba(255,255,255,0.03); padding: 1.5rem; color: #94a3b8; font-size: 0.8rem; }
-  td { padding: 1.5rem; border-bottom: 1px solid var(--adm-border); }
-  .badge { background: rgba(56, 189, 248, 0.1); color: var(--adm-accent); padding: 0.3rem 0.8rem; border-radius: 99px; font-size: 0.75rem; font-weight: 700; }
-  
-  /* Form UI */
-  .form-group { margin-bottom: 2rem; }
-  label { display: block; color: #94a3b8; font-size: 0.8rem; margin-bottom: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
-  input, textarea, select { width: 100%; background: #1e293b; border: 1px solid var(--adm-border); border-radius: 12px; padding: 1rem; color: #fff; font-size: 1rem; }
-  input:focus { border-color: var(--adm-accent); outline: none; }
-  
-  .btn-publish { background: var(--adm-accent); color: #000; padding: 0.75rem 2rem; border-radius: 99px; border: none; font-weight: 800; cursor: pointer; transition: 0.3s; }
-  .btn-publish:hover { box-shadow: 0 10px 30px rgba(56, 189, 248, 0.4); transform: translateY(-2px); }
-
-  /* Notification Bar */
-  #toast { position: fixed; bottom: 2rem; right: 2rem; background: #10b981; color: #fff; padding: 1rem 2rem; border-radius: 12px; transform: translateY(200%); transition: 0.4s; z-index: 10001; font-weight: 600; }
+  .adm-main { flex: 1; display: flex; flex-direction: column; height: 100%; background: #020617; }
+  .adm-topbar { height: 75px; background: var(--adm-sidebar); border-bottom: 1px solid var(--adm-border); display: flex; align-items: center; justify-content: space-between; padding: 0 4rem; }
+  .adm-content { flex: 1; overflow-y: auto; padding: 4rem; }
+  #login-barrier { position: fixed; inset: 0; background: var(--adm-bg); z-index: 100000; display: flex; align-items: center; justify-content: center; }
+  .login-box { background: var(--adm-sidebar); padding: 5rem; border-radius: 40px; border: 1px solid var(--adm-border); width: 450px; text-align: center; }
+  #toast { position: fixed; bottom: 2rem; right: 2rem; background: #10b981; color: #fff; padding: 1rem 2rem; border-radius: 12px; transform: translateY(200%); transition: 0.4s; z-index: 100001; font-weight: 600; }
   #toast.show { transform: translateY(0); }
-
-  /* Login */
-  #login-barrier { position: fixed; inset: 0; background: var(--adm-bg); z-index: 9999; display: flex; align-items: center; justify-content: center; }
-  .login-box { background: var(--adm-sidebar); padding: 5rem; border-radius: 32px; border: 1px solid var(--adm-border); width: 450px; text-align: center; }
 </style>
 </head>
 <body>
 
 <div id="login-barrier">
     <div class="login-box">
-        <h1 style="font-family: 'Outfit', sans-serif; margin-bottom: 1rem;">Enterprise Console</h1>
-        <p style="color: #94a3b8; margin-bottom: 3rem;">GNDECB AIML Neural Orchestrator</p>
-        <input type="password" id="console-pass" placeholder="Enter Command Key" style="text-align: center; margin-bottom: 2rem;">
-        <button class="btn-publish" style="width: 100%;" onclick="accessConsole()">Authenticate</button>
+        <h1 class="gradient-text" style="font-family:'Outfit'; font-size:3.5rem; margin-bottom: 1rem;">Enterprise Hub</h1>
+        <p style="color: #94a3b8; margin-bottom: 3rem;">Neural Orchestrator v4.0.1</p>
+        <input type="password" id="console-pass" placeholder="Neural Access Key" style="width: 100%; background: #1e293b; border: 1px solid var(--adm-border); padding: 1.2rem; border-radius: 12px; color: #fff; text-align: center; margin-bottom: 2rem;">
+        <button class="btn-ultra" style="width: 100%;" onclick="accessConsole()">Authenticate Uplink</button>
     </div>
 </div>
 
 <aside class="adm-sidebar">
     <div class="adm-brand">AIML <span style="font-weight: 300; opacity: 0.5;">ADMIN</span></div>
     <nav class="adm-nav">
-        <button class="adm-btn active" data-tab="dashboard"><i data-lucide="layout-dashboard"></i> Dashboard</button>
-        <button class="adm-btn" data-tab="content"><i data-lucide="edit-3"></i> Content Hub</button>
-        <button class="adm-btn" data-tab="media"><i data-lucide="image"></i> Media Manager</button>
-        <button class="adm-btn" data-tab="users"><i data-lucide="users"></i> User Matrix</button>
-        <button class="adm-btn" data-tab="events"><i data-lucide="calendar"></i> Event Manager</button>
-        <button class="adm-btn" data-tab="notifications"><i data-lucide="bell"></i> Global Alerts</button>
-        <button class="adm-btn" data-tab="backup"><i data-lucide="database"></i> Snapshots</button>
+        <button class="adm-btn active" data-tab="faculty"><i data-lucide="users"></i> Faculty Hub</button>
+        <button class="adm-btn" data-tab="projects"><i data-lucide="layers"></i> Projects</button>
+        <button class="adm-btn" data-tab="testimonials"><i data-lucide="quote"></i> Consensus</button>
+        <button class="adm-btn" data-tab="events"><i data-lucide="calendar"></i> Pulse Events</button>
+        <button class="adm-btn" data-tab="gallery"><i data-lucide="image"></i> Visual Array</button>
     </nav>
-    <div style="padding: 2rem; border-top: 1px solid var(--adm-border); font-size: 0.7rem; color: #64748b;">
-        Console v4.0.1 (Production)
-    </div>
 </aside>
 
 <main class="adm-main">
     <div class="adm-topbar">
-        <div id="active-module-title" style="font-weight: 800; font-family: 'Outfit', sans-serif;">System Overview</div>
-        <div style="display: flex; gap: 1rem;">
-            <button class="btn-publish" style="background: rgba(255,255,255,0.05); color: #fff;" onclick="window.open('index.html')">View Site</button>
-            <button class="btn-publish" id="deployment-btn" onclick="triggerSnapshot()">Export index.html</button>
+        <div style="font-family:'Outfit'; font-weight: 800; letter-spacing: 2px;">NEURAL COMMAND CENTER</div>
+        <div style="display:flex; gap:1.5rem;">
+            <button class="btn-ultra" style="background:transparent; color:#fff; border: 1px solid rgba(255,255,255,0.1);" onclick="window.open('index.html')">View Neural Live</button>
         </div>
     </div>
-
-    <div class="adm-content">
-        <!-- 💹 MODULE: DASHBOARD (ANALYTICS) -->
-        <div id="module-dashboard" class="adm-module active">
-            <div class="grid-stats">
-                <div class="stat-card">
-                    <div class="stat-label">Neural Sessions / 24h</div>
-                    <div class="stat-val">12,492</div>
-                    <div style="color: #10b981; font-size: 0.8rem;">↑ 12.5% vs yesterday</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-label">Active Hub Users</div>
-                    <div class="stat-val">842</div>
-                    <div style="color: var(--adm-accent); font-size: 0.8rem;">Live synchronized</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-label">Media Assets</div>
-                    <div class="stat-val">52GB</div>
-                    <div style="color: #64748b; font-size: 0.8rem;">Vercel CDN optimized</div>
-                </div>
-            </div>
-            
-            <div class="stat-card" style="height: 400px; margin-bottom: 3rem;">
-                <canvas id="analyticsChart"></canvas>
-            </div>
-        </div>
-
-        <!-- 📝 MODULE: CONTENT HUB -->
-        <div id="module-content" class="adm-module">
-            <div style="display: flex; gap: 2rem;">
-                <div id="content-sidebar" style="width: 250px; border-right: 1px solid var(--adm-border);">
-                    <!-- Dynamic Section Links -->
-                </div>
-                <div id="content-form-area" style="flex:1;">
-                    <div style="text-align:center; padding: 5rem; opacity:0.3;">Select a section to begin synchronization...</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 🖼 MODULE: MEDIA MANAGER -->
-        <div id="module-media" class="adm-module">
-            <div class="grid-stats" id="media-grid" style="grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));">
-                <!-- Assets will render here -->
-            </div>
-            <div class="form-group" style="margin-top: 3rem;">
-                <label>External Asset URL to Index</label>
-                <div style="display: flex; gap: 1rem;">
-                    <input type="text" id="asset-url-input" placeholder="https://cdn.example.com/image.jpg">
-                    <button class="btn-publish" onclick="addAssetLink()">Add Asset</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- 👩‍💻 MODULE: USER MATRIX -->
-        <div id="module-users" class="adm-module">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Identity</th>
-                        <th>Status</th>
-                        <th>Role</th>
-                        <th>Last Probe</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody id="user-rows">
-                    <!-- Dynamic rows -->
-                </tbody>
-            </table>
-        </div>
-
-        <!-- 📅 MODULE: EVENT MANAGER -->
-        <div id="module-events" class="adm-module">
-            <div class="dash-card" style="padding: 3rem; margin-bottom: 3rem;">
-                <h3 style="margin-bottom: 2rem;">Schedule Neural Symposium</h3>
-                <div class="form-group">
-                    <input type="text" placeholder="Event Intelligence Label (Title)">
-                </div>
-                <div class="form-group">
-                    <input type="datetime-local">
-                </div>
-                <button class="btn-publish">Commit to Timeline</button>
-            </div>
-        </div>
-
-        <!-- 💾 MODULE: SNAPSHOTS -->
-        <div id="module-backup" class="adm-module">
-            <div class="stat-card">
-                <h3>Temporal Repository</h3>
-                <p style="color: #94a3b8; margin: 1.5rem 0;">Save a persistent snapshot of the current portal architecture.</p>
-                <button class="btn-publish" onclick="triggerSnapshot()">Create Backup Snapshot</button>
-            </div>
-        </div>
+    <div class="adm-content" id="module-list-area">
+        <!-- Main Interface Dynamically Injected by admin-core.js -->
     </div>
 </main>
 
-<div id="toast">Interface Logged.</div>
+<div id="toast">Neural Node Committed.</div>
 
-<script src="js/static-admin.js"></script>
+<script>
+    // Local Access Function (Exposed to admin-core.js)
+    function accessConsole() {
+        // This is handled by admin-core.js global expose
+    }
+</script>
 </body>
 </html>

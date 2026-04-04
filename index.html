@@ -3,234 +3,153 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AIML Innovation Hub | GNDECB</title>
-    
-    <!-- Ultra-Premium Styles -->
+    <title>GNDECB AIML — Neural Innovation Hub</title>
     <link rel="stylesheet" href="css/variables.css">
     <link rel="stylesheet" href="css/ultra.css">
     <link rel="stylesheet" href="css/neural-bg.css">
-    
-    <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
-    
-    <!-- Neural Engines -->
     <script src="js/particles-engine.js" defer></script>
     <script src="js/aira-chatbot.js" defer></script>
-    
-    <style>
-        .card-glow { position: absolute; inset: 0; pointer-events: none; z-index: 0; opacity: 0; transition: opacity 0.5s; }
-        .tilt-card:hover .card-glow { opacity: 1; }
-        .tilt-card { transform-style: preserve-3d; transition: transform 0.1s ease-out; }
-        .tilt-card > * { transform: translateZ(20px); }
-        
-        .floating { animation: float 4s ease-in-out infinite; }
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
-
-        /* 📱 MOBILE FLOATING NAV */
-        @media (max-width: 768px) {
-            .ultra-nav { bottom: 2rem; top: auto; width: 90%; gap: 1rem; padding: 0.8rem; border-radius: 99px; }
-            .ultra-nav a { font-size: 0.7rem; }
-            h2 { font-size: 2.5rem; text-align: center; }
-            .hero-title { font-size: 3.5rem; }
-            .ultra-section { padding: 6rem 1rem; }
-        }
-
-        /* 🦴 SKELETON LOADING (MOCK) */
-        .skeleton { background: linear-gradient(90deg, rgba(255,255,255,0.05) 25%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.05) 75%); background-size: 200% 100%; animation: skeleton-loading 1.5s infinite; border-radius: 12px; }
-        @keyframes skeleton-loading { from { background-position: 200% 0; } to { background-position: -200% 0; } }
-
-        /* 🚀 NEURAL LOADER */
-        #loader { position: fixed; inset: 0; background: #000; z-index: 100000; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: 1s cubic-bezier(0.8, 0, 0.2, 1); }
-        .loader-hub { width: 80px; height: 80px; border: 2px solid var(--neon-cyan); border-radius: 50%; border-top-color: transparent; animation: spin 1s linear infinite; margin-bottom: 2rem; }
-        .loader-text { font-family: 'Outfit'; font-weight: 800; letter-spacing: 4px; color: #fff; font-size: 0.8rem; animation: pulse 2s infinite; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        @keyframes pulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
-        
-        /* 💎 BACK TO TOP */
-        #back-to-top { position: fixed; bottom: 2rem; right: 2rem; width: 50px; height: 50px; background: var(--ultra-accent); color: #000; border-radius: 50%; opacity: 0; transition: 0.4s; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 9998; border: none; font-weight: 800; }
-        #back-to-top.visible { opacity: 1; transform: translateY(-10px); }
-
-        /* 🖱 CUSTOM CURSOR */
-        #custom-cursor { position: fixed; width: 8px; height: 8px; background: #fff; border-radius: 50%; pointer-events: none; z-index: 10000; mix-blend-mode: difference; transition: transform 0.1s; }
-        #cursor-glow { position: fixed; width: 40px; height: 40px; border: 1px solid rgba(255,255,255,0.2); border-radius: 50%; pointer-events: none; z-index: 9999; transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1), width 0.3s, height 0.3s; }
-        
-        /* 💎 RIPPLE EFFECT */
-        .ripple { position: absolute; background: rgba(255,255,255,0.3); transform: translate(-50%, -50%); border-radius: 50%; width: 0; height: 0; pointer-events: none; animation: ripple 0.6s linear; }
-        @keyframes ripple { to { width: 400px; height: 400px; opacity: 0; } }
-
-        .ultra-nav a.active { color: var(--neon-cyan); text-decoration: underline; text-underline-offset: 8px; }
-    </style>
+    <script type="module" src="js/data-engine.js" defer></script>
 </head>
 <body class="ultra-theme">
 
+    <!-- 🚀 LOADER -->
     <div id="loader">
         <div class="loader-hub"></div>
-        <div class="loader-text">INITIALIZING NEURAL INTERFACE</div>
+        <div class="loader-text">SYNCING NEURAL HUB</div>
     </div>
 
-    <div id="custom-cursor"></div>
-    <div id="cursor-glow"></div>
+    <!-- 🌌 BACKGROUND -->
+    <div class="mesh-bg">
+        <div class="mesh-blob blob-1"></div>
+        <div class="mesh-blob blob-2"></div>
+        <div class="mesh-blob blob-3"></div>
+    </div>
 
     <nav class="ultra-nav ultra-glass">
-        <a href="#hero">Home</a>
-        <a href="#about">About</a>
-        <a href="#experience">AI Ops</a>
-        <a href="#journey">Journey</a>
-        <a href="#docs" style="color: var(--neon-cyan); border-left: 1px solid var(--glass-border); padding-left: 2rem;">Intel Hub</a>
+        <a href="#hero" class="active">PULSE</a>
+        <a href="#department">LABS</a>
+        <a href="#faculty">TEAM</a>
+        <a href="#projects">WORK</a>
+        <a href="#placement">JOBS</a>
+        <a href="dashboard.html" style="color: var(--neon-cyan); border-left: 1px solid rgba(255,255,255,0.1); padding-left: 2rem;">HUB</a>
     </nav>
 
-    <!-- 🚀 HERO SECTION -->
-    <section id="hero" class="ultra-hero">
-        <div class="hero-bg-glow"></div>
-        <div class="hero-bg-glow" style="top: 60%; left: 80%; background: radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, transparent 70%);"></div>
-        <div class="ultra-reveal active">
-            <span id="smart-greeting" style="font-weight: 800; letter-spacing: 4px; color: var(--neon-cyan); opacity: 0.8; margin-bottom: 2rem; display: block;">FUTURE OF INTELLIGENCE</span>
-            <h1 class="hero-title gradient-text">AIML Innovation<br>Hub</h1>
-            <p class="hero-subtitle" id="hero-typing-subtitle">Redefining engineering through data-driven architectural excellence and autonomous innovation.</p>
-            <div style="margin-top: 4rem; display: flex; gap: 1.5rem; justify-content: center;">
-                <a href="#experience" class="btn-ultra">Live Neural Demo</a>
-                <a href="dashboard.html" class="btn-ultra" style="background: transparent; color: #fff; border: 1px solid var(--glass-border);">Neural Link Access</a>
-            </div>
-        </div>
-        <div style="position: absolute; bottom: 3rem; animation: bounce 3s infinite; opacity: 0.5;">
-            <div style="width: 2px; height: 60px; background: linear-gradient(to bottom, var(--neon-cyan), transparent);"></div>
-        </div>
-    </section>
-
-    <!-- 🏛 ABOUT SECTION -->
-    <section id="about" class="ultra-section ultra-reveal">
-        <div class="glass-panel glow-border" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 4rem; align-items: center; padding: 4rem;">
-            <div class="glass-panel" style="height: 500px; border-radius: 20px;"><img src="assets/images/campus.png" style="width: 100%; height: 100%; object-fit: cover; opacity: 0.4;"></div>
-            <div>
-                <span class="neon-text" style="font-weight: 800; text-transform: uppercase;">Since 1980</span>
-                <h2 style="text-align: left; font-size: 3.5rem; margin-top: 1rem;">GNDECB Bidar</h2>
-                <p class="text-secondary" style="font-size: 1.1rem; line-height: 2; margin-bottom: 3rem;">Affiliated with VTU Belagavi and accredited by NBA & NAAC with A+ Grade.</p>
-                <div class="ultra-grid" style="grid-template-columns: 1fr 1fr; gap: 2rem;">
-                    <div class="ultra-glass" style="padding: 2rem;"><span style="font-size: 2.5rem; font-weight: 800;">180+</span><p style="color: var(--neon-cyan);">Rankings</p></div>
-                    <div class="ultra-glass" style="padding: 2rem;"><span style="font-size: 2.5rem; font-weight: 800;">A+</span><p style="color: var(--neon-purple);">Accreditation</p></div>
+    <!-- 💎 SECTIONS CORE -->
+    <main style="scroll-behavior: smooth;">
+        <!-- 🚀 SECTION: HERO (Pulse) -->
+        <section id="hero" class="ultra-hero">
+            <div class="ultra-reveal active">
+                <span id="smart-greeting" class="neon-text" style="letter-spacing: 4px; font-weight: 800; display: block; margin-bottom: 2rem;">INTEL HUB</span>
+                <h1 class="hero-title gradient-text">Neural Innovation Hub</h1>
+                <p class="hero-subtitle">GNDECB Bidar: Where Data-Driven Vision meets Engineering Excellence.</p>
+                <div style="margin-top: 4rem; display: flex; gap: 1.5rem; justify-content: center;">
+                    <a href="#experience" class="btn-ultra">Interact with AIRA</a>
+                    <a href="#about" class="btn-ultra" style="background: transparent; color: #fff; border: 1px solid rgba(255,255,255,0.1);">Heritage 1980</a>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- ✨ AI EXPERIENCE CENTER -->
-    <section id="experience" class="ultra-section ultra-reveal">
-        <div style="text-align: center; margin-bottom: 6rem;">
-            <span class="neon-text" style="font-weight: 800; letter-spacing: 4px;">NEURAL INTERFACE</span>
-            <h2 style="margin-top: 1.5rem;">Interactive AI Experience</h2>
-        </div>
-        <div class="ultra-grid" style="grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 3rem;">
-            <div class="tilt-card ultra-glass" style="padding: 3.5rem; min-height: 450px; display: flex; flex-direction: column;">
-                <div class="card-glow"></div>
-                <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem;"><div style="width: 12px; height: 12px; border-radius: 50%; background: #10b981;"></div><span style="font-weight: 800;">AIRA NEURAL CHAT</span></div>
-                <div class="ultra-glass" style="flex: 1; background: rgba(0,0,0,0.3); border-radius: 12px; padding: 1.5rem; display: flex; flex-direction: column; overflow: hidden;">
-                    <div style="margin-bottom: 1rem; padding: 0.8rem; background: rgba(56, 189, 248, 0.1); border-radius: 12px; align-self: flex-start; font-size: 0.85rem;">Hello! Architecture analysis complete.</div>
-                    <div style="margin-top: auto; display: flex; gap: 0.5rem;"><input type="text" placeholder="Prompt..." style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 0.8rem; border-radius: 8px; flex: 1; font-size: 0.8rem;"><button class="btn-ultra" style="padding: 0 1rem; font-size: 0.8rem;">Send</button></div>
-                </div>
-                <h3 style="margin-top: 2rem; color: var(--neon-cyan);">Llama-3 Hub</h3>
-            </div>
-            <div class="tilt-card ultra-glass" style="padding: 3.5rem; min-height: 450px; display: flex; flex-direction: column;">
-                <div class="card-glow"></div>
-                <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem;"><div style="width: 12px; height: 12px; border-radius: 50%; background: #a855f7;"></div><span style="font-weight: 800;">GNDECB PIXEL GEN</span></div>
-                <div class="ultra-glass" style="flex: 1; background: rgba(0,0,0,0.3); border-radius: 12px; overflow: hidden; position: relative;">
-                    <img src="assets/images/campus.png" style="width: 100%; height: 100%; object-fit: cover; opacity: 0.5;">
-                    <div style="position: absolute; bottom: 1rem; left: 1rem; right: 1rem; padding: 0.8rem; background: rgba(0,0,0,0.6); backdrop-filter: blur(10px); border-radius: 8px; font-size: 0.7rem;">"Industrial AI Hub under cosmic lighting..."</div>
-                </div>
-                <h3 style="margin-top: 2rem; color: var(--neon-purple);">Stable Diffusion XL</h3>
-            </div>
-        </div>
-    </section>
-
-    <!-- 🎭 THE JOURNEY (STICKY SCROLLYTELLING) -->
-    <section id="journey" class="scrolly-container">
-        <div class="scrolly-sticky-visual">
-            <div id="scrolly-media-1" class="scrolly-media active"><img src="assets/images/aiml_lab.png"></div>
-            <div id="scrolly-media-2" class="scrolly-media"><img src="assets/images/hackathon.png"></div>
-            <div id="scrolly-media-3" class="scrolly-media"><img src="assets/images/recruiters.png" style="filter: invert(1);"></div>
-            <div class="scrolly-overlay"></div>
-        </div>
-        <div class="scrolly-steps">
-            <div class="scrolly-step ultra-reveal" data-step="1"><span class="neon-text">Step 01</span><h1 class="gradient-text">Neural Labs</h1><p>Our NVIDIA-powered AI Research Center. Specialized hardware for massive deep learning.</p></div>
-            <div class="scrolly-step ultra-reveal" data-step="2"><span class="neon-text">Step 02</span><h1 class="gradient-text">Project Hub</h1><p>Students architect live solutions for world-scale challenges.</p></div>
-            <div class="scrolly-step ultra-reveal" data-step="3"><span class="neon-text">Step 03</span><h1 class="gradient-text">Industry Sync</h1><p>Curriculum synchronized with tech giants for 96% deployment rate.</p></div>
-        </div>
-    </section>
-
-    <!-- 💡 WHY THIS PROJECT & DOCS -->
-    <section id="docs" class="ultra-section ultra-reveal">
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 6rem;">
-            <div>
-                <h2 style="text-align: left;">Architecture Vision</h2>
-                <p class="text-secondary" style="margin-bottom: 3rem;">A centralized high-end SaaS environment providing autonomous tools and live chat interfaces for modern AIML students.</p>
-                <div class="ultra-grid" style="grid-template-columns: 1fr; gap: 1.5rem;">
-                    <div class="ultra-glass" style="padding: 2rem;"><h4 style="color: var(--neon-cyan);">The Goal</h4><p style="font-size: 0.9rem; opacity: 0.6;">Replace static archives with interactive AI deployments.</p></div>
-                    <div class="ultra-glass" style="padding: 2rem;"><h4 style="color: var(--neon-purple);">The Impact</h4><p style="font-size: 0.9rem; opacity: 0.6;">Bridging theory and industry results in a single digital platform.</p></div>
+        <!-- 🏛 SECTION: ABOUT (Heritage) -->
+        <section id="about" class="ultra-section ultra-reveal">
+            <div class="glass-panel glow-border" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 4rem; padding: 5rem;">
+                <div class="glass-panel" style="height: 450px;"><img src="assets/images/campus.png" style="width: 100%; height: 100%; object-fit: cover; opacity: 0.4;"></div>
+                <div>
+                    <h2 style="text-align: left; font-size: 3.5rem;">The Architecture of GNDECB</h2>
+                    <p class="text-secondary" style="font-size: 1.2rem; line-height: 2; margin-top: 2rem;">Established in 1980, GNDECB has evolved into an AI excellence hub, accredited with A+ Grade by NAAC and NBA. We bridge 40 years of engineering pedigree with contemporary neural research.</p>
                 </div>
             </div>
-            <div>
-                <h2 style="text-align: left;">Tech Stack Matrix</h2>
-                <div class="ultra-glass" style="padding: 2.5rem;">
-                    <ul style="list-style: none; display: flex; flex-direction: column; gap: 2rem;">
-                        <li style="display: flex; gap: 1.5rem;"><div style="width: 50px; height: 50px; background: rgba(56, 189, 248, 0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center;"><i data-lucide="layers"></i></div><div><strong style="display: block;">Core Platform</strong><small style="opacity: 0.5;">HTML5 / CSS / Vanilla JS Engine</small></div></li>
-                        <li style="display: flex; gap: 1.5rem;"><div style="width: 50px; height: 50px; background: rgba(168, 85, 247, 0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center;"><i data-lucide="zap"></i></div><div><strong style="display: block;">Neural Layer</strong><small style="opacity: 0.5;">Llama-3 LLM / SDXL</small></div></li>
-                    </ul>
-                    <a href="status.html" class="btn-ultra" style="margin-top: 3rem; display: block; text-align: center; padding: 1rem;">View System Status</a>
+        </section>
+
+        <!-- 🤖 SECTION: DEPT (Architecture) -->
+        <section id="department" class="ultra-section ultra-reveal">
+            <div style="text-align: center; margin-bottom: 8rem;">
+                <span class="neon-text" style="font-weight: 800; letter-spacing: 4px;">AIML ARCHITECTURE</span>
+                <h2 style="margin-top: 2rem;">Next-Gen Neural Labs</h2>
+            </div>
+            <div class="scrolly-container">
+                <div class="scrolly-sticky-visual"><div class="scrolly-media active"><img src="assets/images/aiml_lab.png"></div></div>
+                <div class="scrolly-steps">
+                    <div class="scrolly-step active" data-step="1"><h1>NVIDIA Center</h1><p>High-fidelity GPU rendering for deep learning applications.</p></div>
+                    <div class="scrolly-step" data-step="2"><h1>Robotics Hub</h1><p>Mobile autonomous rover deployment testing.</p></div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- 🏛 FOOTER -->
-    <footer style="background: rgba(0,0,0,0.8); border-top: 1px solid var(--ultra-border); padding: 8rem 2rem 5rem;">
-        <div style="max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 4rem;">
-            <div><h2 class="gradient-text" style="font-family:'Outfit'; font-size: 2.2rem; margin-bottom: 2rem;">GNDECB</h2><p style="opacity: 0.4;">Architecting the digital future since 1980.</p></div>
-            <div><h4 style="margin-bottom: 2rem;">LINKS</h4><div style="display: flex; flex-direction: column; gap: 1rem; font-size: 0.85rem;"><a href="#hero">Home</a><a href="dashboard.html">Intel Hub</a><a href="admin.html">Admin</a></div></div>
-            <div><h4 style="margin-bottom: 2rem;">CONNECT</h4><div style="display: flex; flex-direction: column; gap: 1rem; font-size: 0.85rem; opacity: 0.4;"><p>Bidar, India</p><p>admin@gndecb.ac.in</p></div></div>
+        <!-- 👨‍🏫 SECTION: FACULTY -->
+        <section id="faculty" class="ultra-section ultra-reveal">
+            <h2 style="margin-bottom: 6rem;">The Faculty Neural Network</h2>
+            <div id="faculty-grid" class="ultra-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 3rem;">
+                <!-- Dynamically Fetched (Firebase) -->
+                <div class="skeleton" style="height: 400px;"></div>
+                <div class="skeleton" style="height: 400px;"></div>
+                <div class="skeleton" style="height: 400px;"></div>
+            </div>
+        </section>
+
+        <!-- 💰 SECTION: PLACEMENT -->
+        <section id="placement" class="ultra-section ultra-reveal">
+            <div class="glass-panel" style="padding: 6rem; text-align: center;">
+                <h1 style="font-size: 6rem; font-weight: 800; margin-bottom: 1rem;">45.0 LPA</h1>
+                <p class="neon-text" style="font-weight: 800; font-size: 1.5rem; letter-spacing: 2px;">MAXIMUM DEPLOYMENT PACKAGE</p>
+                <div style="margin-top: 4rem; display: flex; justify-content: center; opacity: 0.3;"><img src="assets/images/recruiters.png" style="max-width: 600px; filter: invert(1);"></div>
+            </div>
+        </section>
+
+        <!-- 📁 SECTION: PROJECTS -->
+        <section id="projects" class="ultra-section ultra-reveal">
+            <h2 style="margin-bottom: 6rem;">Neural Deployments</h2>
+            <div id="project-grid" class="ultra-grid" style="grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 3rem;">
+                <!-- Dynamically Fetched (Firebase) -->
+                <div class="skeleton" style="height: 350px;"></div>
+                <div class="skeleton" style="height: 350px;"></div>
+            </div>
+        </section>
+
+        <!-- 🏛 SECTION: TESTIMONIALS -->
+        <section id="testimonials" class="ultra-section ultra-reveal">
+            <h2 style="margin-bottom: 6rem;">Student Consensus</h2>
+            <div id="testimonial-grid" class="ultra-grid" style="grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 2rem;">
+                <!-- Dynamically Fetched (Firebase) -->
+            </div>
+        </section>
+
+        <!-- 🗺 SECTION: CONTACT -->
+        <section id="contact" class="ultra-section ultra-reveal">
+            <div class="glass-panel glow-border" style="display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; padding: 4rem;">
+                <div>
+                    <h2 style="text-align: left;">Neural Sync Line</h2>
+                    <p style="opacity: 0.5; margin: 2rem 0;">Request a technical deep-dive into our AIML architecture.</p>
+                    <input type="text" placeholder="Identity (Name)" style="width: 100%; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 1.5rem; border-radius: 12px; margin-bottom: 1rem;">
+                    <textarea placeholder="Neural Query (Message)" style="width: 100%; height: 150px; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 1.5rem; border-radius: 12px; margin-bottom: 2rem;"></textarea>
+                    <button class="btn-ultra" style="width: 100%;">Initialize Uplink</button>
+                </div>
+                <div class="glass-panel"><img src="assets/images/campus.png" style="width: 100%; height: 100%; object-fit: cover; opacity: 0.4;"></div>
+            </div>
+        </section>
+    </main>
+
+    <footer style="background: rgba(0,0,0,0.9); padding: 8rem 2rem 5rem; border-top: 1px solid rgba(255,255,255,0.05);">
+        <div style="max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 4rem; text-align: center;">
+            <div><h2 class="gradient-text" style="font-family:'Outfit';">GNDECB</h2><p style="opacity: 0.4; font-size: 0.9rem;">Architecting Autonomy since 1980.</p></div>
+            <div><h4>LINKS</h4><div style="display: flex; flex-direction: column; gap: 1rem; font-size: 0.8rem; margin-top: 2rem;"><a href="#hero">Neural Home</a><a href="dashboard.html">Intel Hub</a><a href="admin.html" style="color: var(--neon-cyan);">COMMAND CENTER</a></div></div>
         </div>
     </footer>
 
     <button id="back-to-top" onclick="window.scrollTo({top:0, behavior:'smooth'})">▲</button>
 
     <script>
-        // SMART LOGIC: Greetings
-        const hours = new Date().getHours();
-        const greeting = hours < 12 ? "Good Morning" : (hours < 18 ? "Good Afternoon" : "Good Evening");
-        document.getElementById('smart-greeting').innerText = `${greeting}, Jaspreet`;
-
-        // SCROLL REVEAL
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
-        }, { threshold: 0.1 });
-        document.querySelectorAll('.ultra-reveal').forEach(el => observer.observe(el));
-
-        // TILT & MOUSE EFFECTS
-        document.addEventListener('mousemove', (e) => {
-            document.getElementById('custom-cursor').style.cssText = `left: ${e.clientX}px; top: ${e.clientY}px;`;
-            document.getElementById('cursor-glow').style.cssText = `left: ${e.clientX - 20}px; top: ${e.clientY - 20}px;`;
-            
-            document.querySelectorAll('.tilt-card').forEach(card => {
-                const rect = card.getBoundingClientRect();
-                const x = (e.clientX - (rect.left + rect.width / 2)) / 20;
-                const y = ((rect.top + rect.height / 2) - e.clientY) / 20;
-                card.style.transform = `perspective(1000px) rotateX(${y}deg) rotateY(${x}deg)`;
-            });
-        });
-
-        // SCROLL SPY & BACK TO TOP
-        window.addEventListener('scroll', () => {
-            const currentPos = window.scrollY;
-            document.getElementById('back-to-top').classList.toggle('visible', currentPos > 800);
-            
-            const activeLink = [...document.querySelectorAll('section')].reverse().find(s => currentPos >= s.offsetTop - 200)?.id;
-            document.querySelectorAll('.ultra-nav a').forEach(a => a.classList.toggle('active', a.getAttribute('href') === `#${activeLink}`));
-        });
-
-        // LOADER
+        // GLOBAL UX SCRIPT
         window.onload = () => setTimeout(() => {
-            document.getElementById('loader').style.opacity = '0';
-            setTimeout(() => document.getElementById('loader').style.display='none', 1000);
+            const l = document.getElementById('loader');
+            l.style.opacity = '0';
+            setTimeout(() => l.style.display='none', 1000);
         }, 1500);
 
+        window.onscroll = () => {
+            document.getElementById('back-to-top').classList.toggle('visible', window.scrollY > 800);
+        };
         lucide.createIcons();
     </script>
 </body>
