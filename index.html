@@ -40,7 +40,18 @@
             50% { transform: translateY(-15px); }
         }
 
-        /* 🖱 CUSTOM CURSOR */
+        /* 🚀 NEURAL LOADER */
+        #loader { position: fixed; inset: 0; background: #000; z-index: 100000; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: 1s cubic-bezier(0.8, 0, 0.2, 1); }
+        .loader-hub { width: 80px; height: 80px; border: 2px solid var(--neon-cyan); border-radius: 50%; border-top-color: transparent; animation: spin 1s linear infinite; margin-bottom: 2rem; }
+        .loader-text { font-family: 'Outfit'; font-weight: 800; letter-spacing: 4px; color: #fff; font-size: 0.8rem; animation: pulse 2s infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes pulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
+        
+        /* 💎 BACK TO TOP */
+        #back-to-top { position: fixed; bottom: 2rem; right: 2rem; width: 50px; height: 50px; background: var(--ultra-accent); color: #000; border-radius: 50%; opacity: 0; transition: 0.4s; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 9998; border: none; font-weight: 800; }
+        #back-to-top.visible { opacity: 1; transform: translateY(-10px); }
+
+        /* 🖱 CUSTOM CURSOR ... */
         #custom-cursor { position: fixed; width: 8px; height: 8px; background: #fff; border-radius: 50%; pointer-events: none; z-index: 10000; mix-blend-mode: difference; transition: transform 0.1s; }
         #cursor-glow { position: fixed; width: 40px; height: 40px; border: 1px solid rgba(255,255,255,0.2); border-radius: 50%; pointer-events: none; z-index: 9999; transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1), width 0.3s, height 0.3s; }
         
@@ -50,6 +61,12 @@
     </style>
 </head>
 <body class="ultra-theme">
+
+    <!-- 🚀 NEURAL LOADER -->
+    <div id="loader">
+        <div class="loader-hub"></div>
+        <div class="loader-text">INITIALIZING NEURAL INTERFACE</div>
+    </div>
 
     <!-- 🖱 CURSOR INDICATORS -->
     <div id="custom-cursor"></div>
@@ -284,15 +301,52 @@
         </div>
     </section>
 
-    <footer class="ultra-section" style="padding-top: 4rem; text-align: center; opacity: 0.5;">
-        <div style="width: 100%; height: 1px; background: var(--ultra-border); margin-bottom: 4rem;"></div>
-        <p>© 2024 GNDECB AIML HUB — ARCHITECTED FOR INTELLIGENCE</p>
-        <div style="margin-top: 1.5rem; display: flex; gap: 1.5rem; justify-content: center;">
-            <a href="admin.html" style="text-decoration: none; color: var(--neon-cyan); font-size: 0.8rem;">ENGINEER PORTAL</a>
-            <a href="#" style="text-decoration: none; color: #fff; font-size: 0.8rem;">TERMS</a>
-            <a href="#" style="text-decoration: none; color: #fff; font-size: 0.8rem;">CONNECT</a>
+    <!-- 🏛 MULTI-COLUMN FOOTER -->
+    <footer style="background: rgba(0,0,0,0.8); border-top: 1px solid var(--ultra-border); padding: 10rem 2rem 5rem;">
+        <div style="max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 4rem;">
+            <div>
+                <h2 class="gradient-text" style="font-family:'Outfit'; font-size: 2.5rem; margin-bottom: 2rem;">GNDECB</h2>
+                <p style="opacity: 0.5; line-height: 1.8;">Architecting the digital future since 1980. Accredited AI Excellence in professional engineering education.</p>
+                <div style="display: flex; gap: 1.5rem; margin-top: 3rem;">
+                    <i data-lucide="instagram" style="opacity: 0.5; cursor:pointer;"></i>
+                    <i data-lucide="linkedin" style="opacity: 0.5; cursor:pointer;"></i>
+                    <i data-lucide="twitter" style="opacity: 0.5; cursor:pointer;"></i>
+                </div>
+            </div>
+            <div>
+                <h4 style="margin-bottom: 2rem; color: #fff;">QUICK LINKS</h4>
+                <div style="display: flex; flex-direction: column; gap: 1.2rem; font-size: 0.9rem;">
+                    <a href="#hero" style="text-decoration: none; color: #94a3b8;">Neural Home</a>
+                    <a href="#about" style="text-decoration: none; color: #94a3b8;">Vision 2030</a>
+                    <a href="#experience" style="text-decoration: none; color: #94a3b8;">AI Ops Center</a>
+                    <a href="dashboard.html" style="text-decoration: none; color: #94a3b8;">Intel Hub</a>
+                </div>
+            </div>
+            <div>
+                <h4 style="margin-bottom: 2rem; color: #fff;">DEPARTMENT</h4>
+                <div style="display: flex; flex-direction: column; gap: 1.2rem; font-size: 0.9rem;">
+                    <a href="#" style="text-decoration: none; color: #94a3b8;">Syllabus Matrix</a>
+                    <a href="#" style="text-decoration: none; color: #94a3b8;">Faculty Array</a>
+                    <a href="#" style="text-decoration: none; color: #94a3b8;">Neural Labs</a>
+                    <a href="#" style="text-decoration: none; color: #94a3b8;">Patent Office</a>
+                </div>
+            </div>
+            <div>
+                <h4 style="margin-bottom: 2rem; color: #fff;">CONNECT</h4>
+                <div style="display: flex; flex-direction: column; gap: 1.2rem; font-size: 0.9rem; color: #94a3b8;">
+                    <p>Bidar, Karnataka, India</p>
+                    <p>admin@gndecb.ac.in</p>
+                    <p>+91 8482 XXXXXX</p>
+                    <a href="admin.html" style="color: var(--neon-cyan); text-decoration: none; margin-top: 1rem; font-weight: 800;">🔐 COMMAND CENTER</a>
+                </div>
+            </div>
+        </div>
+        <div style="max-width: 1400px; margin: 8rem auto 0; text-align: center; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 4rem; font-size: 0.8rem; opacity: 0.3;">
+            <p>© 2024 GNDECB AIML DEPARTMENT HUB — BUILT FOR AUTONOMY</p>
         </div>
     </footer>
+
+    <button id="back-to-top" onclick="window.scrollTo({top:0, behavior:'smooth'})">▲</button>
 
     <script>
         // 1. TYPING EFFECT
@@ -391,11 +445,25 @@
         const smoothScroll = () => {
             current += (target - current) * 0.08;
             window.scrollTo(0, current);
+            
+            // Back to top visibility
+            if(window.scrollY > 800) document.getElementById('back-to-top').classList.add('visible');
+            else document.getElementById('back-to-top').classList.remove('visible');
+
             requestAnimationFrame(smoothScroll);
         };
         smoothScroll();
 
-        // 7. INIT ICONS
+        // 7. LOADER TRANSITION
+        window.addEventListener('load', () => {
+             setTimeout(() => {
+                const loader = document.getElementById('loader');
+                loader.style.opacity = '0';
+                setTimeout(() => loader.style.display = 'none', 1000);
+             }, 1500);
+        });
+
+        // 8. INIT ICONS
         lucide.createIcons();
     </script>
 </body>
