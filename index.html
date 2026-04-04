@@ -3,10 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GNDECB AIML — Neural Innovation Hub</title>
+    <title>GNDEC Bidar | AIML Innovation Hub</title>
+    
     <link rel="stylesheet" href="css/variables.css">
     <link rel="stylesheet" href="css/ultra.css">
     <link rel="stylesheet" href="css/neural-bg.css">
+    
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="js/particles-engine.js" defer></script>
     <script src="js/aira-chatbot.js" defer></script>
@@ -14,142 +16,193 @@
 </head>
 <body class="ultra-theme">
 
-    <!-- 🚀 LOADER -->
     <div id="loader">
         <div class="loader-hub"></div>
-        <div class="loader-text">SYNCING NEURAL HUB</div>
+        <div class="loader-text">GNDECB NEURAL SYNC</div>
     </div>
 
-    <!-- 🌌 BACKGROUND -->
     <div class="mesh-bg">
         <div class="mesh-blob blob-1"></div>
         <div class="mesh-blob blob-2"></div>
         <div class="mesh-blob blob-3"></div>
     </div>
 
+    <!-- ⚪ NAVIGATION -->
     <nav class="ultra-nav ultra-glass">
-        <a href="#hero" class="active">PULSE</a>
+        <a href="#hero">PULSE</a>
+        <a href="#about">HERITAGE</a>
         <a href="#department">LABS</a>
+        <a href="#student-hub">STUDENT</a>
         <a href="#faculty">TEAM</a>
-        <a href="#projects">WORK</a>
         <a href="#placement">JOBS</a>
-        <a href="dashboard.html" style="color: var(--neon-cyan); border-left: 1px solid rgba(255,255,255,0.1); padding-left: 2rem;">HUB</a>
+        <a href="dashboard.html" style="color: var(--neon-cyan); border-left: 1px solid rgba(255,255,255,0.1); padding-left: 1.5rem;">INTEL HUB</a>
     </nav>
 
-    <!-- 💎 SECTIONS CORE -->
-    <main style="scroll-behavior: smooth;">
-        <!-- 🚀 SECTION: HERO (Pulse) -->
-        <section id="hero" class="ultra-hero">
-            <div class="ultra-reveal active">
-                <span id="smart-greeting" class="neon-text" style="letter-spacing: 4px; font-weight: 800; display: block; margin-bottom: 2rem;">INTEL HUB</span>
-                <h1 class="hero-title gradient-text">Neural Innovation Hub</h1>
-                <p class="hero-subtitle">GNDECB Bidar: Where Data-Driven Vision meets Engineering Excellence.</p>
-                <div style="margin-top: 4rem; display: flex; gap: 1.5rem; justify-content: center;">
-                    <a href="#experience" class="btn-ultra">Interact with AIRA</a>
-                    <a href="#about" class="btn-ultra" style="background: transparent; color: #fff; border: 1px solid rgba(255,255,255,0.1);">Heritage 1980</a>
+    <!-- 🚀 HERO PLATFORM -->
+    <section id="hero" class="ultra-hero">
+        <div class="ultra-reveal active">
+            <span id="smart-greeting" class="neon-text" style="letter-spacing: 4px; font-weight: 800; display: block; margin-bottom: 2rem;">GURU NANAK DEV ENGINEERING COLLEGE</span>
+            <h1 class="hero-title gradient-text">Building the Future<br>with AI & ML</h1>
+            <p class="hero-subtitle">Redefining professional engineering at GNDEC Bidar through autonomous innovation and data-driven architectural excellence.</p>
+            <div style="margin-top: 4rem; display: flex; gap: 1.5rem; justify-content: center;">
+                <a href="#department" class="btn-ultra">Explore Innovation</a>
+                <a href="#student-hub" class="btn-ultra" style="background: transparent; color: #fff; border: 1px solid rgba(255,255,255,0.1);">Join AIML Hub</a>
+            </div>
+        </div>
+        <div id="scroll-indicator" style="position: absolute; bottom: 3rem; animation: bounce 3s infinite; opacity: 0.5;">
+            <div style="width: 2px; height: 60px; background: linear-gradient(to bottom, var(--neon-cyan), transparent);"></div>
+        </div>
+    </section>
+
+    <!-- 🏛 HERITAGE & VISION (ABOUT) -->
+    <section id="about" class="ultra-section ultra-reveal">
+        <div class="glass-panel glow-border" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 4rem; padding: 5rem;">
+            <div class="glass-panel" style="height: 500px; border-radius: 20px;"><img src="assets/images/campus.png" style="width: 100%; height: 100%; object-fit: cover; opacity: 0.3;"></div>
+            <div>
+                <span class="neon-text" style="font-weight: 800; text-transform: uppercase;">Established 1980</span>
+                <h2 style="text-align: left; font-size: 3.5rem; margin-top: 1rem;">The Legacy of GNDECB</h2>
+                <p class="text-secondary" style="font-size: 1.1rem; line-height: 1.8; margin-top: 2rem;">GNDEC Bidar is a premier institution affiliated to VTU Belagavi and accredited by NBA/NAAC. Known for quality technical education, we stand as a beacon of innovation in Karnataka since 1980.</p>
+                <div style="margin-top: 3rem; display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                    <div class="ultra-glass" style="padding: 2rem; border-color: rgba(56, 189, 248, 0.2);">
+                        <h4 style="color: var(--neon-cyan);">VISION</h4>
+                        <p style="font-size: 0.8rem; opacity: 0.6; margin-top: 1rem;">To emerge as a world-class technical institution keeping pace with modern technology.</p>
+                    </div>
+                    <div class="ultra-glass" style="padding: 2rem; border-color: rgba(168, 85, 247, 0.2);">
+                        <h4 style="color: var(--neon-purple);">MISSION</h4>
+                        <p style="font-size: 0.8rem; opacity: 0.6; margin-top: 1rem;">Industry readiness, research excellence, and high-impact technical skill development.</p>
+                    </div>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- 🏛 SECTION: ABOUT (Heritage) -->
-        <section id="about" class="ultra-section ultra-reveal">
-            <div class="glass-panel glow-border" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 4rem; padding: 5rem;">
-                <div class="glass-panel" style="height: 450px;"><img src="assets/images/campus.png" style="width: 100%; height: 100%; object-fit: cover; opacity: 0.4;"></div>
-                <div>
-                    <h2 style="text-align: left; font-size: 3.5rem;">The Architecture of GNDECB</h2>
-                    <p class="text-secondary" style="font-size: 1.2rem; line-height: 2; margin-top: 2rem;">Established in 1980, GNDECB has evolved into an AI excellence hub, accredited with A+ Grade by NAAC and NBA. We bridge 40 years of engineering pedigree with contemporary neural research.</p>
+    <!-- 🧠 AIML DEPARTMENT (CORE) -->
+    <section id="department" class="ultra-section ultra-reveal">
+        <div style="text-align: center; margin-bottom: 8rem;">
+            <span class="neon-text" style="font-weight: 800; letter-spacing: 4px;">AIML ARCHITECTURE</span>
+            <h2 style="margin-top: 2rem;">Next-Gen Machine Intelligence</h2>
+        </div>
+        <div class="ultra-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem;">
+            <div class="ultra-glass glow-border" style="padding: 3rem;">
+                <div style="width: 50px; height: 50px; background: rgba(56, 189, 248, 0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 2rem;"><i data-lucide="brain"></i></div>
+                <h3>Career Scope</h3>
+                <p style="font-size: 0.9rem; opacity: 0.5; margin-top: 1rem;">AI Engineers, Data Scientists, and Machine Learning Architects are the key drivers of the 4th Industrial Revolution.</p>
+            </div>
+            <div class="ultra-glass glow-border" style="padding: 3rem;">
+                <div style="width: 50px; height: 50px; background: rgba(168, 85, 247, 0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 2rem;"><i data-lucide="cpu"></i></div>
+                <h3>Neural Labs</h3>
+                <p style="font-size: 0.9rem; opacity: 0.5; margin-top: 1rem;">Equipped with NVIDIA Tesla V100 clusters for massive-scale deep learning and computer vision research.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 📊 NOTICE & CALENDAR HUB -->
+    <section id="notices" class="ultra-section ultra-reveal">
+        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 3rem;">
+            <div class="ultra-glass" style="padding: 4rem;">
+                <h2 style="text-align: left; margin-bottom: 3rem;">Neural Notice Board</h2>
+                <div id="notice-feed" style="display: flex; flex-direction: column; gap: 1.5rem;">
+                    <!-- Dynamic Notices -->
+                    <div class="skeleton" style="height: 80px;"></div>
                 </div>
             </div>
-        </section>
-
-        <!-- 🤖 SECTION: DEPT (Architecture) -->
-        <section id="department" class="ultra-section ultra-reveal">
-            <div style="text-align: center; margin-bottom: 8rem;">
-                <span class="neon-text" style="font-weight: 800; letter-spacing: 4px;">AIML ARCHITECTURE</span>
-                <h2 style="margin-top: 2rem;">Next-Gen Neural Labs</h2>
-            </div>
-            <div class="scrolly-container">
-                <div class="scrolly-sticky-visual"><div class="scrolly-media active"><img src="assets/images/aiml_lab.png"></div></div>
-                <div class="scrolly-steps">
-                    <div class="scrolly-step active" data-step="1"><h1>NVIDIA Center</h1><p>High-fidelity GPU rendering for deep learning applications.</p></div>
-                    <div class="scrolly-step" data-step="2"><h1>Robotics Hub</h1><p>Mobile autonomous rover deployment testing.</p></div>
+            <div class="ultra-glass" style="padding: 4rem;">
+                <h2 style="text-align: left; margin-bottom: 3rem;">Academic Pulse</h2>
+                <div id="calendar-feed" style="display: flex; flex-direction: column; gap: 1.5rem;">
+                    <!-- Dynamic Events -->
+                    <div class="skeleton" style="height: 60px;"></div>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- 👨‍🏫 SECTION: FACULTY -->
-        <section id="faculty" class="ultra-section ultra-reveal">
-            <h2 style="margin-bottom: 6rem;">The Faculty Neural Network</h2>
-            <div id="faculty-grid" class="ultra-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 3rem;">
-                <!-- Dynamically Fetched (Firebase) -->
-                <div class="skeleton" style="height: 400px;"></div>
-                <div class="skeleton" style="height: 400px;"></div>
-                <div class="skeleton" style="height: 400px;"></div>
+    <!-- 🖥 STUDENT HUB (DASHBOARD) -->
+    <section id="student-hub" class="ultra-section ultra-reveal">
+        <h2 style="margin-bottom: 6rem;">Student Intel Hub</h2>
+        <div class="ultra-grid" style="grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 3rem;">
+            <div class="ultra-glass glow-border" style="padding: 3.5rem;">
+                <div style="margin-bottom: 2rem; color: var(--neon-cyan);"><i data-lucide="book-open" style="width: 40px; height: 40px;"></i></div>
+                <h3>Neural Notes & PDFs</h3>
+                <p style="opacity: 0.5; margin-top: 1rem; font-size: 0.9rem;">Cloud-synced technical archives and VTU-compliant semester notes.</p>
+                <div style="margin-top: 2.5rem;"><a href="#" class="btn-ultra" style="padding: 0.8rem 1.5rem; font-size: 0.8rem;">Access Repository</a></div>
             </div>
-        </section>
-
-        <!-- 💰 SECTION: PLACEMENT -->
-        <section id="placement" class="ultra-section ultra-reveal">
-            <div class="glass-panel" style="padding: 6rem; text-align: center;">
-                <h1 style="font-size: 6rem; font-weight: 800; margin-bottom: 1rem;">45.0 LPA</h1>
-                <p class="neon-text" style="font-weight: 800; font-size: 1.5rem; letter-spacing: 2px;">MAXIMUM DEPLOYMENT PACKAGE</p>
-                <div style="margin-top: 4rem; display: flex; justify-content: center; opacity: 0.3;"><img src="assets/images/recruiters.png" style="max-width: 600px; filter: invert(1);"></div>
+            <div class="ultra-glass glow-border" style="padding: 3.5rem;">
+                <div style="margin-bottom: 2rem; color: var(--neon-purple);"><i data-lucide="github" style="width: 40px; height: 40px;"></i></div>
+                <h3>Deployment Center</h3>
+                <p style="opacity: 0.5; margin-top: 1rem; font-size: 0.9rem;">Showcase your AIML deployments to the global recruitment network.</p>
+                <div style="margin-top: 2.5rem;"><a href="#" class="btn-ultra" style="padding: 0.8rem 1.5rem; font-size: 0.8rem;">Submit Project</a></div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- 📁 SECTION: PROJECTS -->
-        <section id="projects" class="ultra-section ultra-reveal">
-            <h2 style="margin-bottom: 6rem;">Neural Deployments</h2>
-            <div id="project-grid" class="ultra-grid" style="grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 3rem;">
-                <!-- Dynamically Fetched (Firebase) -->
-                <div class="skeleton" style="height: 350px;"></div>
-                <div class="skeleton" style="height: 350px;"></div>
+    <!-- 👨‍👩‍👧 PARENTS PLATFORM (TRUST) -->
+    <section id="parents" class="ultra-section ultra-reveal">
+        <div class="glass-panel" style="padding: 6rem; text-align: center; border-color: rgba(56, 189, 248, 0.3);">
+            <span class="neon-text" style="font-weight: 800; letter-spacing: 4px;">TRUST MATRIX</span>
+            <h2 style="margin: 2rem 0;">A Safe Foundation for Success</h2>
+            <div class="ultra-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; margin-top: 4rem;">
+                <div><h1 style="color: var(--neon-cyan);">40+</h1><p style="opacity: 0.5;">Years of Reputation</p></div>
+                <div><h1 style="color: var(--neon-purple);">96%</h1><p style="opacity: 0.5;">Academic Performance</p></div>
+                <div><h1 style="color: var(--neon-cyan);">WiFi</h1><p style="opacity: 0.5;">Global High-Speed Campus</p></div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- 🏛 SECTION: TESTIMONIALS -->
-        <section id="testimonials" class="ultra-section ultra-reveal">
-            <h2 style="margin-bottom: 6rem;">Student Consensus</h2>
-            <div id="testimonial-grid" class="ultra-grid" style="grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 2rem;">
-                <!-- Dynamically Fetched (Firebase) -->
-            </div>
-        </section>
+    <!-- 👨‍🏫 FACULTY, PROJECTS, PLACEMENT ... -->
+    <!-- (Sections handled by data-engine.js dynamically) -->
 
-        <!-- 🗺 SECTION: CONTACT -->
-        <section id="contact" class="ultra-section ultra-reveal">
-            <div class="glass-panel glow-border" style="display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; padding: 4rem;">
-                <div>
-                    <h2 style="text-align: left;">Neural Sync Line</h2>
-                    <p style="opacity: 0.5; margin: 2rem 0;">Request a technical deep-dive into our AIML architecture.</p>
-                    <input type="text" placeholder="Identity (Name)" style="width: 100%; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 1.5rem; border-radius: 12px; margin-bottom: 1rem;">
-                    <textarea placeholder="Neural Query (Message)" style="width: 100%; height: 150px; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 1.5rem; border-radius: 12px; margin-bottom: 2rem;"></textarea>
-                    <button class="btn-ultra" style="width: 100%;">Initialize Uplink</button>
+    <!-- 🗺 CONTACT & MAP -->
+    <section id="contact" class="ultra-section ultra-reveal">
+        <div class="glass-panel glow-border" style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 4rem; padding: 4rem;">
+            <div>
+                <h2 style="text-align: left;">Neural Sync Hub</h2>
+                <p style="opacity: 0.4; margin: 2rem 0;">Direct communication line to the AIML department at GNDECB.</p>
+                <div style="margin-top: 1rem; display: flex; flex-direction: column; gap: 1.5rem; opacity: 0.7;">
+                    <p><i data-lucide="map-pin" style="margin-right: 1rem;"></i> Bidar, Karnataka, India - 585401</p>
+                    <p><i data-lucide="mail" style="margin-right: 1rem;"></i> helpdesk@gndecb.ac.in</p>
+                    <p><i data-lucide="phone" style="margin-right: 1rem;"></i> +91 8482 XXXXXX</p>
                 </div>
-                <div class="glass-panel"><img src="assets/images/campus.png" style="width: 100%; height: 100%; object-fit: cover; opacity: 0.4;"></div>
             </div>
-        </section>
-    </main>
+            <div class="glass-panel" style="overflow: hidden; height: 350px;">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d11545.961021469!2d77.5147817!3d17.9157242!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bb9f0d1b32d2c77%3A0xe5a361ef53e29f3d!2sGuru%20Nanak%20Dev%20Engineering%20College%20Bidar!5e0!3m2!1sen!2sin!4v1712218456124!5m2!1sen!2sin" width="100%" height="100%" style="border:0; filter: invert(100%) grayscale(100%);" allowfullscreen="" loading="lazy"></iframe>
+            </div>
+        </div>
+    </section>
 
-    <footer style="background: rgba(0,0,0,0.9); padding: 8rem 2rem 5rem; border-top: 1px solid rgba(255,255,255,0.05);">
-        <div style="max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 4rem; text-align: center;">
-            <div><h2 class="gradient-text" style="font-family:'Outfit';">GNDECB</h2><p style="opacity: 0.4; font-size: 0.9rem;">Architecting Autonomy since 1980.</p></div>
-            <div><h4>LINKS</h4><div style="display: flex; flex-direction: column; gap: 1rem; font-size: 0.8rem; margin-top: 2rem;"><a href="#hero">Neural Home</a><a href="dashboard.html">Intel Hub</a><a href="admin.html" style="color: var(--neon-cyan);">COMMAND CENTER</a></div></div>
+    <!-- 🏛 FOOTER -->
+    <footer style="background: rgba(0,0,0,0.9); padding: 10rem 2rem 5rem; border-top: 1px solid rgba(255,255,255,0.05);">
+        <div style="max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 4rem;">
+            <div>
+                <h2 class="gradient-text" style="font-family:'Outfit';">GNDECB</h2>
+                <p style="opacity: 0.4; font-size: 1rem; line-height: 1.8; margin-top: 2rem;">Affiliated to VTU Belagavi, Approved by AICTE & NBA. Leading the frontier of AIML since 2021.</p>
+                <a href="admin.html" style="color: var(--neon-cyan); display: inline-block; margin-top: 2rem; font-weight: 800; font-size: 0.8rem; letter-spacing: 2px;">🔐 NEURAL COMMAND CENTER</a>
+            </div>
+            <div>
+                <h4 style="margin-bottom: 2rem;">DEPARTMENTS</h4>
+                <div style="display: flex; flex-direction: column; gap: 1rem; font-size: 0.85rem; opacity: 0.5;">
+                    <a href="#">Neural Labs</a>
+                    <a href="#">Syllabus Matrix</a>
+                    <a href="#">Academic Pulse</a>
+                </div>
+            </div>
+            <div>
+                <h4 style="margin-bottom: 2rem;">CONNECT</h4>
+                <div style="display: flex; gap: 1.5rem;">
+                    <i data-lucide="linkedin" style="cursor: pointer;"></i>
+                    <i data-lucide="instagram" style="cursor: pointer;"></i>
+                    <i data-lucide="twitter" style="cursor: pointer;"></i>
+                </div>
+            </div>
         </div>
     </footer>
 
     <button id="back-to-top" onclick="window.scrollTo({top:0, behavior:'smooth'})">▲</button>
 
     <script>
-        // GLOBAL UX SCRIPT
         window.onload = () => setTimeout(() => {
-            const l = document.getElementById('loader');
-            l.style.opacity = '0';
-            setTimeout(() => l.style.display='none', 1000);
+            document.getElementById('loader').style.opacity = '0';
+            setTimeout(() => document.getElementById('loader').style.display='none', 1000);
         }, 1500);
-
-        window.onscroll = () => {
-            document.getElementById('back-to-top').classList.toggle('visible', window.scrollY > 800);
-        };
         lucide.createIcons();
     </script>
 </body>
