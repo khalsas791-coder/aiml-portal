@@ -18,6 +18,14 @@
         .tilt-card:hover .card-glow { opacity: 1; }
         .tilt-card { transform-style: preserve-3d; transition: transform 0.1s ease-out; }
         .tilt-card > * { transform: translateZ(20px); }
+        
+        .floating {
+            animation: float 4s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
     </style>
 </head>
 <body class="ultra-theme">
@@ -145,6 +153,58 @@
         </div>
     </section>
 
+    <!-- 🌌 FUTURE OF AI (STORYTELLING TIMELINE) -->
+    <section id="pathway" class="ultra-section ultra-reveal">
+        <div style="text-align: center; margin-bottom: 8rem;">
+            <span class="neon-text" style="font-weight: 800; letter-spacing: 4px;">NEURAL PATHWAY</span>
+            <h2 style="margin-top: 1rem;">Future of Intelligence</h2>
+            <p style="opacity: 0.6; font-size: 1.2rem;">Architecting the transition from narrow AI to cognitive evolution.</p>
+        </div>
+        
+        <div style="position: relative; max-width: 1000px; margin: 0 auto; padding-left: 50px;">
+            <div style="position: absolute; left: 10px; top: 0; bottom: 0; width: 2px; background: linear-gradient(var(--neon-cyan), var(--neon-purple), transparent);"></div>
+            
+            <!-- Node 1: Foundation -->
+            <div class="ultra-reveal" style="margin-bottom: 6rem; position: relative;">
+                <div style="position: absolute; left: -46px; top: 0; width: 14px; height: 14px; border-radius: 50%; background: var(--neon-cyan); box-shadow: 0 0 20px var(--neon-cyan);"></div>
+                <div class="ultra-glass" style="padding: 3rem;">
+                    <span style="font-weight: 800; color: var(--neon-cyan);">2010 - 2020</span>
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <h3 style="font-size: 2.2rem; margin: 1rem 0;">Neural Foundations</h3>
+                        <i data-lucide="layers" class="floating" style="color: var(--neon-cyan); width: 40px; height: 40px;"></i>
+                    </div>
+                    <p class="text-secondary" style="font-size: 1.1rem; line-height: 1.8;">The rise of Deep Learning and CNNs. Departmental research transitioned from classical heuristics to massive-scale neural training, establishing the base for modern computer vision.</p>
+                </div>
+            </div>
+            
+            <!-- Node 2: Generative -->
+            <div class="ultra-reveal" style="margin-bottom: 6rem; position: relative;">
+                <div style="position: absolute; left: -46px; top: 0; width: 14px; height: 14px; border-radius: 50%; background: var(--neon-purple); box-shadow: 0 0 20px var(--neon-purple);"></div>
+                <div class="ultra-glass" style="padding: 3rem; border-color: rgba(168, 85, 247, 0.2);">
+                    <span style="font-weight: 800; color: var(--neon-purple);">2021 - 2024</span>
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <h3 style="font-size: 2.2rem; margin: 1rem 0;">Generative Revolution</h3>
+                        <i data-lucide="sparkles" class="floating" style="color: var(--neon-purple); width: 40px; height: 40px; animation-delay: 1s;"></i>
+                    </div>
+                    <p class="text-secondary" style="font-size: 1.1rem; line-height: 1.8;">The emergence of Large Language Models and Diffusion engines. We integrated real-time generative interfaces, enabling autonomous content synthesis and advanced natural language reasoning.</p>
+                </div>
+            </div>
+            
+            <!-- Node 3: Future -->
+            <div class="ultra-reveal" style="margin-bottom: 6rem; position: relative;">
+                <div style="position: absolute; left: -46px; top: 0; width: 14px; height: 14px; border-radius: 50%; background: #fff; box-shadow: 0 0 25px #fff;"></div>
+                <div class="ultra-glass" style="padding: 3rem; border-color: rgba(255,255,255,0.2); background: rgba(56, 189, 248, 0.05);">
+                    <span style="font-weight: 800; color: #fff;">2025 & BEYOND</span>
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <h3 style="font-size: 2.2rem; margin: 1rem 0;">Cognitive Maturity (AGI)</h3>
+                        <i data-lucide="brain-circuit" class="floating" style="color: #fff; width: 40px; height: 40px; animation-delay: 2s;"></i>
+                    </div>
+                    <p class="text-secondary" style="font-size: 1.1rem; line-height: 1.8;">Architecting AGI-ready systems and decentralized intelligence. The future focuses on multi-agent collaboration, quantum-AI convergence, and emotional intelligence in autonomous agents.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- 🎓 INNOVATION (SUCCESS STATS) -->
     <section id="innovation" class="ultra-section ultra-reveal">
         <div class="ultra-glass" style="padding: 6rem; text-align: center; border: 1px solid var(--neon-cyan);">
@@ -222,6 +282,9 @@
         document.addEventListener('mouseleave', () => {
              document.querySelectorAll('.tilt-card').forEach(card => card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg)`);
         });
+
+        // 4. INIT ICONS
+        lucide.createIcons();
     </script>
 </body>
 </html>
