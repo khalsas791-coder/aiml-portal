@@ -19,7 +19,7 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "AIzaSyDoM3i2MldcwAs_bJ5_nmJxtUPuUM9Xgg8")
 
-# â•â•â• DATABASE â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+#  DATABASE 
 def get_db_connection():
     conn = sqlite3.connect('database.db')
     conn.row_factory = sqlite3.Row
@@ -44,12 +44,18 @@ def init_db():
         conn.commit()
         conn.close()
     except Exception as e:
-        print(f"⚠️ Startup Database Warning: {e}")
+        print(f" Startup Database Warning: {e}")
 
 # Initialize core tables on startup
-init_db()
+if __name__ == '__main__':
+    init_db()
 
-# â•â•â• GEMINI AI â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+# Health check for Render
+@app.route('/health')
+def health():
+    return jsonify({"status": "neural systems active", "version": "5.1"}), 200
+
+#  GEMINI AI 
 def query_gemini(prompt):
     url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={GEMINI_API_KEY}"
     payload = {"contents": [{"parts": [{"text": prompt}]}]}
@@ -61,7 +67,7 @@ def query_gemini(prompt):
     except Exception as e:
         return "Neural engine timeout. Please try again."
 
-# â•â•â• AUTH â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+#  AUTH 
 def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
@@ -70,7 +76,7 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
-# â•â•â• CONTEXT PROCESSOR â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+#  CONTEXT PROCESSOR 
 @app.context_processor
 def inject_globals():
     if 'admin_logged_in' in session:
@@ -83,7 +89,7 @@ def inject_globals():
             return {'msg_count': 0}
     return {}
 
-# â•â•â• CORS HELPER â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+#  CORS HELPER 
 @app.after_request
 def after_request(response):
     response.headers.add('Access-Control-Allow-Origin', '*')
@@ -91,7 +97,7 @@ def after_request(response):
     response.headers.add('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
     return response
 
-# â•â•â• API ENDPOINTS â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+#  API ENDPOINTS 
 @app.route('/api/full-site-data')
 def api_all_data():
     conn = get_db_connection()
@@ -153,12 +159,12 @@ def track_view(type, id):
     conn.close()
     return jsonify({"success": True})
 
-# â•â•â• PAGE ROUTES â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+#  PAGE ROUTES 
 @app.route('/')
 def home():
     return send_from_directory('.', 'index.html')
 
-# â•â•â• ADMIN ROUTES â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+#  ADMIN ROUTES 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -512,8 +518,8 @@ def serve_static(path):
     if os.path.exists(file_path) and os.path.isfile(file_path):
         return send_from_directory('.', path)
         
-    return f"404 — Neural Resource '{path}' Not Found", 404
+    return f"404  Neural Resource '{path}' Not Found", 404
 
-# â•â•â• RUN â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+#  RUN 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
