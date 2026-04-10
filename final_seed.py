@@ -5,6 +5,22 @@ def seed():
     conn = sqlite3.connect('database.db')
     cursor = conn.cursor()
 
+    # ── CREATE ALL TABLES (required for fresh deploy) ───────
+    cursor.execute('CREATE TABLE IF NOT EXISTS home_config (id INTEGER PRIMARY KEY, college_name TEXT, tagline TEXT, intro TEXT)')
+    cursor.execute('CREATE TABLE IF NOT EXISTS about_config (id INTEGER PRIMARY KEY, description TEXT, vision TEXT)')
+    cursor.execute('CREATE TABLE IF NOT EXISTS mission_points (id INTEGER PRIMARY KEY AUTOINCREMENT, point TEXT)')
+    cursor.execute('CREATE TABLE IF NOT EXISTS highlights (id INTEGER PRIMARY KEY AUTOINCREMENT, point TEXT)')
+    cursor.execute('CREATE TABLE IF NOT EXISTS events (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, description TEXT, image_path TEXT, views INTEGER DEFAULT 0)')
+    cursor.execute('CREATE TABLE IF NOT EXISTS projects (id INTEGER PRIMARY KEY AUTOINCREMENT, student_name TEXT, project_title TEXT, description TEXT, github_link TEXT, views INTEGER DEFAULT 0)')
+    cursor.execute('CREATE TABLE IF NOT EXISTS achievements (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, description TEXT)')
+    cursor.execute('CREATE TABLE IF NOT EXISTS team (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, role TEXT, image_path TEXT)')
+    cursor.execute('CREATE TABLE IF NOT EXISTS contact_config (id INTEGER PRIMARY KEY, address TEXT, email TEXT, phone TEXT, map_location TEXT)')
+    cursor.execute('CREATE TABLE IF NOT EXISTS contacts (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, email TEXT, message TEXT, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)')
+    cursor.execute('CREATE TABLE IF NOT EXISTS admins (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT UNIQUE NOT NULL, password TEXT NOT NULL)')
+    cursor.execute('CREATE TABLE IF NOT EXISTS gallery (id INTEGER PRIMARY KEY AUTOINCREMENT, url TEXT, caption TEXT)')
+    cursor.execute('CREATE TABLE IF NOT EXISTS faq (id INTEGER PRIMARY KEY AUTOINCREMENT, question TEXT, answer TEXT)')
+    conn.commit()
+
     # Clear all tables
     tables = ['home_config', 'about_config', 'mission_points', 'highlights',
               'events', 'projects', 'achievements', 'team', 'contact_config',
