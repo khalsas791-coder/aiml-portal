@@ -83,6 +83,19 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
+# ═══ CONTEXT PROCESSOR ══════════════════════════════════════
+@app.context_processor
+def inject_globals():
+    if 'admin_logged_in' in session:
+        try:
+            conn = get_db_connection()
+            count = conn.execute('SELECT COUNT(*) FROM contacts').fetchone()[0]
+            conn.close()
+            return {'msg_count': count}
+        except:
+            return {'msg_count': 0}
+    return {}
+
 # ═══ CORS HELPER ════════════════════════════════════════════
 @app.after_request
 def after_request(response):
