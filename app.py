@@ -55,8 +55,10 @@ def init_db():
         missions = ["Integrate professional skills with academic learning.", "Promote research and consultancy activities.", "Incalculate values and ethics in students."]
         conn.executemany('INSERT INTO mission_points (point) VALUES (?)', [(m,) for m in missions])
         hashed_pw = generate_password_hash('admin123')
-        conn.execute('INSERT OR IGNORE INTO admins (username, password) VALUES (?, ?)', ('admin', hashed_pw))
+        conn.execute('INSERT OR IGNORE INTO admins (username, password) VALUES (?, ?)', ('admin@gndecb.ac.in', hashed_pw))
 
+    # Migration: Ensure 'admin' is updated to 'admin@gndecb.ac.in' if user already has the old database
+    conn.execute("UPDATE admins SET username = 'admin@gndecb.ac.in' WHERE username = 'admin'")
     conn.commit()
     conn.close()
 
