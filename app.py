@@ -1,4 +1,4 @@
-﻿import os
+import os
 import sqlite3
 import uuid
 import json
@@ -516,9 +516,16 @@ def edit_project(id):
 
 @app.route('/<path:path>')
 def serve_static(path):
-    if os.path.exists(os.path.join('.', path)):
+    # Security: Prevent escaping from root
+    if ".." in path:
+        return "Access Denied", 403
+        
+    # Check if file exists in root or static/
+    file_path = os.path.join('.', path)
+    if os.path.exists(file_path) and os.path.isfile(file_path):
         return send_from_directory('.', path)
-    return "404 — Page not found", 404
+        
+    return f"404 — Neural Resource '{path}' Not Found", 404
 
 # â•â•â• RUN â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 if __name__ == '__main__':
