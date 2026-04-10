@@ -1,21 +1,31 @@
 {% extends 'base.html' %}
+{% block title %}Hero Config{% endblock %}
 {% block content %}
-<h1>Edit Home Configuration</h1>
+<div class="page-header">
+    <div>
+        <h1 class="page-title">Hero / Home Configuration</h1>
+        <p class="page-desc">Edit the hero section, college name, tagline, and introduction paragraph.</p>
+    </div>
+</div>
+
 <div class="card" style="max-width: 800px;">
     <form method="POST">
-        <div style="margin-bottom: 1.5rem;">
-            <label>College Name</label>
-            <input type="text" name="college_name" class="form-control" value="{{ home.college_name }}">
+        <div class="form-grid">
+            <div class="form-group full">
+                <label class="form-label">College Name</label>
+                <input type="text" name="college_name" class="form-control" value="{{ home.college_name }}" required>
+            </div>
+            <div class="form-group full">
+                <label class="form-label">Hero Tagline</label>
+                <input type="text" name="tagline" class="form-control" value="{{ home.tagline }}" placeholder="e.g., Next-Gen AIML Innovation Hub">
+            </div>
+            <div class="form-group full">
+                <label class="form-label">Introductory Paragraph</label>
+                <textarea name="intro" class="form-control" rows="5" placeholder="Brief about the college...">{{ home.intro }}</textarea>
+            </div>
         </div>
-        <div style="margin-bottom: 1.5rem;">
-            <label>Hero Tagline</label>
-            <input type="text" name="tagline" class="form-control" value="{{ home.tagline }}">
-        </div>
-        <div style="margin-bottom: 1.5rem;">
-            <label>Introductory Paragraph</label>
-            <textarea name="intro" class="form-control" rows="4">{{ home.intro }}</textarea>
-        </div>
-        <button type="submit" class="btn">Update Global Identity</button>
+        <button type="submit" class="btn btn-primary"><i data-lucide="save"></i> Save Changes</button>
     </form>
 </div>
+<script>lucide.createIcons();</script>
 {% endblock %}

@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block title %}Highlights{% endblock %}
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title">Highlight Chips</h1>
+        <p class="page-desc">Small badges shown in the About section (e.g., "NBA Accredited", "95% Placement").</p>
+    </div>
+</div>
+
+<div style="display:grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; max-width: 1000px;">
+    <div class="card">
+        <h3 class="card-title" style="margin-bottom:1rem;">Add Highlight</h3>
+        <form method="POST">
+            <div class="form-group">
+                <label class="form-label">Highlight Text</label>
+                <input type="text" name="point" class="form-control" required placeholder="e.g., 15+ AI/ML Research Labs">
+            </div>
+            <button type="submit" class="btn btn-primary"><i data-lucide="plus"></i> Add</button>
+        </form>
+    </div>
+    <div class="card">
+        <h3 class="card-title" style="margin-bottom:1rem;">Current Highlights ({{ highlights|length }})</h3>
+        <div style="display:flex; flex-wrap:wrap; gap:8px;">
+            {% for h in highlights %}
+            <div style="display:flex; align-items:center; gap:6px; background: rgba(56,189,248,0.08); padding: 6px 14px 6px 14px; border-radius: 20px; font-size: 0.8rem; color: var(--accent);">
+                {{ h.point }}
+                <a href="{{ url_for('delete_highlight', id=h.id) }}" style="color:var(--red); text-decoration:none; font-weight:700;">×</a>
+            </div>
+            {% else %}
+            <p style="color:var(--text-muted); font-size:0.85rem;">No highlights added yet.</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+<script>lucide.createIcons();</script>
+{% endblock %}

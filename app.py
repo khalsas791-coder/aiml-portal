@@ -408,6 +408,104 @@ def view_messages():
     conn.close()
     return render_template('view_messages.html', messages=msgs)
 
+# Highlights CRUD
+@app.route('/admin/highlights', methods=['GET', 'POST'])
+@login_required
+def admin_highlights():
+    conn = get_db_connection()
+    if request.method == 'POST':
+        conn.execute('INSERT INTO highlights (point) VALUES (?)', (request.form['point'],))
+        conn.commit()
+        flash('Highlight added.', 'success')
+    highlights = conn.execute('SELECT * FROM highlights').fetchall()
+    conn.close()
+    return render_template('admin_highlights.html', highlights=highlights)
+
+@app.route('/admin/highlights/delete/<int:id>')
+@login_required
+def delete_highlight(id):
+    conn = get_db_connection()
+    conn.execute('DELETE FROM highlights WHERE id = ?', (id,))
+    conn.commit()
+    conn.close()
+    flash('Highlight removed.', 'success')
+    return redirect(url_for('admin_highlights'))
+
+# Contact Config
+@app.route('/admin/contact', methods=['GET', 'POST'])
+@login_required
+def admin_contact():
+    conn = get_db_connection()
+    if request.method == 'POST':
+        conn.execute('UPDATE contact_config SET address = ?, email = ?, phone = ?, map_location = ? WHERE id = 1',
+                     (request.form['address'], request.form['email'], request.form['phone'], request.form['map_location']))
+        conn.commit()
+        flash('Contact info updated.', 'success')
+    contact = conn.execute('SELECT * FROM contact_config WHERE id = 1').fetchone()
+    conn.close()
+    return render_template('admin_contact.html', contact=contact)
+
+# Gallery CRUD
+@app.route('/admin/gallery', methods=['GET', 'POST'])
+@login_required
+def admin_gallery():
+    conn = get_db_connection()
+    if request.method == 'POST':
+        conn.execute('INSERT INTO gallery (url, caption) VALUES (?, ?)', (request.form['url'], request.form['caption']))
+        conn.commit()
+        flash('Gallery image added.', 'success')
+    gallery = conn.execute('SELECT * FROM gallery ORDER BY id DESC').fetchall()
+    conn.close()
+    return render_template('admin_gallery.html', gallery=gallery)
+
+@app.route('/admin/gallery/delete/<int:id>')
+@login_required
+def delete_gallery(id):
+    conn = get_db_connection()
+    conn.execute('DELETE FROM gallery WHERE id = ?', (id,))
+    conn.commit()
+    conn.close()
+    flash('Gallery image removed.', 'success')
+    return redirect(url_for('admin_gallery'))
+
+# FAQ CRUD
+@app.route('/admin/faq', methods=['GET', 'POST'])
+@login_required
+def admin_faq():
+    conn = get_db_connection()
+    if request.method == 'POST':
+        conn.execute('INSERT INTO faq (question, answer) VALUES (?, ?)', (request.form['question'], request.form['answer']))
+        conn.commit()
+        flash('FAQ added.', 'success')
+    faq = conn.execute('SELECT * FROM faq ORDER BY id DESC').fetchall()
+    conn.close()
+    return render_template('admin_faq.html', faq=faq)
+
+@app.route('/admin/faq/delete/<int:id>')
+@login_required
+def delete_faq(id):
+    conn = get_db_connection()
+    conn.execute('DELETE FROM faq WHERE id = ?', (id,))
+    conn.commit()
+    conn.close()
+    flash('FAQ deleted.', 'success')
+    return redirect(url_for('admin_faq'))
+
+# Edit Project
+@app.route('/edit-project/<int:id>', methods=['GET', 'POST'])
+@login_required
+def edit_project(id):
+    conn = get_db_connection()
+    if request.method == 'POST':
+        conn.execute('UPDATE projects SET student_name = ?, project_title = ?, description = ?, github_link = ? WHERE id = ?',
+                     (request.form['student_name'], request.form['project_title'], request.form['description'], request.form['github_link'], id))
+        conn.commit()
+        flash('Project updated.', 'success')
+        return redirect(url_for('view_projects'))
+    project = conn.execute('SELECT * FROM projects WHERE id = ?', (id,)).fetchone()
+    conn.close()
+    return render_template('edit_project.html', project=project)
+
 # ═══ RUN ════════════════════════════════════════════════════
 if __name__ == '__main__':
     app.run(debug=True, port=5000)

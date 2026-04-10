@@ -1,21 +1,33 @@
 {% extends 'base.html' %}
+{% block title %}Add Team Member{% endblock %}
 {% block content %}
-<h1>Add Team Member</h1>
-<div class="card" style="max-width: 600px;">
+<div class="page-header">
+    <div>
+        <h1 class="page-title">Add Team Member</h1>
+        <p class="page-desc">Add a faculty member or student coordinator.</p>
+    </div>
+    <a href="{{ url_for('view_team') }}" class="btn btn-ghost">← Back</a>
+</div>
+
+<div class="card" style="max-width: 800px;">
     <form method="POST" enctype="multipart/form-data">
-        <div style="margin-bottom: 1.5rem;">
-            <label>Full Name</label>
-            <input type="text" name="name" class="form-control" required>
+        <div class="form-grid">
+            <div class="form-group">
+                <label class="form-label">Full Name</label>
+                <input type="text" name="name" class="form-control" required placeholder="e.g., Dr. Dhananjay M.">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Role / Designation</label>
+                <input type="text" name="role" class="form-control" required placeholder="e.g., HOD — AIML Department">
+            </div>
+            <div class="form-group full">
+                <label class="form-label">Profile Photo</label>
+                <input type="file" name="image" class="form-control" accept="image/*">
+                <p style="font-size:0.7rem; color:var(--text-muted); margin-top:6px;">Optional. Auto-generates initials avatar if not provided.</p>
+            </div>
         </div>
-        <div style="margin-bottom: 1.5rem;">
-            <label>Role / Designation</label>
-            <input type="text" name="role" class="form-control" required>
-        </div>
-        <div style="margin-bottom: 1.5rem;">
-            <label>Profile Image</label>
-            <input type="file" name="image" class="form-control" required>
-        </div>
-        <button type="submit" class="btn">Add to Neural Nodes</button>
+        <button type="submit" class="btn btn-primary"><i data-lucide="plus"></i> Add Member</button>
     </form>
 </div>
+<script>lucide.createIcons();</script>
 {% endblock %}

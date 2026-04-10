@@ -1,16 +1,31 @@
 {% extends 'base.html' %}
+{% block title %}Achievements{% endblock %}
 {% block content %}
-<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
-    <h1>Technical Achievements</h1>
-    <a href="{{ url_for('add_achievement') }}" class="btn">+ Add Milestone</a>
+<div class="page-header">
+    <div>
+        <h1 class="page-title">Achievements & Awards</h1>
+        <p class="page-desc">Manage milestones and achievements. {{ achievements|length }} total.</p>
+    </div>
+    <a href="{{ url_for('add_achievement') }}" class="btn btn-primary"><i data-lucide="plus"></i> Add Achievement</a>
 </div>
 
-<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 2rem;">
-    {% for a in achievements %}
-    <div class="card">
-        <h3 style="margin:0 0 1rem 0;">{{ a.title }}</h3>
-        <p style="font-size: 0.9rem; color: #8b949e; line-height: 1.6;">{{ a.description }}</p>
-    </div>
-    {% endfor %}
+<div class="card">
+    <table class="data-table">
+        <thead><tr><th>Title</th><th>Description</th><th>Action</th></tr></thead>
+        <tbody>
+            {% for a in achievements %}
+            <tr>
+                <td style="font-weight:600; color:#fff;">🏆 {{ a.title }}</td>
+                <td style="font-size:0.82rem; color:var(--text-secondary);">{{ a.description[:100] }}{% if a.description|length > 100 %}...{% endif %}</td>
+                <td>
+                    <button class="btn btn-danger btn-sm" onclick="confirmDelete('{{ url_for('delete_achievement', id=a.id) }}', '{{ a.title }}')"><i data-lucide="trash-2"></i></button>
+                </td>
+            </tr>
+            {% else %}
+            <tr><td colspan="3" class="empty-state"><p class="empty-state-msg">No achievements yet.</p></td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </div>
+<script>lucide.createIcons();</script>
 {% endblock %}

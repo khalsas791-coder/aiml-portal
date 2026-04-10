@@ -1,17 +1,26 @@
 {% extends 'base.html' %}
+{% block title %}Add Achievement{% endblock %}
 {% block content %}
-<h1>Add Achievement Milestone</h1>
-<div class="card" style="max-width: 600px;">
+<div class="page-header">
+    <div>
+        <h1 class="page-title">Add Achievement</h1>
+        <p class="page-desc">Record a new milestone or award.</p>
+    </div>
+    <a href="{{ url_for('view_achievements') }}" class="btn btn-ghost">← Back</a>
+</div>
+
+<div class="card" style="max-width: 800px;">
     <form method="POST">
-        <div style="margin-bottom: 1.5rem;">
-            <label>Achievement Title</label>
-            <input type="text" name="title" class="form-control" required>
+        <div class="form-group">
+            <label class="form-label">Achievement Title</label>
+            <input type="text" name="title" class="form-control" required placeholder="e.g., 1st Prize — National Hackathon">
         </div>
-        <div style="margin-bottom: 1.5rem;">
-            <label>Description</label>
-            <textarea name="description" class="form-control" rows="4" required></textarea>
+        <div class="form-group">
+            <label class="form-label">Description</label>
+            <textarea name="description" class="form-control" rows="4" required placeholder="Describe the achievement and its impact..."></textarea>
         </div>
-        <button type="submit" class="btn">Deploy to Glory Board</button>
+        <button type="submit" class="btn btn-primary"><i data-lucide="plus"></i> Add Achievement</button>
     </form>
 </div>
+<script>lucide.createIcons();</script>
 {% endblock %}

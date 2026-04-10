@@ -3,89 +3,580 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GNDECB Neural Admin</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>{% block title %}GNDECB Admin{% endblock %} — Neural Console</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        :root { --accent: #38bdf8; --bg: #0D1117; --card: #161B22; --border: #30363D; --text: #C9D1D9; }
-        body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; margin:0; }
-        .admin-layout { display: grid; grid-template-columns: 280px 1fr; min-height: 100vh; }
-        .sidebar { background: var(--card); border-right: 1px solid var(--border); padding: 2rem; }
-        .sidebar-brand { font-size: 1.5rem; font-weight: 800; color: #fff; margin-bottom: 3rem; display: flex; align-items: center; gap: 10px; }
-        .sidebar-brand span { color: var(--accent); }
-        .nav-group { margin-bottom: 2rem; }
-        .nav-label { font-size: 0.7rem; font-weight: 800; color: #484f58; letter-spacing: 2px; margin-bottom: 1rem; display: block; }
-        .nav-item { display: block; padding: 10px 15px; color: var(--text); text-decoration: none; border-radius: 6px; margin-bottom: 5px; font-size: 0.9rem; transition: background 0.2s; }
-        .nav-item:hover, .nav-item.active { background: rgba(56, 189, 248, 0.1); color: var(--accent); }
-        .main-content { padding: 3rem; overflow-y: auto; }
-        .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 2rem; }
-        .btn { background: var(--accent); color: #000; padding: 10px 20px; border: none; border-radius: 6px; font-weight: 700; cursor: pointer; text-decoration:none; display:inline-block; }
-        .form-control { background: #010409; border: 1px solid var(--border); padding: 12px; border-radius: 6px; color: #fff; width: 100%; box-sizing: border-box; margin-top: 5px; }
-        .flash-alert { padding: 1rem; border-radius: 8px; margin-bottom: 2rem; }
-        .flash-success { background: rgba(16, 185, 129, 0.1); color: #10b981; border: 1px solid #10b981; }
+        /* ═══ ADMIN DESIGN TOKENS ═══ */
+        :root {
+            --bg-body: #0a0e17;
+            --bg-sidebar: #0f1523;
+            --bg-card: #131a2b;
+            --bg-input: #0c1120;
+            --bg-hover: rgba(56, 189, 248, 0.06);
+            --accent: #38bdf8;
+            --accent-glow: rgba(56, 189, 248, 0.15);
+            --purple: #a78bfa;
+            --green: #10b981;
+            --red: #ef4444;
+            --orange: #f59e0b;
+            --border: rgba(148, 163, 184, 0.08);
+            --border-accent: rgba(56, 189, 248, 0.15);
+            --text-primary: #e2e8f0;
+            --text-secondary: #64748b;
+            --text-muted: #475569;
+            --radius: 12px;
+            --sidebar-width: 280px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--bg-body);
+            color: var(--text-primary);
+            font-family: 'Inter', -apple-system, sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* ═══ LAYOUT ═══ */
+        .admin-layout {
+            display: grid;
+            grid-template-columns: var(--sidebar-width) 1fr;
+            min-height: 100vh;
+        }
+
+        /* ═══ SIDEBAR ═══ */
+        .sidebar {
+            background: var(--bg-sidebar);
+            border-right: 1px solid var(--border);
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            width: var(--sidebar-width);
+            overflow-y: auto;
+            z-index: 100;
+        }
+
+        .sidebar::-webkit-scrollbar { width: 3px; }
+        .sidebar::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
+
+        .sidebar-brand {
+            padding: 0.5rem 0.75rem;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .sidebar-brand-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--accent), var(--purple));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 16px;
+            color: #000;
+        }
+        .brand-text { font-weight: 800; font-size: 1.1rem; }
+        .brand-text span { color: var(--accent); }
+        .brand-sub { font-size: 0.65rem; color: var(--text-muted); letter-spacing: 1.5px; text-transform: uppercase; }
+
+        .nav-group { margin-bottom: 1.25rem; }
+        .nav-label {
+            font-size: 0.6rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 0 0.75rem;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 0.6rem 0.75rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-radius: 8px;
+            margin-bottom: 2px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+        .nav-item:hover {
+            background: var(--bg-hover);
+            color: var(--text-primary);
+        }
+        .nav-item.active {
+            background: var(--accent-glow);
+            color: var(--accent);
+            font-weight: 600;
+        }
+        .nav-item.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 3px;
+            height: 60%;
+            background: var(--accent);
+            border-radius: 0 4px 4px 0;
+        }
+        .nav-item i { width: 18px; height: 18px; opacity: 0.7; }
+        .nav-item.active i { opacity: 1; }
+        .nav-badge {
+            margin-left: auto;
+            background: var(--accent);
+            color: #000;
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 2px 7px;
+            border-radius: 20px;
+        }
+
+        .sidebar-footer {
+            margin-top: auto;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border);
+        }
+        .nav-item.logout { color: var(--red); }
+        .nav-item.logout:hover { background: rgba(239, 68, 68, 0.08); }
+
+        .visit-site {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0.6rem 0.75rem;
+            color: var(--green);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+        .visit-site:hover { background: rgba(16, 185, 129, 0.08); }
+
+        /* ═══ MAIN CONTENT ═══ */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            padding: 2rem 2.5rem;
+            min-height: 100vh;
+        }
+
+        /* ═══ PAGE HEADER ═══ */
+        .page-header {
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        .page-title {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 4px;
+        }
+        .page-desc {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+        .page-actions { display: flex; gap: 10px; }
+
+        /* ═══ CARDS ═══ */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+        }
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.25rem;
+        }
+        .card-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        /* ═══ STAT CARDS ═══ */
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .stat-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 80px;
+            height: 80px;
+            border-radius: 0 0 0 80px;
+            opacity: 0.04;
+        }
+        .stat-card.cyan::after { background: var(--accent); }
+        .stat-card.purple::after { background: var(--purple); }
+        .stat-card.green::after { background: var(--green); }
+        .stat-card.orange::after { background: var(--orange); }
+        .stat-card.red::after { background: var(--red); }
+
+        .stat-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            font-size: 1.25rem;
+        }
+        .stat-icon.cyan { background: rgba(56, 189, 248, 0.1); color: var(--accent); }
+        .stat-icon.purple { background: rgba(167, 139, 250, 0.1); color: var(--purple); }
+        .stat-icon.green { background: rgba(16, 185, 129, 0.1); color: var(--green); }
+        .stat-icon.orange { background: rgba(245, 158, 11, 0.1); color: var(--orange); }
+        .stat-icon.red { background: rgba(239, 68, 68, 0.1); color: var(--red); }
+
+        .stat-value { font-size: 2rem; font-weight: 800; color: #fff; }
+        .stat-label { color: var(--text-muted); font-size: 0.75rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; margin-top: 4px; }
+
+        /* ═══ TABLE ═══ */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.88rem;
+        }
+        .data-table th {
+            text-align: left;
+            padding: 0.75rem 1rem;
+            color: var(--text-muted);
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            border-bottom: 1px solid var(--border);
+        }
+        .data-table td {
+            padding: 0.85rem 1rem;
+            border-bottom: 1px solid var(--border);
+            vertical-align: middle;
+        }
+        .data-table tr:hover td { background: var(--bg-hover); }
+        .data-table tr:last-child td { border-bottom: none; }
+
+        /* ═══ BUTTONS ═══ */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 0.55rem 1.1rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+        .btn i { width: 16px; height: 16px; }
+        .btn-primary { background: var(--accent); color: #000; }
+        .btn-primary:hover { background: #7dd3fc; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3);}
+        .btn-ghost { background: transparent; border: 1px solid var(--border); color: var(--text-secondary); }
+        .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+        .btn-danger { background: rgba(239, 68, 68, 0.1); color: var(--red); border: 1px solid rgba(239, 68, 68, 0.2); }
+        .btn-danger:hover { background: rgba(239, 68, 68, 0.2); }
+        .btn-success { background: rgba(16, 185, 129, 0.1); color: var(--green); border: 1px solid rgba(16, 185, 129, 0.2); }
+        .btn-success:hover { background: rgba(16, 185, 129, 0.2); }
+        .btn-purple { background: rgba(167, 139, 250, 0.1); color: var(--purple); border: 1px solid rgba(167, 139, 250, 0.2); }
+        .btn-purple:hover { background: rgba(167, 139, 250, 0.2); }
+        .btn-sm { padding: 0.35rem 0.75rem; font-size: 0.75rem; }
+
+        /* ═══ FORMS ═══ */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.25rem;
+        }
+        .form-group { margin-bottom: 1.25rem; }
+        .form-group.full { grid-column: 1 / -1; }
+        .form-label {
+            display: block;
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 0.4rem;
+            letter-spacing: 0.5px;
+        }
+        .form-control {
+            width: 100%;
+            padding: 0.7rem 1rem;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 0.88rem;
+            font-family: inherit;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .form-control:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-glow);
+        }
+        .form-control::placeholder { color: var(--text-muted); }
+        textarea.form-control { resize: vertical; min-height: 80px; }
+
+        /* ═══ IMAGE PREVIEW ═══ */
+        .img-preview {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            object-fit: cover;
+            border: 1px solid var(--border);
+        }
+        .avatar-preview {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--border);
+        }
+
+        /* ═══ BADGES ═══ */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 3px 10px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            border-radius: 20px;
+        }
+        .badge-cyan { background: rgba(56, 189, 248, 0.1); color: var(--accent); }
+        .badge-green { background: rgba(16, 185, 129, 0.1); color: var(--green); }
+        .badge-purple { background: rgba(167, 139, 250, 0.1); color: var(--purple); }
+        .badge-orange { background: rgba(245, 158, 11, 0.1); color: var(--orange); }
+
+        /* ═══ FLASH ALERTS ═══ */
+        .flash-bar {
+            padding: 0.85rem 1.25rem;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            animation: flashIn 0.3s ease;
+        }
+        @keyframes flashIn { from { opacity:0; transform:translateY(-10px); } }
+        .flash-success { background: rgba(16, 185, 129, 0.1); color: var(--green); border: 1px solid rgba(16, 185, 129, 0.2); }
+        .flash-error { background: rgba(239, 68, 68, 0.1); color: var(--red); border: 1px solid rgba(239, 68, 68, 0.2); }
+        .flash-info { background: rgba(56, 189, 248, 0.1); color: var(--accent); border: 1px solid rgba(56, 189, 248, 0.2); }
+
+        /* ═══ EMPTY STATE ═══ */
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-muted);
+        }
+        .empty-state-icon { font-size: 3rem; margin-bottom: 1rem; opacity: 0.3; }
+        .empty-state-msg { font-size: 0.9rem; margin-bottom: 1rem; }
+
+        /* ═══ CONFIRM MODAL ═══ */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.6);
+            z-index: 500;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-overlay.active { display: flex; }
+        .modal-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 2rem;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+        }
+        .modal-box h3 { color: #fff; margin-bottom: 0.5rem; }
+        .modal-box p { color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1.5rem; }
+        .modal-actions { display: flex; gap: 10px; justify-content: center; }
+
+        /* ═══ MOBILE ═══ */
+        @media (max-width: 1024px) {
+            .admin-layout { grid-template-columns: 1fr; }
+            .sidebar { display: none; }
+            .main-content { margin-left: 0; padding: 1.5rem; }
+            .form-grid { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body>
     <div class="admin-layout">
         <aside class="sidebar">
-            <div class="sidebar-brand">GNDECB<span>ADMIN</span></div>
-            
+            <div class="sidebar-brand">
+                <div class="sidebar-brand-icon">AI</div>
+                <div>
+                    <div class="brand-text">GNDECB <span>Admin</span></div>
+                    <div class="brand-sub">Neural Console v6</div>
+                </div>
+            </div>
+
             <nav>
                 <div class="nav-group">
-                    <span class="nav-label">SITE IDENTITY</span>
-                    <a href="{{ url_for('admin_home') }}" class="nav-item">Hero Config</a>
-                    <a href="{{ url_for('admin_about') }}" class="nav-item">About & Vision</a>
-                    <a href="{{ url_for('admin_mission') }}" class="nav-item">Mission Nodes</a>
+                    <span class="nav-label">Overview</span>
+                    <a href="{{ url_for('dashboard') }}" class="nav-item {% if request.endpoint == 'dashboard' %}active{% endif %}">
+                        <i data-lucide="layout-dashboard"></i> Dashboard
+                    </a>
                 </div>
 
                 <div class="nav-group">
-                    <span class="nav-label">CONTENT MANAGEMENT</span>
-                    <a href="{{ url_for('view_events') }}" class="nav-item">Technical Events</a>
-                    <a href="{{ url_for('view_projects') }}" class="nav-item">Student Projects</a>
-                    <a href="{{ url_for('view_achievements') }}" class="nav-item">Achievements</a>
-                    <a href="{{ url_for('view_team') }}" class="nav-item">Mentorship Team</a>
+                    <span class="nav-label">Site Identity</span>
+                    <a href="{{ url_for('admin_home') }}" class="nav-item {% if request.endpoint == 'admin_home' %}active{% endif %}">
+                        <i data-lucide="home"></i> Hero / Home
+                    </a>
+                    <a href="{{ url_for('admin_about') }}" class="nav-item {% if request.endpoint == 'admin_about' %}active{% endif %}">
+                        <i data-lucide="info"></i> About & Vision
+                    </a>
+                    <a href="{{ url_for('admin_mission') }}" class="nav-item {% if request.endpoint == 'admin_mission' %}active{% endif %}">
+                        <i data-lucide="target"></i> Mission Points
+                    </a>
+                    <a href="{{ url_for('admin_highlights') }}" class="nav-item {% if request.endpoint == 'admin_highlights' %}active{% endif %}">
+                        <i data-lucide="sparkles"></i> Highlights
+                    </a>
+                    <a href="{{ url_for('admin_contact') }}" class="nav-item {% if request.endpoint == 'admin_contact' %}active{% endif %}">
+                        <i data-lucide="map-pin"></i> Contact Info
+                    </a>
                 </div>
 
                 <div class="nav-group">
-                    <span class="nav-label">ANALYTICS & INBOX</span>
-                    <a href="{{ url_for('dashboard') }}" class="nav-item">System Overview</a>
-                    <a href="{{ url_for('view_messages') }}" class="nav-item">Neural Messages</a>
+                    <span class="nav-label">Content</span>
+                    <a href="{{ url_for('view_events') }}" class="nav-item {% if request.endpoint in ['view_events','add_event','edit_event'] %}active{% endif %}">
+                        <i data-lucide="calendar"></i> Events
+                    </a>
+                    <a href="{{ url_for('view_projects') }}" class="nav-item {% if request.endpoint in ['view_projects','add_project'] %}active{% endif %}">
+                        <i data-lucide="code-2"></i> Projects
+                    </a>
+                    <a href="{{ url_for('view_achievements') }}" class="nav-item {% if request.endpoint in ['view_achievements','add_achievement'] %}active{% endif %}">
+                        <i data-lucide="trophy"></i> Achievements
+                    </a>
+                    <a href="{{ url_for('view_team') }}" class="nav-item {% if request.endpoint in ['view_team','add_team'] %}active{% endif %}">
+                        <i data-lucide="users"></i> Team
+                    </a>
+                    <a href="{{ url_for('admin_gallery') }}" class="nav-item {% if request.endpoint == 'admin_gallery' %}active{% endif %}">
+                        <i data-lucide="image"></i> Gallery
+                    </a>
+                    <a href="{{ url_for('admin_faq') }}" class="nav-item {% if request.endpoint == 'admin_faq' %}active{% endif %}">
+                        <i data-lucide="help-circle"></i> FAQ
+                    </a>
                 </div>
-                
-                <div style="margin-top: 4rem;">
-                    <a href="{{ url_for('logout') }}" class="nav-item" style="color: #f85149;">Terminate Session</a>
+
+                <div class="nav-group">
+                    <span class="nav-label">Inbox</span>
+                    <a href="{{ url_for('view_messages') }}" class="nav-item {% if request.endpoint == 'view_messages' %}active{% endif %}">
+                        <i data-lucide="mail"></i> Messages
+                        {% if msg_count is defined and msg_count > 0 %}
+                        <span class="nav-badge">{{ msg_count }}</span>
+                        {% endif %}
+                    </a>
                 </div>
             </nav>
+
+            <div class="sidebar-footer">
+                <a href="/" class="visit-site" target="_blank">
+                    <i data-lucide="external-link" style="width:16px;height:16px;"></i> Visit Website
+                </a>
+                <a href="{{ url_for('logout') }}" class="nav-item logout">
+                    <i data-lucide="log-out"></i> Sign Out
+                </a>
+            </div>
         </aside>
 
         <main class="main-content">
             {% with messages = get_flashed_messages(with_categories=true) %}
                 {% if messages %}
                     {% for cat, msg in messages %}
-                        <div class="flash-alert flash-{{ cat }}">{{ msg }}</div>
+                        <div class="flash-bar flash-{{ cat }}">
+                            {% if cat == 'success' %}✓{% elif cat == 'error' %}✕{% else %}ℹ{% endif %}
+                            {{ msg }}
+                        </div>
                     {% endfor %}
                 {% endif %}
             {% endwith %}
-            
+
             {% block content %}{% endblock %}
         </main>
     </div>
 
+    <!-- ═══ CONFIRM DIALOG ═══ -->
+    <div class="modal-overlay" id="confirm-modal">
+        <div class="modal-box">
+            <h3>⚠️ Confirm Delete</h3>
+            <p id="confirm-msg">Are you sure you want to delete this item? This action cannot be undone.</p>
+            <div class="modal-actions">
+                <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+                <a id="confirm-link" href="#" class="btn btn-danger">Delete</a>
+            </div>
+        </div>
+    </div>
+
     <script>
+        lucide.createIcons();
+
+        // Confirm delete
+        function confirmDelete(url, name) {
+            const modal = document.getElementById('confirm-modal');
+            document.getElementById('confirm-msg').textContent = `Delete "${name || 'this item'}"? This cannot be undone.`;
+            document.getElementById('confirm-link').href = url;
+            modal.classList.add('active');
+        }
+        function closeModal() {
+            document.getElementById('confirm-modal').classList.remove('active');
+        }
+
+        // AI Description Generator
         async function generateDesc(type) {
             const titleField = type === 'event' ? document.getElementById('title') : document.getElementById('project_title');
-            if(!titleField || !titleField.value) { alert("Title required."); return; }
+            if (!titleField || !titleField.value) { alert("Enter a title first."); return; }
             const descField = document.getElementById('description');
-            descField.value = "Generating... (Gemini AI)";
+            descField.value = "✨ Generating with Gemini AI...";
             try {
                 const res = await fetch('/api/generate-description', {
                     method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({title: titleField.value})
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ title: titleField.value })
                 });
                 const data = await res.json();
                 descField.value = data.description;
-            } catch(e) { descField.value = "AI Engine unreachable."; }
+            } catch (e) { descField.value = "AI engine unreachable. Write manually."; }
         }
     </script>
 </body>

@@ -1,40 +1,31 @@
 {% extends 'base.html' %}
 {% block title %}Edit Event{% endblock %}
 {% block content %}
-<div class="card" style="max-width: 600px;">
-    <form action="{{ url_for('edit_event', id=event.id) }}" method="POST" enctype="multipart/form-data">
-        <div class="form-group">
-            <label for="title">Event Title</label>
-            <input type="text" id="title" name="title" class="form-control" required value="{{ event.title }}">
-        </div>
-        <div class="form-group">
-            <label for="description">Event Description</label>
-            <textarea id="description" name="description" class="form-control" required rows="4">{{ event.description }}</textarea>
-        </div>
-        <div class="form-group">
-            <label for="image">Replace Event Cover Image (Optional)</label>
-            <div style="margin-bottom: 1rem;">
-                <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.5rem;">Current Image:</p>
-                <img src="{{ url_for('static', filename='images/' + event.image_path) }}" alt="Current" style="height: 100px; border-radius: 8px; border: 1px solid var(--border);">
-            </div>
-            <input type="file" id="image" name="image" class="form-control" accept="image/png, image/jpeg" onchange="previewEditImage(event)">
-            <img id="previewEditOut" style="display:none; width:100%; height:200px; object-fit:cover; border-radius:8px; margin-top:10px; border: 1px dashed var(--accent);">
-            <p style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 5px;">Leave blank to keep the existing image.</p>
-        </div>
-        <button type="submit" class="btn">💾 Update Event</button>
-        <a href="{{ url_for('view_events') }}" class="btn" style="background: transparent; border: 1px solid var(--border); margin-left: 1rem;">Cancel</a>
-    </form>
+<div class="page-header">
+    <div>
+        <h1 class="page-title">Edit Event</h1>
+        <p class="page-desc">Update the details for "{{ event.title }}".</p>
+    </div>
+    <a href="{{ url_for('view_events') }}" class="btn btn-ghost">← Back to Events</a>
 </div>
 
-<script>
-function previewEditImage(event) {
-    const reader = new FileReader();
-    reader.onload = function() {
-        const output = document.getElementById('previewEditOut');
-        output.src = reader.result;
-        output.style.display = 'block';
-    };
-    reader.readAsDataURL(event.target.files[0]);
-}
-</script>
+<div class="card" style="max-width: 800px;">
+    <form method="POST">
+        <div class="form-grid">
+            <div class="form-group full">
+                <label class="form-label">Event Title</label>
+                <input type="text" id="title" name="title" class="form-control" value="{{ event.title }}" required>
+            </div>
+            <div class="form-group full">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.4rem;">
+                    <label class="form-label" style="margin:0;">Description</label>
+                    <button type="button" class="btn btn-purple btn-sm" onclick="generateDesc('event')"><i data-lucide="sparkles"></i> Regenerate with AI</button>
+                </div>
+                <textarea id="description" name="description" class="form-control" rows="5" required>{{ event.description }}</textarea>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary"><i data-lucide="save"></i> Save Changes</button>
+    </form>
+</div>
+<script>lucide.createIcons();</script>
 {% endblock %}

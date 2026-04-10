@@ -1,17 +1,32 @@
 {% extends 'base.html' %}
+{% block title %}Team{% endblock %}
 {% block content %}
-<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
-    <h1>Mentorship & Coordinator Team</h1>
-    <a href="{{ url_for('add_team') }}" class="btn">+ Add Member</a>
+<div class="page-header">
+    <div>
+        <h1 class="page-title">Team Members</h1>
+        <p class="page-desc">Manage faculty and student coordinators. {{ team|length }} members.</p>
+    </div>
+    <a href="{{ url_for('add_team') }}" class="btn btn-primary"><i data-lucide="plus"></i> Add Member</a>
 </div>
 
-<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 2rem;">
-    {% for t in team %}
-    <div class="card" style="text-align: center;">
-        <img src="/static/images/{{ t.image_path }}" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; margin-bottom: 1rem; border: 2px solid var(--accent);">
-        <h3 style="margin:0;">{{ t.name }}</h3>
-        <p style="color: var(--accent); font-size: 0.8rem; margin: 5px 0;">{{ t.role }}</p>
-    </div>
-    {% endfor %}
+<div class="card">
+    <table class="data-table">
+        <thead><tr><th>Photo</th><th>Name</th><th>Role</th><th>Action</th></tr></thead>
+        <tbody>
+            {% for t in team %}
+            <tr>
+                <td><img src="{{ url_for('static', filename='images/' + t.image_path) }}" class="avatar-preview" alt="{{ t.name }}" onerror="this.src='https://ui-avatars.com/api/?name={{ t.name|urlencode }}&background=0f172a&color=06b6d4&size=96&bold=true'"></td>
+                <td style="font-weight:600; color:#fff;">{{ t.name }}</td>
+                <td><span class="badge badge-green">{{ t.role }}</span></td>
+                <td>
+                    <button class="btn btn-danger btn-sm" onclick="confirmDelete('{{ url_for('delete_team', id=t.id) }}', '{{ t.name }}')"><i data-lucide="trash-2"></i></button>
+                </td>
+            </tr>
+            {% else %}
+            <tr><td colspan="4" class="empty-state"><p class="empty-state-msg">No team members yet.</p></td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </div>
+<script>lucide.createIcons();</script>
 {% endblock %}

@@ -1,34 +1,96 @@
 {% extends 'base.html' %}
+{% block title %}Dashboard{% endblock %}
 {% block content %}
-<h1>Dashboard Control Center</h1>
-
-<div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:2rem; margin: 3rem 0;">
-    <div class="card" style="text-align: center;">
-        <h4 style="margin:0; opacity:0.6;">TECHNICAL EVENTS</h4>
-        <div style="font-size:3.5rem; font-weight:800; color:#fff; margin:10px 0;">{{ e_count }}</div>
-    </div>
-    <div class="card" style="text-align: center;">
-        <h4 style="margin:0; opacity:0.6;">INNOVATION NODES</h4>
-        <div style="font-size:3.5rem; font-weight:800; color:#fff; margin:10px 0;">{{ p_count }}</div>
-    </div>
-    <div class="card" style="text-align: center;">
-        <h4 style="margin:0; opacity:0.6;">NEURAL MESSAGES</h4>
-        <div style="font-size:3.5rem; font-weight:800; color:var(--accent); margin:10px 0;">{{ m_count }}</div>
+<div class="page-header">
+    <div>
+        <h1 class="page-title">Dashboard</h1>
+        <p class="page-desc">Overview of your GNDECB AIML portal content and analytics.</p>
     </div>
 </div>
 
-<div class="card">
-    <h3 style="margin-bottom:2rem; color:#fff;">🔥 Trending Events (Most Viewed)</h3>
-    <div style="display:flex; flex-direction:column; gap:1.5rem;">
-        {% for e in top_events %}
-        <div style="display:flex; justify-content:space-between; align-items:center; padding-bottom:1rem; border-bottom:1px solid var(--border);">
-            <div>
-                <h4 style="margin:0; color:#fff;">{{ e.title }}</h4>
-                <p style="font-size:0.8rem; opacity:0.5;">{{ e.views }} Views logged via telemetry</p>
-            </div>
-            <a href="{{ url_for('view_events') }}" style="color:var(--accent); text-decoration:none; font-size:0.8rem; font-weight:800;">MANAGE &rarr;</a>
+<!-- Stat Cards -->
+<div class="stat-grid">
+    <div class="stat-card cyan">
+        <div class="stat-icon cyan">📅</div>
+        <div class="stat-value">{{ stats.e }}</div>
+        <div class="stat-label">Events</div>
+    </div>
+    <div class="stat-card purple">
+        <div class="stat-icon purple">🚀</div>
+        <div class="stat-value">{{ stats.p }}</div>
+        <div class="stat-label">Projects</div>
+    </div>
+    <div class="stat-card green">
+        <div class="stat-icon green">🏆</div>
+        <div class="stat-value">{{ stats.a }}</div>
+        <div class="stat-label">Achievements</div>
+    </div>
+    <div class="stat-card orange">
+        <div class="stat-icon orange">👥</div>
+        <div class="stat-value">{{ stats.t }}</div>
+        <div class="stat-label">Team Members</div>
+    </div>
+    <div class="stat-card red">
+        <div class="stat-icon red">✉️</div>
+        <div class="stat-value">{{ stats.m }}</div>
+        <div class="stat-label">Messages</div>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div style="display:grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Quick Actions</h3>
         </div>
-        {% endfor %}
+        <div style="display:flex; flex-wrap:wrap; gap:10px;">
+            <a href="{{ url_for('add_event') }}" class="btn btn-primary"><i data-lucide="plus"></i> Add Event</a>
+            <a href="{{ url_for('add_project') }}" class="btn btn-purple"><i data-lucide="plus"></i> Add Project</a>
+            <a href="{{ url_for('add_achievement') }}" class="btn btn-success"><i data-lucide="plus"></i> Add Achievement</a>
+            <a href="{{ url_for('add_team') }}" class="btn btn-ghost"><i data-lucide="plus"></i> Add Team Member</a>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Site Management</h3>
+        </div>
+        <div style="display:flex; flex-wrap:wrap; gap:10px;">
+            <a href="{{ url_for('admin_home') }}" class="btn btn-ghost"><i data-lucide="home"></i> Edit Hero</a>
+            <a href="{{ url_for('admin_about') }}" class="btn btn-ghost"><i data-lucide="info"></i> Edit About</a>
+            <a href="{{ url_for('admin_contact') }}" class="btn btn-ghost"><i data-lucide="map-pin"></i> Edit Contact</a>
+            <a href="{{ url_for('admin_gallery') }}" class="btn btn-ghost"><i data-lucide="image"></i> Gallery</a>
+            <a href="{{ url_for('admin_faq') }}" class="btn btn-ghost"><i data-lucide="help-circle"></i> FAQ</a>
+        </div>
     </div>
 </div>
+
+<!-- Trending Events -->
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">🔥 Trending Events</h3>
+        <a href="{{ url_for('view_events') }}" class="btn btn-ghost btn-sm">View All →</a>
+    </div>
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Event Title</th>
+                <th>Views</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for e in top_events %}
+            <tr>
+                <td style="font-weight:600; color:#fff;">{{ e.title }}</td>
+                <td><span class="badge badge-cyan">{{ e.views }} views</span></td>
+                <td><a href="{{ url_for('edit_event', id=e.id) }}" class="btn btn-ghost btn-sm">Edit</a></td>
+            </tr>
+            {% else %}
+            <tr><td colspan="3" class="empty-state"><p class="empty-state-msg">No events yet. Add your first event!</p></td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script>lucide.createIcons();</script>
 {% endblock %}

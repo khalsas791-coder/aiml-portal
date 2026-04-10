@@ -1,22 +1,40 @@
 {% extends 'base.html' %}
+{% block title %}Mission Points{% endblock %}
 {% block content %}
-<h1>Manage Mission Points</h1>
-
-<div class="card" style="max-width: 600px; margin-bottom: 3rem;">
-    <h3 style="margin-top:0;">Add New Point</h3>
-    <form method="POST">
-        <textarea name="point" class="form-control" rows="3" placeholder="Enter a mission statement..." required></textarea>
-        <button type="submit" class="btn" style="margin-top: 1rem;">Add to Mission</button>
-    </form>
-</div>
-
-<div class="card">
-    <h3 style="margin-top:0;">Active Mission Points</h3>
-    {% for p in points %}
-    <div style="display:flex; justify-content:space-between; align-items:center; padding: 1rem 0; border-bottom: 1px solid var(--border);">
-        <p style="margin:0; font-size: 0.95rem;">• {{ p.point }}</p>
-        <a href="{{ url_for('delete_mission', id=p.id) }}" style="color: #f85149; text-decoration:none; font-size: 0.8rem; font-weight: 800;">DELETE</a>
+<div class="page-header">
+    <div>
+        <h1 class="page-title">Mission Points</h1>
+        <p class="page-desc">Manage the mission points displayed in the About section of your website.</p>
     </div>
-    {% endfor %}
 </div>
+
+<div style="display:grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; max-width: 1000px;">
+    <!-- Add New -->
+    <div class="card">
+        <h3 class="card-title" style="margin-bottom:1rem;">Add Mission Point</h3>
+        <form method="POST">
+            <div class="form-group">
+                <label class="form-label">Mission Statement</label>
+                <textarea name="point" class="form-control" rows="3" required placeholder="e.g., Promote cutting-edge research in AI & ML"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary"><i data-lucide="plus"></i> Add Point</button>
+        </form>
+    </div>
+
+    <!-- Current Points -->
+    <div class="card">
+        <h3 class="card-title" style="margin-bottom:1rem;">Current Points ({{ points|length }})</h3>
+        {% for p in points %}
+        <div style="display:flex; justify-content:space-between; align-items:center; padding: 0.75rem 0; border-bottom: 1px solid rgba(148,163,184,0.08);">
+            <span style="font-size:0.88rem;">• {{ p.point }}</span>
+            <button class="btn btn-danger btn-sm" onclick="confirmDelete('{{ url_for('delete_mission', id=p.id) }}', '{{ p.point[:30] }}')">
+                <i data-lucide="trash-2"></i>
+            </button>
+        </div>
+        {% else %}
+        <div class="empty-state"><p class="empty-state-msg">No mission points yet.</p></div>
+        {% endfor %}
+    </div>
+</div>
+<script>lucide.createIcons();</script>
 {% endblock %}

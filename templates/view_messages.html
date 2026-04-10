@@ -1,17 +1,35 @@
 {% extends 'base.html' %}
+{% block title %}Messages{% endblock %}
 {% block content %}
-<h1>Inbox: Neural Link Messages</h1>
-<div class="card">
-    {% for m in messages %}
-    <div style="padding: 1.5rem; border-bottom: 1px solid var(--border); margin-bottom: 1rem;">
-        <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
-            <h3 style="margin:0;">{{ m.name }} <span style="font-size:0.8rem; color:#8b949e; margin-left:10px;">{{ m.email }}</span></h3>
-            <span style="font-size:0.75rem; color:#484f58;">{{ m.created_at }}</span>
-        </div>
-        <p style="font-size:0.95rem; line-height:1.6;">{{ m.message }}</p>
+<div class="page-header">
+    <div>
+        <h1 class="page-title">Contact Messages</h1>
+        <p class="page-desc">Messages received from your website's contact form. {{ messages|length }} total.</p>
     </div>
-    {% else %}
-    <p>No messages received yet.</p>
-    {% endfor %}
+</div>
+
+<div class="card">
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Message</th>
+                <th>Received</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for m in messages %}
+            <tr>
+                <td style="font-weight:600; color:#fff;">{{ m.name }}</td>
+                <td><a href="mailto:{{ m.email }}" style="color:var(--accent); text-decoration:none;">{{ m.email }}</a></td>
+                <td style="font-size:0.82rem; color:var(--text-secondary); max-width:350px;">{{ m.message }}</td>
+                <td style="font-size:0.75rem; color:var(--text-muted);">{{ m.created_at or 'N/A' }}</td>
+            </tr>
+            {% else %}
+            <tr><td colspan="4" class="empty-state"><div class="empty-state-icon">📭</div><p class="empty-state-msg">No messages received yet.</p></td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </div>
 {% endblock %}

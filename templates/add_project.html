@@ -1,27 +1,39 @@
 {% extends 'base.html' %}
-{% block title %}Add New Project{% endblock %}
+{% block title %}Add Project{% endblock %}
 {% block content %}
-<div class="card" style="max-width: 600px;">
-    <form action="{{ url_for('add_project') }}" method="POST">
-        <div class="form-group">
-            <label for="student_name">Student Name</label>
-            <input type="text" id="student_name" name="student_name" class="form-control" required placeholder="John Doe">
+<div class="page-header">
+    <div>
+        <h1 class="page-title">Add New Project</h1>
+        <p class="page-desc">Add a student innovation project to the website.</p>
+    </div>
+    <a href="{{ url_for('view_projects') }}" class="btn btn-ghost">← Back</a>
+</div>
+
+<div class="card" style="max-width: 800px;">
+    <form method="POST">
+        <div class="form-grid">
+            <div class="form-group">
+                <label class="form-label">Student Name</label>
+                <input type="text" name="student_name" class="form-control" required placeholder="e.g., Rahul Sharma">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Project Title</label>
+                <input type="text" id="project_title" name="project_title" class="form-control" required placeholder="e.g., IoT Smart Agricultural Bot">
+            </div>
+            <div class="form-group full">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.4rem;">
+                    <label class="form-label" style="margin:0;">Description</label>
+                    <button type="button" class="btn btn-purple btn-sm" onclick="generateDesc('project')"><i data-lucide="sparkles"></i> Generate with AI</button>
+                </div>
+                <textarea id="description" name="description" class="form-control" rows="4" required placeholder="Describe the project..."></textarea>
+            </div>
+            <div class="form-group full">
+                <label class="form-label">GitHub Link</label>
+                <input type="url" name="github_link" class="form-control" required placeholder="https://github.com/...">
+            </div>
         </div>
-        <div class="form-group">
-            <label for="project_title">Project Title</label>
-            <input type="text" id="project_title" name="project_title" class="form-control" required placeholder="Ex: Advanced YOLO Object Detection">
-        </div>
-        <div class="form-group">
-            <label for="description">Project Description
-                <button type="button" onclick="generateDesc('project')" style="background: rgba(56, 189, 248, 0.2); border: 1px solid #38bdf8; color: #38bdf8; padding: 4px 10px; border-radius: 4px; font-size: 0.7rem; cursor: pointer; float: right; transition: all 0.2s;">✨ AI Auto-Generate</button>
-            </label>
-            <textarea id="description" name="description" class="form-control" required rows="4"></textarea>
-        </div>
-        <div class="form-group">
-            <label for="github_link">GitHub Link</label>
-            <input type="url" id="github_link" name="github_link" class="form-control" required placeholder="https://github.com/...">
-        </div>
-        <button type="submit" class="btn">🚀 Save Project</button>
+        <button type="submit" class="btn btn-primary"><i data-lucide="plus"></i> Create Project</button>
     </form>
 </div>
+<script>lucide.createIcons();</script>
 {% endblock %}

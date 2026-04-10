@@ -1,17 +1,25 @@
 {% extends 'base.html' %}
+{% block title %}About & Vision{% endblock %}
 {% block content %}
-<h1>Edit About & Vision</h1>
+<div class="page-header">
+    <div>
+        <h1 class="page-title">About & Vision</h1>
+        <p class="page-desc">Edit the About section text and the Vision statement displayed on the website.</p>
+    </div>
+</div>
+
 <div class="card" style="max-width: 800px;">
     <form method="POST">
-        <div style="margin-bottom: 1.5rem;">
-            <label>Institutional Description</label>
+        <div class="form-group">
+            <label class="form-label">About Description</label>
             <textarea name="description" class="form-control" rows="6">{{ about.description }}</textarea>
         </div>
-        <div style="margin-bottom: 1.5rem;">
-            <label>Strategic Vision</label>
+        <div class="form-group">
+            <label class="form-label">Vision Statement</label>
             <textarea name="vision" class="form-control" rows="4">{{ about.vision }}</textarea>
         </div>
-        <button type="submit" class="btn">Update Institutional Framework</button>
+        <button type="submit" class="btn btn-primary"><i data-lucide="save"></i> Save Changes</button>
     </form>
 </div>
+<script>lucide.createIcons();</script>
 {% endblock %}
