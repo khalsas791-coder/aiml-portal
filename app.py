@@ -26,42 +26,27 @@ def get_db_connection():
     return conn
 
 def init_db():
-    conn = get_db_connection()
-    conn.execute('CREATE TABLE IF NOT EXISTS home_config (id INTEGER PRIMARY KEY, college_name TEXT, tagline TEXT, intro TEXT)')
-    conn.execute('CREATE TABLE IF NOT EXISTS about_config (id INTEGER PRIMARY KEY, description TEXT, vision TEXT)')
-    conn.execute('CREATE TABLE IF NOT EXISTS mission_points (id INTEGER PRIMARY KEY AUTOINCREMENT, point TEXT)')
-    conn.execute('CREATE TABLE IF NOT EXISTS highlights (id INTEGER PRIMARY KEY AUTOINCREMENT, point TEXT)')
-    conn.execute('CREATE TABLE IF NOT EXISTS events (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, description TEXT, image_path TEXT, views INTEGER DEFAULT 0)')
-    conn.execute('CREATE TABLE IF NOT EXISTS projects (id INTEGER PRIMARY KEY AUTOINCREMENT, student_name TEXT, project_title TEXT, description TEXT, github_link TEXT, views INTEGER DEFAULT 0)')
-    conn.execute('CREATE TABLE IF NOT EXISTS achievements (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, description TEXT)')
-    conn.execute('CREATE TABLE IF NOT EXISTS team (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, role TEXT, image_path TEXT)')
-    conn.execute('CREATE TABLE IF NOT EXISTS contact_config (id INTEGER PRIMARY KEY, address TEXT, email TEXT, phone TEXT, map_location TEXT)')
-    conn.execute('CREATE TABLE IF NOT EXISTS contacts (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, email TEXT, message TEXT, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)')
-    conn.execute('CREATE TABLE IF NOT EXISTS admins (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT UNIQUE NOT NULL, password TEXT NOT NULL)')
-    conn.execute('CREATE TABLE IF NOT EXISTS gallery (id INTEGER PRIMARY KEY AUTOINCREMENT, url TEXT, caption TEXT)')
-    conn.execute('CREATE TABLE IF NOT EXISTS faq (id INTEGER PRIMARY KEY AUTOINCREMENT, question TEXT, answer TEXT)')
+    try:
+        conn = get_db_connection()
+        conn.execute('CREATE TABLE IF NOT EXISTS home_config (id INTEGER PRIMARY KEY, college_name TEXT, tagline TEXT, intro TEXT)')
+        conn.execute('CREATE TABLE IF NOT EXISTS about_config (id INTEGER PRIMARY KEY, description TEXT, vision TEXT)')
+        conn.execute('CREATE TABLE IF NOT EXISTS mission_points (id INTEGER PRIMARY KEY AUTOINCREMENT, point TEXT)')
+        conn.execute('CREATE TABLE IF NOT EXISTS highlights (id INTEGER PRIMARY KEY AUTOINCREMENT, point TEXT)')
+        conn.execute('CREATE TABLE IF NOT EXISTS events (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, description TEXT, image_path TEXT, views INTEGER DEFAULT 0)')
+        conn.execute('CREATE TABLE IF NOT EXISTS projects (id INTEGER PRIMARY KEY AUTOINCREMENT, student_name TEXT, project_title TEXT, description TEXT, github_link TEXT, views INTEGER DEFAULT 0)')
+        conn.execute('CREATE TABLE IF NOT EXISTS achievements (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, description TEXT)')
+        conn.execute('CREATE TABLE IF NOT EXISTS team (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, role TEXT, image_path TEXT)')
+        conn.execute('CREATE TABLE IF NOT EXISTS contact_config (id INTEGER PRIMARY KEY, address TEXT, email TEXT, phone TEXT, map_location TEXT)')
+        conn.execute('CREATE TABLE IF NOT EXISTS contacts (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, email TEXT, message TEXT, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)')
+        conn.execute('CREATE TABLE IF NOT EXISTS admins (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT UNIQUE NOT NULL, password TEXT NOT NULL)')
+        conn.execute('CREATE TABLE IF NOT EXISTS gallery (id INTEGER PRIMARY KEY AUTOINCREMENT, url TEXT, caption TEXT)')
+        conn.execute('CREATE TABLE IF NOT EXISTS faq (id INTEGER PRIMARY KEY AUTOINCREMENT, question TEXT, answer TEXT)')
+        conn.commit()
+        conn.close()
+    except Exception as e:
+        print(f"⚠️ Startup Database Warning: {e}")
 
-    # Seed defaults if empty
-    if not conn.execute('SELECT * FROM home_config').fetchone():
-        conn.execute('INSERT INTO home_config (college_name, tagline, intro) VALUES (?, ?, ?)',
-                     ("Guru Nanak Dev Engineering College Bidar",
-                      "Empowering technical excellence since 1980.",
-                      "GNDECB stands as a beacon of Engineering Education in North Karnataka, fostering innovation and humanitarian values."))
-        conn.execute('INSERT INTO about_config (description, vision) VALUES (?, ?)',
-                     ("GNDECB is a premier engineering institution affiliated to VTU Belagavi.",
-                      "To be a premier institution in technical education by imparting quality education and research."))
-        conn.execute('INSERT INTO contact_config (address, email, phone, map_location) VALUES (?, ?, ?, ?)',
-                     ("Mailoor Road, Bidar, Karnataka - 585401", "info@gndecb.ac.in", "+91 84822 26569", "GNDEC Bidar Campus"))
-        missions = ["Integrate professional skills with academic learning.", "Promote research and consultancy activities.", "Incalculate values and ethics in students."]
-        conn.executemany('INSERT INTO mission_points (point) VALUES (?)', [(m,) for m in missions])
-        hashed_pw = generate_password_hash('admin123')
-        conn.execute('INSERT OR IGNORE INTO admins (username, password) VALUES (?, ?)', ('admin@gndecb.ac.in', hashed_pw))
-
-    # Migration: Ensure 'admin' is updated to 'admin@gndecb.ac.in' if user already has the old database
-    conn.execute("UPDATE admins SET username = 'admin@gndecb.ac.in' WHERE username = 'admin'")
-    conn.commit()
-    conn.close()
-
+# Initialize core tables on startup
 init_db()
 
 # â•â•â• GEMINI AI â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•

@@ -175,7 +175,7 @@ def seed():
     hashed_pw = generate_password_hash('admin123')
     try:
         cursor.execute('DELETE FROM admins')
-        cursor.execute('INSERT INTO admins (username, password) VALUES (?, ?)', ('admin', hashed_pw))
+        cursor.execute('INSERT INTO admins (username, password) VALUES (?, ?)', ('admin@gndecb.ac.in', hashed_pw))
     except:
         pass
 
