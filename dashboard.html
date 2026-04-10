@@ -1,9 +1,17 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
+<script>
+  (function () {
+    var AUTH_KEY = "aiml_admin_session";
+    if (localStorage.getItem(AUTH_KEY) !== "active") {
+      window.location.href = "admin.html";
+    }
+  })();
+</script>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Student Intel Hub — GNDECB AIML</title>
+<title>Student Intel Hub â€” GNDECB AIML</title>
 
 <!-- Standard Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
@@ -63,11 +71,11 @@
         GNDECB <span style="font-weight: 300; opacity: 0.5;">STUDENT</span>
     </div>
     <nav class="dash-nav">
-        <button class="dash-btn active">📊 Activity Hub</button>
-        <button class="dash-btn">📁 Saved Projects</button>
-        <button class="dash-btn">📝 Research Notes</button>
-        <button class="dash-btn">👩‍🎓 Profile Intel</button>
-        <button class="dash-btn">⚙️ AI Settings</button>
+        <button class="dash-btn active">ðŸ“Š Activity Hub</button>
+        <button class="dash-btn">ðŸ“ Saved Projects</button>
+        <button class="dash-btn">ðŸ“ Research Notes</button>
+        <button class="dash-btn">ðŸ‘©â€ðŸŽ“ Profile Intel</button>
+        <button class="dash-btn">âš™ï¸ AI Settings</button>
     </nav>
     <div style="margin-top: auto; padding: 2rem; font-size: 0.75rem; color: #64748b;">
         Authenticated via Neural Link v2.4
@@ -155,3 +163,4 @@
 <script src="js/animations.js"></script>
 </body>
 </html>
+

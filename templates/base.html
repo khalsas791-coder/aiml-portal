@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GNDECB Neural Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        :root { --accent: #38bdf8; --bg: #0D1117; --card: #161B22; --border: #30363D; --text: #C9D1D9; }
+        body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; margin:0; }
+        .admin-layout { display: grid; grid-template-columns: 280px 1fr; min-height: 100vh; }
+        .sidebar { background: var(--card); border-right: 1px solid var(--border); padding: 2rem; }
+        .sidebar-brand { font-size: 1.5rem; font-weight: 800; color: #fff; margin-bottom: 3rem; display: flex; align-items: center; gap: 10px; }
+        .sidebar-brand span { color: var(--accent); }
+        .nav-group { margin-bottom: 2rem; }
+        .nav-label { font-size: 0.7rem; font-weight: 800; color: #484f58; letter-spacing: 2px; margin-bottom: 1rem; display: block; }
+        .nav-item { display: block; padding: 10px 15px; color: var(--text); text-decoration: none; border-radius: 6px; margin-bottom: 5px; font-size: 0.9rem; transition: background 0.2s; }
+        .nav-item:hover, .nav-item.active { background: rgba(56, 189, 248, 0.1); color: var(--accent); }
+        .main-content { padding: 3rem; overflow-y: auto; }
+        .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 2rem; }
+        .btn { background: var(--accent); color: #000; padding: 10px 20px; border: none; border-radius: 6px; font-weight: 700; cursor: pointer; text-decoration:none; display:inline-block; }
+        .form-control { background: #010409; border: 1px solid var(--border); padding: 12px; border-radius: 6px; color: #fff; width: 100%; box-sizing: border-box; margin-top: 5px; }
+        .flash-alert { padding: 1rem; border-radius: 8px; margin-bottom: 2rem; }
+        .flash-success { background: rgba(16, 185, 129, 0.1); color: #10b981; border: 1px solid #10b981; }
+    </style>
+</head>
+<body>
+    <div class="admin-layout">
+        <aside class="sidebar">
+            <div class="sidebar-brand">GNDECB<span>ADMIN</span></div>
+            
+            <nav>
+                <div class="nav-group">
+                    <span class="nav-label">SITE IDENTITY</span>
+                    <a href="{{ url_for('admin_home') }}" class="nav-item">Hero Config</a>
+                    <a href="{{ url_for('admin_about') }}" class="nav-item">About & Vision</a>
+                    <a href="{{ url_for('admin_mission') }}" class="nav-item">Mission Nodes</a>
+                </div>
+
+                <div class="nav-group">
+                    <span class="nav-label">CONTENT MANAGEMENT</span>
+                    <a href="{{ url_for('view_events') }}" class="nav-item">Technical Events</a>
+                    <a href="{{ url_for('view_projects') }}" class="nav-item">Student Projects</a>
+                    <a href="{{ url_for('view_achievements') }}" class="nav-item">Achievements</a>
+                    <a href="{{ url_for('view_team') }}" class="nav-item">Mentorship Team</a>
+                </div>
+
+                <div class="nav-group">
+                    <span class="nav-label">ANALYTICS & INBOX</span>
+                    <a href="{{ url_for('dashboard') }}" class="nav-item">System Overview</a>
+                    <a href="{{ url_for('view_messages') }}" class="nav-item">Neural Messages</a>
+                </div>
+                
+                <div style="margin-top: 4rem;">
+                    <a href="{{ url_for('logout') }}" class="nav-item" style="color: #f85149;">Terminate Session</a>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for cat, msg in messages %}
+                        <div class="flash-alert flash-{{ cat }}">{{ msg }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+
+    <script>
+        async function generateDesc(type) {
+            const titleField = type === 'event' ? document.getElementById('title') : document.getElementById('project_title');
+            if(!titleField || !titleField.value) { alert("Title required."); return; }
+            const descField = document.getElementById('description');
+            descField.value = "Generating... (Gemini AI)";
+            try {
+                const res = await fetch('/api/generate-description', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({title: titleField.value})
+                });
+                const data = await res.json();
+                descField.value = data.description;
+            } catch(e) { descField.value = "AI Engine unreachable."; }
+        }
+    </script>
+</body>
+</html>

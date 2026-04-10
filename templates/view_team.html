@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+    <h1>Mentorship & Coordinator Team</h1>
+    <a href="{{ url_for('add_team') }}" class="btn">+ Add Member</a>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 2rem;">
+    {% for t in team %}
+    <div class="card" style="text-align: center;">
+        <img src="/static/images/{{ t.image_path }}" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; margin-bottom: 1rem; border: 2px solid var(--accent);">
+        <h3 style="margin:0;">{{ t.name }}</h3>
+        <p style="color: var(--accent); font-size: 0.8rem; margin: 5px 0;">{{ t.role }}</p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

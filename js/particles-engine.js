@@ -1,99 +1,146 @@
-// js/particles-engine.js — GPU-Accelerated Neural Network Background
-// High-fidelity particle system with connecting node lines
+// ═══════════════════════════════════════════════════════════
+// PARTICLES ENGINE v6.0 — Neural Network Background
+// Optimized with requestAnimationFrame and throttled resize
+// ═══════════════════════════════════════════════════════════
 
-class NeuralParticles {
-    constructor(canvasId) {
-        this.canvas = document.getElementById(canvasId);
-        this.ctx = this.canvas.getContext('2d');
-        this.particles = [];
-        this.mouse = { x: null, y: null, radius: 150 };
-        this.numParticles = 100;
-        this.lineDist = 120;
-        this.color = 'rgba(56, 189, 248, 0.2)';
-        this.init();
-    }
+document.addEventListener('DOMContentLoaded', () => {
+    const canvas = document.getElementById('particles-canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
 
-    init() {
-        this.resize();
-        window.addEventListener('resize', () => this.resize());
-        window.addEventListener('mousemove', (e) => {
-            this.mouse.x = e.clientX;
-            this.mouse.y = e.clientY;
-        });
+    const CONFIG = {
+        particleCount: Math.min(50, Math.floor(window.innerWidth / 25)),
+        connectionDistance: 140,
+        particleColor: { r: 6, g: 182, b: 212 },
+        lineColor: { r: 56, g: 189, b: 248 },
+        mouseRadius: 200,
+        speed: 0.3,
+    };
 
-        // Generate Particles
-        for (let i = 0; i < this.numParticles; i++) {
-            this.particles.push({
-                x: Math.random() * this.canvas.width,
-                y: Math.random() * this.canvas.height,
-                vx: (Math.random() - 0.5) * 0.5,
-                vy: (Math.random() - 0.5) * 0.5,
-                radius: Math.random() * 2 + 1
-            });
+    let particles = [];
+    let animId;
+    let mouse = { x: null, y: null };
+
+    // Throttle mouse tracking
+    let mouseThrottle = false;
+    window.addEventListener('mousemove', (e) => {
+        if (mouseThrottle) return;
+        mouseThrottle = true;
+        mouse.x = e.clientX;
+        mouse.y = e.clientY;
+        setTimeout(() => mouseThrottle = false, 30);
+    }, { passive: true });
+
+    window.addEventListener('mouseout', () => {
+        mouse.x = null;
+        mouse.y = null;
+    });
+
+    class Particle {
+        constructor() {
+            this.reset();
         }
-        this.animate();
-    }
-
-    resize() {
-        this.canvas.width = window.innerWidth;
-        this.canvas.height = window.innerHeight;
-    }
-
-    draw() {
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        
-        for (let i = 0; i < this.particles.length; i++) {
-            let p = this.particles[i];
-            
-            // Move
-            p.x += p.vx;
-            p.y += p.vy;
-
-            // Bounce
-            if (p.x < 0 || p.x > this.canvas.width) p.vx *= -1;
-            if (p.y < 0 || p.y > this.canvas.height) p.vy *= -1;
-
-            // Mouse Interaction (Push/Pull)
-            let dx = this.mouse.x - p.x;
-            let dy = this.mouse.y - p.y;
-            let dist = Math.sqrt(dx*dx + dy*dy);
-            if (dist < this.mouse.radius) {
-                p.x -= dx * 0.01;
-                p.y -= dy * 0.01;
+        reset() {
+            this.x = Math.random() * canvas.width;
+            this.y = Math.random() * canvas.height;
+            this.size = Math.random() * 2 + 0.5;
+            this.vx = (Math.random() - 0.5) * CONFIG.speed;
+            this.vy = (Math.random() - 0.5) * CONFIG.speed;
+            this.opacity = Math.random() * 0.4 + 0.1;
+        }
+        update() {
+            // Mouse interaction
+            if (mouse.x !== null) {
+                const dx = mouse.x - this.x;
+                const dy = mouse.y - this.y;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+                if (dist < CONFIG.mouseRadius) {
+                    const force = (CONFIG.mouseRadius - dist) / CONFIG.mouseRadius;
+                    this.vx -= (dx / dist) * force * 0.02;
+                    this.vy -= (dy / dist) * force * 0.02;
+                }
             }
 
-            // Draw Point
-            this.ctx.beginPath();
-            this.ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-            this.ctx.fillStyle = this.color;
-            this.ctx.fill();
+            this.x += this.vx;
+            this.y += this.vy;
 
-            // Draw Connections
-            for (let j = i + 1; j < this.particles.length; j++) {
-                let p2 = this.particles[j];
-                let d = Math.sqrt(Math.pow(p.x - p2.x, 2) + Math.pow(p.y - p2.y, 2));
-                if (d < this.lineDist) {
-                    this.ctx.beginPath();
-                    this.ctx.moveTo(p.x, p.y);
-                    this.ctx.lineTo(p2.x, p2.y);
-                    this.ctx.strokeStyle = `rgba(56, 189, 248, ${1 - d/this.lineDist * 0.5})`;
-                    this.ctx.lineWidth = 0.5;
-                    this.ctx.stroke();
+            // Damping
+            this.vx *= 0.999;
+            this.vy *= 0.999;
+
+            // Wrap edges
+            if (this.x > canvas.width) this.x = 0;
+            if (this.x < 0) this.x = canvas.width;
+            if (this.y > canvas.height) this.y = 0;
+            if (this.y < 0) this.y = canvas.height;
+        }
+        draw() {
+            const { r, g, b } = CONFIG.particleColor;
+            ctx.fillStyle = `rgba(${r},${g},${b},${this.opacity})`;
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fill();
+        }
+    }
+
+    function init() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        particles = [];
+        for (let i = 0; i < CONFIG.particleCount; i++) {
+            particles.push(new Particle());
+        }
+    }
+
+    function drawConnections() {
+        const { r, g, b } = CONFIG.lineColor;
+        for (let i = 0; i < particles.length; i++) {
+            for (let j = i + 1; j < particles.length; j++) {
+                const dx = particles[i].x - particles[j].x;
+                const dy = particles[i].y - particles[j].y;
+                const dist = dx * dx + dy * dy; // Skip sqrt for perf
+
+                if (dist < CONFIG.connectionDistance * CONFIG.connectionDistance) {
+                    const opacity = 0.08 * (1 - Math.sqrt(dist) / CONFIG.connectionDistance);
+                    ctx.beginPath();
+                    ctx.strokeStyle = `rgba(${r},${g},${b},${opacity})`;
+                    ctx.lineWidth = 0.5;
+                    ctx.moveTo(particles[i].x, particles[i].y);
+                    ctx.lineTo(particles[j].x, particles[j].y);
+                    ctx.stroke();
                 }
             }
         }
     }
 
-    animate() {
-        this.draw();
-        requestAnimationFrame(() => this.animate());
-    }
-}
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-document.addEventListener('DOMContentLoaded', () => {
-    const canvas = document.createElement('canvas');
-    canvas.id = 'neural-canvas';
-    canvas.style.cssText = 'position:fixed; inset:0; z-index:-1; pointer-events:none;';
-    document.body.prepend(canvas);
-    new NeuralParticles('neural-canvas');
+        for (const p of particles) {
+            p.update();
+            p.draw();
+        }
+        drawConnections();
+
+        animId = requestAnimationFrame(animate);
+    }
+
+    // Throttled resize
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(init, 200);
+    });
+
+    // Pause when tab is hidden
+    document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+            cancelAnimationFrame(animId);
+        } else {
+            animate();
+        }
+    });
+
+    init();
+    animate();
 });

@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Add Achievement Milestone</h1>
+<div class="card" style="max-width: 600px;">
+    <form method="POST">
+        <div style="margin-bottom: 1.5rem;">
+            <label>Achievement Title</label>
+            <input type="text" name="title" class="form-control" required>
+        </div>
+        <div style="margin-bottom: 1.5rem;">
+            <label>Description</label>
+            <textarea name="description" class="form-control" rows="4" required></textarea>
+        </div>
+        <button type="submit" class="btn">Deploy to Glory Board</button>
+    </form>
+</div>
+{% endblock %}

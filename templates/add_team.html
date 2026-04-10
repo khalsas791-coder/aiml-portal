@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Add Team Member</h1>
+<div class="card" style="max-width: 600px;">
+    <form method="POST" enctype="multipart/form-data">
+        <div style="margin-bottom: 1.5rem;">
+            <label>Full Name</label>
+            <input type="text" name="name" class="form-control" required>
+        </div>
+        <div style="margin-bottom: 1.5rem;">
+            <label>Role / Designation</label>
+            <input type="text" name="role" class="form-control" required>
+        </div>
+        <div style="margin-bottom: 1.5rem;">
+            <label>Profile Image</label>
+            <input type="file" name="image" class="form-control" required>
+        </div>
+        <button type="submit" class="btn">Add to Neural Nodes</button>
+    </form>
+</div>
+{% endblock %}

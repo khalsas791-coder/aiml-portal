@@ -1,142 +1,316 @@
-// js/data-engine.js — Neural Data Orchestrator v4.1
-// Powering 15+ dynamic sectors of the GNDECB AIML Hub
+// ═══════════════════════════════════════════════════════════
+// DATA ENGINE v6.0 — Dynamic Content Renderer
+// Fetches from /api/full-site-data and renders all sections
+// ═══════════════════════════════════════════════════════════
 
-import { db } from './firebase-config.js';
-import { collection, getDocs, orderBy, query } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('⚡ Data Engine v6.0: Loading site data...');
 
-document.addEventListener('DOMContentLoaded', async () => {
-    // 1. SYNC: CORE ACADEMIC BLOCKS
-    await syncSection('faculty', 'faculty-grid', createFacultyCard);
-    await syncSection('projects', 'project-grid', createProjectCard);
-    await syncSection('testimonials', 'testimonial-grid', createTestimonialCard);
+    const API_URL = '/api/full-site-data';
 
-    // 2. SYNC: NOTICE BOARD (LATEST)
-    await syncNoticeBoard();
+    // ── HELPER: Fallback image ─────────────────────────────
+    const fallbackImg = (url, fallback) => {
+        return url || fallback;
+    };
 
-    // 3. SYNC: ACADEMIC CALENDAR
-    await syncCalendar();
+    const unsplashFallback = (query) =>
+        `https://images.unsplash.com/photo-${query}?auto=format&fit=crop&w=800&q=80`;
 
-    // 4. SMART GREETING
-    const h = new Date().getHours();
-    const g = h < 12 ? "Good Morning" : (h < 18 ? "Good Afternoon" : "Good Evening");
-    const ge = document.getElementById('smart-greeting');
-    if(ge) ge.innerText = `${g}, GNDECB Hub User`;
+    // ── FETCH & RENDER ─────────────────────────────────────
+    fetch(API_URL)
+        .then(res => {
+            if (!res.ok) throw new Error('API Error');
+            return res.json();
+        })
+        .then(data => {
+            renderHero(data.home);
+            renderAbout(data.about, data.mission, data.highlights);
+            renderEvents(data.events);
+            renderProjects(data.projects);
+            renderAchievements(data.achievements);
+            renderTeam(data.team);
+            renderGallery(data.gallery || []);
+            renderFAQ(data.faq || []);
+            renderContact(data.contact);
+            renderFooter(data.home);
 
-    // 5. SCROLL SPY INIT
-    initScrollSpy();
-});
+            // Re-init UI effects after dynamic content
+            setTimeout(() => {
+                if (window.initUIEffects) window.initUIEffects();
+            }, 100);
+        })
+        .catch(err => {
+            console.warn('Data Engine: Using static fallback.', err);
+        });
 
-async function syncSection(col, gridId, cardFn) {
-    try {
-        const grid = document.getElementById(gridId);
-        if(!grid) return;
-        const snap = await getDocs(collection(db, col));
-        if(snap.empty) {
-            grid.innerHTML = `<div style="padding: 5rem; opacity: 0.3; grid-column: 1/-1; text-align: center;">Retrieving sectoral matrix for ${col.toUpperCase()}...</div>`;
+    // ── HERO ───────────────────────────────────────────────
+    function renderHero(home) {
+        if (!home) return;
+        const title = document.getElementById('hero-title');
+        const sub = document.getElementById('hero-subtitle');
+        if (title && home.tagline) title.innerHTML = `Next-Gen<br>AIML Innovation`;
+        if (sub && home.intro) sub.textContent = home.intro;
+    }
+
+    // ── ABOUT ──────────────────────────────────────────────
+    function renderAbout(about, mission, highlights) {
+        if (about) {
+            const desc = document.getElementById('about-desc');
+            const vision = document.getElementById('about-vision');
+            if (desc) desc.textContent = about.description;
+            if (vision) vision.textContent = about.vision;
+        }
+
+        if (mission && mission.length) {
+            const box = document.getElementById('about-mission');
+            if (box) {
+                box.innerHTML = mission.map(m => `<p style="margin-bottom:6px;">• ${m}</p>`).join('');
+            }
+        }
+
+        if (highlights && highlights.length) {
+            const row = document.getElementById('highlights-row');
+            if (row) {
+                row.innerHTML = highlights.map(h =>
+                    `<span class="highlight-chip">${h}</span>`
+                ).join('');
+            }
+        }
+    }
+
+    // ── EVENTS ─────────────────────────────────────────────
+    function renderEvents(events) {
+        const grid = document.getElementById('events-grid');
+        if (!grid || !events) return;
+
+        if (events.length === 0) {
+            grid.innerHTML = '<p style="color:var(--text-muted);text-align:center;grid-column:1/-1;">No events yet. Check back soon!</p>';
             return;
         }
-        grid.innerHTML = "";
-        snap.forEach(doc => grid.appendChild(cardFn(doc.data(), doc.id)));
-    } catch(e) { console.error(`Sync Fail [${col}]:`, e); }
-}
 
-async function syncNoticeBoard() {
-    const feed = document.getElementById('notice-feed');
-    if(!feed) return;
-    try {
-        const q = query(collection(db, 'notices'), orderBy('timestamp', 'desc'));
-        const snap = await getDocs(query(collection(db, 'notices')));
-        feed.innerHTML = "";
-        snap.forEach(d => {
-            const data = d.data();
-            const div = document.createElement('div');
-            div.className = 'glass-panel';
-            div.style.padding = '1.5rem 2rem';
-            div.style.borderLeft = '4px solid var(--neon-cyan)';
-            div.innerHTML = `
-                <div style="font-size: 0.7rem; font-weight: 800; color: var(--neon-cyan); letter-spacing: 2px;">NOTICE_${new Date(data.timestamp).toLocaleDateString()}</div>
-                <h4 style="margin: 0.8rem 0 0.5rem; font-size: 1.1rem; color: #fff;">${data.title}</h4>
-                <p style="opacity: 0.5; font-size: 0.85rem;">${data.content}</p>
+        grid.innerHTML = events.map(ev => `
+            <div class="glass-card event-card" onmouseenter="fetch('/api/track/event/${ev.id}',{method:'POST'}).catch(()=>{})">
+                <div class="event-card-image">
+                    <img src="/static/images/${ev.image_path}"
+                         alt="${ev.title}"
+                         onerror="this.src='${unsplashFallback('1517245386807-bb43f82c33c4')}'">
+                </div>
+                <div class="event-card-body">
+                    <h3>${ev.title}</h3>
+                    <p>${ev.description}</p>
+                    <div class="event-meta">
+                        <i data-lucide="eye" style="width:14px;height:14px;"></i>
+                        ${ev.views || 0} views
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    // ── PROJECTS ───────────────────────────────────────────
+    function renderProjects(projects) {
+        const grid = document.getElementById('project-grid');
+        if (!grid || !projects) return;
+
+        if (projects.length === 0) {
+            grid.innerHTML = '<p style="color:var(--text-muted);text-align:center;grid-column:1/-1;">No projects yet.</p>';
+            return;
+        }
+
+        const icons = ['🤖', '🧠', '🔬', '🛡️', '📡', '🌐', '⚙️', '💡'];
+
+        grid.innerHTML = projects.map((p, i) => `
+            <div class="glass-card project-card" onmouseenter="fetch('/api/track/project/${p.id}',{method:'POST'}).catch(()=>{})">
+                <div class="project-card-header">
+                    <div class="project-icon">${icons[i % icons.length]}</div>
+                    <div>
+                        <h3>${p.project_title}</h3>
+                        <span class="project-author">${p.student_name}</span>
+                    </div>
+                </div>
+                <p>${p.description}</p>
+                <a href="${p.github_link}" target="_blank" rel="noopener" class="project-link">
+                    <i data-lucide="github" style="width:14px;height:14px;"></i>
+                    View Repository
+                </a>
+            </div>
+        `).join('');
+    }
+
+    // ── ACHIEVEMENTS ───────────────────────────────────────
+    function renderAchievements(achievements) {
+        const grid = document.getElementById('achievements-grid');
+        if (!grid || !achievements) return;
+
+        if (achievements.length === 0) {
+            grid.innerHTML = '<p style="color:var(--text-muted);text-align:center;grid-column:1/-1;">No achievements yet.</p>';
+            return;
+        }
+
+        const emojis = ['🏆', '🥇', '🎯', '📈', '🌟', '💎', '🔥', '⚡'];
+
+        grid.innerHTML = achievements.map((a, i) => `
+            <div class="glass-card achievement-card">
+                <div class="achievement-icon">${emojis[i % emojis.length]}</div>
+                <h3>${a.title}</h3>
+                <p>${a.description}</p>
+            </div>
+        `).join('');
+    }
+
+    // ── TEAM ───────────────────────────────────────────────
+    function renderTeam(team) {
+        const grid = document.getElementById('team-grid');
+        if (!grid || !team) return;
+
+        if (team.length === 0) {
+            grid.innerHTML = '<p style="color:var(--text-muted);text-align:center;grid-column:1/-1;">Team info coming soon.</p>';
+            return;
+        }
+
+        grid.innerHTML = team.map(t => `
+            <div class="glass-card team-card">
+                <div class="team-avatar">
+                    <img src="/static/images/${t.image_path}"
+                         alt="${t.name}"
+                         onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(t.name)}&background=0f172a&color=06b6d4&size=200&bold=true'">
+                </div>
+                <h3>${t.name}</h3>
+                <p class="team-role">${t.role}</p>
+            </div>
+        `).join('');
+    }
+
+    // ── GALLERY ────────────────────────────────────────────
+    function renderGallery(gallery) {
+        const grid = document.getElementById('gallery-grid');
+        if (!grid) return;
+
+        if (!gallery || gallery.length === 0) {
+            // Provide default gallery with Unsplash images
+            const defaults = [
+                { url: 'https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&w=600&q=80', caption: 'Campus View' },
+                { url: 'https://images.unsplash.com/photo-1523050854058-8df90110c7f1?auto=format&fit=crop&w=600&q=80', caption: 'Lab Session' },
+                { url: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=600&q=80', caption: 'Workshop' },
+                { url: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=600&q=80', caption: 'Tech Event' },
+                { url: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=600&q=80', caption: 'Team Meeting' },
+                { url: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=600&q=80', caption: 'Innovation Hub' },
+            ];
+            gallery = defaults;
+        }
+
+        grid.innerHTML = gallery.map(g => `
+            <div class="gallery-item">
+                <img src="${g.url || '/static/images/' + g.image_path}"
+                     alt="${g.caption || 'Gallery'}"
+                     onerror="this.src='${unsplashFallback('1562774053-701939374585')}'">
+                <div class="gallery-overlay">
+                    <span>${g.caption || ''}</span>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    // ── FAQ ────────────────────────────────────────────────
+    function renderFAQ(faq) {
+        const list = document.getElementById('faq-list');
+        if (!list) return;
+
+        if (!faq || faq.length === 0) {
+            // Default FAQ
+            faq = [
+                { question: 'What is the AIML department about?', answer: 'The AIML (Artificial Intelligence & Machine Learning) department at GNDECB focuses on cutting-edge AI research, hands-on project development, and preparing students for careers in data science, machine learning, and intelligent systems.' },
+                { question: 'What are the placement opportunities?', answer: 'Our students are placed in top tech companies with packages ranging from 4 LPA to 15+ LPA. We maintain a 95%+ placement rate with strong industry connections.' },
+                { question: 'Are there research opportunities for students?', answer: 'Yes! Students can participate in VGST-funded research projects, publish papers in international conferences, and work on real-world AI solutions in our dedicated research labs.' },
+                { question: 'How can I get involved in events?', answer: 'Join our student chapters like AI-Node and Robotics-Link. Follow our events section for upcoming hackathons, workshops, and the annual Tech-Srijan Symposium.' },
+                { question: 'What programming languages are taught?', answer: 'The curriculum covers Python, R, Java, C++, and specialized ML frameworks like TensorFlow, PyTorch, and scikit-learn, alongside cloud platforms like AWS and Azure.' },
+            ];
+        }
+
+        list.innerHTML = faq.map((f, i) => `
+            <div class="faq-item${i === 0 ? ' active' : ''}">
+                <button class="faq-question">
+                    <span>${f.question}</span>
+                    <span class="faq-icon">+</span>
+                </button>
+                <div class="faq-answer">
+                    <p>${f.answer}</p>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    // ── CONTACT ────────────────────────────────────────────
+    function renderContact(contact) {
+        if (!contact) return;
+
+        const info = document.getElementById('contact-info');
+        if (info) {
+            info.innerHTML = `
+                <div class="contact-info-item">
+                    <h4 style="color:var(--neon-cyan);">📍 Address</h4>
+                    <p>${contact.address}</p>
+                </div>
+                <div class="contact-info-item">
+                    <h4 style="color:var(--neon-purple);">📧 Email & Phone</h4>
+                    <p>${contact.email}<br>${contact.phone}</p>
+                </div>
             `;
-            feed.appendChild(div);
+        }
+
+        // Map
+        if (contact.map_location) {
+            const mapFrame = document.getElementById('contact-map');
+            if (mapFrame && contact.map_location.includes('embed')) {
+                mapFrame.src = contact.map_location;
+            }
+        }
+    }
+
+    // ── FOOTER ─────────────────────────────────────────────
+    function renderFooter(home) {
+        if (!home) return;
+        const logo = document.getElementById('footer-logo');
+        const desc = document.getElementById('footer-desc');
+        if (logo) logo.textContent = home.college_name || 'GNDECB AIML Hub';
+        if (desc) desc.textContent = home.intro || '';
+    }
+
+    // ── CONTACT FORM HANDLER ───────────────────────────────
+    const cForm = document.getElementById('contactForm');
+    if (cForm) {
+        cForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = cForm.querySelector('button[type="submit"]');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = 'Sending...';
+            btn.disabled = true;
+
+            try {
+                const payload = {
+                    name: document.getElementById('c_name').value,
+                    email: document.getElementById('c_email').value,
+                    message: document.getElementById('c_msg').value
+                };
+
+                const res = await fetch('/api/contact', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (res.ok) {
+                    if (window.showToast) showToast('Message sent successfully!', 'success');
+                    cForm.reset();
+                } else {
+                    throw new Error('Send failed');
+                }
+            } catch (err) {
+                if (window.showToast) showToast('Failed to send message. Try again.', 'error');
+            } finally {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
         });
-    } catch(e) { feed.innerHTML = "Sync Delay..."; }
-}
-
-async function syncCalendar() {
-    const feed = document.getElementById('calendar-feed');
-    if(!feed) return;
-    try {
-        const snap = await getDocs(collection(db, 'calendar'));
-        feed.innerHTML = "";
-        snap.forEach(d => {
-            const data = d.data();
-            const div = document.createElement('div');
-            div.className = 'glass-panel';
-            div.style.padding = '1.5rem 2rem';
-            div.style.display = 'flex';
-            div.style.gap = '1.5rem';
-            div.style.alignItems = 'center';
-            div.innerHTML = `
-                <div style="text-align: center;"><h3 style="color: var(--neon-purple);">${data.day || '01'}</h3><p style="font-size: 0.7rem; opacity: 0.4;">${data.month || 'APR'}</p></div>
-                <div style="height: 40px; width: 1px; background: rgba(255,255,255,0.1);"></div>
-                <p style="font-size: 0.85rem; font-weight: 800;">${data.event || 'Semester Sync'}</p>
-            `;
-            feed.appendChild(div);
-        });
-    } catch(e) { feed.innerHTML = "Sync Delay..."; }
-}
-
-// Visual Card UI Logic (Refined)
-function createFacultyCard(data) {
-    const d = document.createElement('div');
-    d.className = 'glass-panel glow-border';
-    d.style.padding = '2.5rem';
-    d.innerHTML = `
-        <div style="height: 250px; background: rgba(56, 189, 248, 0.05); border-radius: 12px; margin-bottom: 2rem; overflow: hidden;"><img src="${data.image || 'assets/images/campus.png'}" style="width: 100%; height: 100%; object-fit: cover; filter: grayscale(1);"></div>
-        <h3 style="font-family:'Outfit'; margin-bottom: 0.5rem;">${data.name}</h3>
-        <p style="color: var(--neon-cyan); font-weight: 800; font-size: 0.75rem; letter-spacing: 2px;">${data.role || 'Neural Faculty'}</p>
-        <div style="margin-top: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem; opacity: 0.5; font-size: 0.8rem;"><p>Exp: ${data.exp || '10+'} Years</p><p>Expertise: ${data.expertise || 'AIML'}</p></div>
-    `;
-    return d;
-}
-
-function createProjectCard(data) {
-    const d = document.createElement('div');
-    d.className = 'glass-panel glow-border';
-    d.style.padding = '3rem';
-    d.innerHTML = `
-        <span style="font-size: 0.7rem; font-weight: 800; color: var(--neon-purple); letter-spacing: 2px;">VER_1.0_PROJ</span>
-        <h3 style="margin: 1.5rem 0 1rem; font-family:'Outfit';">${data.title}</h3>
-        <p style="font-size: 0.85rem; opacity: 0.5; line-height: 1.8;">${data.desc}</p>
-        <div style="margin-top: 3rem; display: flex; justify-content: space-between;"><button class="btn-ultra" style="padding: 0.6rem 1.2rem; font-size: 0.7rem;">Source Code</button></div>
-    `;
-    return d;
-}
-
-function createTestimonialCard(data) {
-    const d = document.createElement('div');
-    d.className = 'glass-panel';
-    d.style.padding = '4rem';
-    d.innerHTML = `
-        <p style="font-style: italic; line-height: 2; opacity: 0.8;">"${data.text}"</p>
-        <div style="margin-top: 3rem; display: flex; align-items: center; gap: 1.5rem;">
-            <div style="width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, var(--neon-cyan), var(--neon-purple));"></div>
-            <div><strong style="font-family:'Outfit';">${data.name}</strong><p style="font-size: 0.7rem; opacity: 0.4; letter-spacing: 1px;">${data.batch || 'Class of 2024'}</p></div>
-        </div>
-    `;
-    return d;
-}
-
-function initScrollSpy() {
-    window.addEventListener('scroll', () => {
-        const sections = document.querySelectorAll('section');
-        const navLinks = document.querySelectorAll('.ultra-nav a');
-        let current = "";
-        sections.forEach(s => { if(window.pageYOffset >= (s.offsetTop - 200)) current = s.getAttribute('id'); });
-        navLinks.forEach(a => {
-            a.classList.remove('active');
-            if(a.getAttribute('href').includes(current)) a.classList.add('active');
-        });
-    });
-}
+    }
+});

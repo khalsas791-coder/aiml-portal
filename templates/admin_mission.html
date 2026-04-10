@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Manage Mission Points</h1>
+
+<div class="card" style="max-width: 600px; margin-bottom: 3rem;">
+    <h3 style="margin-top:0;">Add New Point</h3>
+    <form method="POST">
+        <textarea name="point" class="form-control" rows="3" placeholder="Enter a mission statement..." required></textarea>
+        <button type="submit" class="btn" style="margin-top: 1rem;">Add to Mission</button>
+    </form>
+</div>
+
+<div class="card">
+    <h3 style="margin-top:0;">Active Mission Points</h3>
+    {% for p in points %}
+    <div style="display:flex; justify-content:space-between; align-items:center; padding: 1rem 0; border-bottom: 1px solid var(--border);">
+        <p style="margin:0; font-size: 0.95rem;">• {{ p.point }}</p>
+        <a href="{{ url_for('delete_mission', id=p.id) }}" style="color: #f85149; text-decoration:none; font-size: 0.8rem; font-weight: 800;">DELETE</a>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

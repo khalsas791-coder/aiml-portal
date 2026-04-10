@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Edit About & Vision</h1>
+<div class="card" style="max-width: 800px;">
+    <form method="POST">
+        <div style="margin-bottom: 1.5rem;">
+            <label>Institutional Description</label>
+            <textarea name="description" class="form-control" rows="6">{{ about.description }}</textarea>
+        </div>
+        <div style="margin-bottom: 1.5rem;">
+            <label>Strategic Vision</label>
+            <textarea name="vision" class="form-control" rows="4">{{ about.vision }}</textarea>
+        </div>
+        <button type="submit" class="btn">Update Institutional Framework</button>
+    </form>
+</div>
+{% endblock %}

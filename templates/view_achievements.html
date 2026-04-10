@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+    <h1>Technical Achievements</h1>
+    <a href="{{ url_for('add_achievement') }}" class="btn">+ Add Milestone</a>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 2rem;">
+    {% for a in achievements %}
+    <div class="card">
+        <h3 style="margin:0 0 1rem 0;">{{ a.title }}</h3>
+        <p style="font-size: 0.9rem; color: #8b949e; line-height: 1.6;">{{ a.description }}</p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

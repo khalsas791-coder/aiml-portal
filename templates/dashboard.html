@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Dashboard Control Center</h1>
+
+<div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:2rem; margin: 3rem 0;">
+    <div class="card" style="text-align: center;">
+        <h4 style="margin:0; opacity:0.6;">TECHNICAL EVENTS</h4>
+        <div style="font-size:3.5rem; font-weight:800; color:#fff; margin:10px 0;">{{ e_count }}</div>
+    </div>
+    <div class="card" style="text-align: center;">
+        <h4 style="margin:0; opacity:0.6;">INNOVATION NODES</h4>
+        <div style="font-size:3.5rem; font-weight:800; color:#fff; margin:10px 0;">{{ p_count }}</div>
+    </div>
+    <div class="card" style="text-align: center;">
+        <h4 style="margin:0; opacity:0.6;">NEURAL MESSAGES</h4>
+        <div style="font-size:3.5rem; font-weight:800; color:var(--accent); margin:10px 0;">{{ m_count }}</div>
+    </div>
+</div>
+
+<div class="card">
+    <h3 style="margin-bottom:2rem; color:#fff;">🔥 Trending Events (Most Viewed)</h3>
+    <div style="display:flex; flex-direction:column; gap:1.5rem;">
+        {% for e in top_events %}
+        <div style="display:flex; justify-content:space-between; align-items:center; padding-bottom:1rem; border-bottom:1px solid var(--border);">
+            <div>
+                <h4 style="margin:0; color:#fff;">{{ e.title }}</h4>
+                <p style="font-size:0.8rem; opacity:0.5;">{{ e.views }} Views logged via telemetry</p>
+            </div>
+            <a href="{{ url_for('view_events') }}" style="color:var(--accent); text-decoration:none; font-size:0.8rem; font-weight:800;">MANAGE &rarr;</a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
