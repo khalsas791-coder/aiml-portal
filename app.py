@@ -1,4 +1,4 @@
-import os
+﻿import os
 import sqlite3
 import uuid
 import json
@@ -19,7 +19,7 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "AIzaSyDoM3i2MldcwAs_bJ5_nmJxtUPuUM9Xgg8")
 
-# ═══ DATABASE ═══════════════════════════════════════════════
+# â•â•â• DATABASE â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 def get_db_connection():
     conn = sqlite3.connect('database.db')
     conn.row_factory = sqlite3.Row
@@ -62,7 +62,7 @@ def init_db():
 
 init_db()
 
-# ═══ GEMINI AI ══════════════════════════════════════════════
+# â•â•â• GEMINI AI â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 def query_gemini(prompt):
     url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={GEMINI_API_KEY}"
     payload = {"contents": [{"parts": [{"text": prompt}]}]}
@@ -74,7 +74,7 @@ def query_gemini(prompt):
     except Exception as e:
         return "Neural engine timeout. Please try again."
 
-# ═══ AUTH ════════════════════════════════════════════════════
+# â•â•â• AUTH â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
@@ -83,7 +83,7 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
-# ═══ CONTEXT PROCESSOR ══════════════════════════════════════
+# â•â•â• CONTEXT PROCESSOR â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 @app.context_processor
 def inject_globals():
     if 'admin_logged_in' in session:
@@ -96,7 +96,7 @@ def inject_globals():
             return {'msg_count': 0}
     return {}
 
-# ═══ CORS HELPER ════════════════════════════════════════════
+# â•â•â• CORS HELPER â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 @app.after_request
 def after_request(response):
     response.headers.add('Access-Control-Allow-Origin', '*')
@@ -104,7 +104,7 @@ def after_request(response):
     response.headers.add('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
     return response
 
-# ═══ API ENDPOINTS ══════════════════════════════════════════
+# â•â•â• API ENDPOINTS â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 @app.route('/api/full-site-data')
 def api_all_data():
     conn = get_db_connection()
@@ -166,18 +166,12 @@ def track_view(type, id):
     conn.close()
     return jsonify({"success": True})
 
-# ═══ PAGE ROUTES ════════════════════════════════════════════
+# â•â•â• PAGE ROUTES â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 @app.route('/')
 def home():
     return send_from_directory('.', 'index.html')
 
-@app.route('/<path:path>')
-def serve_static(path):
-    if os.path.exists(os.path.join('.', path)):
-        return send_from_directory('.', path)
-    return "404 — Page not found", 404
-
-# ═══ ADMIN ROUTES ═══════════════════════════════════════════
+# â•â•â• ADMIN ROUTES â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -519,6 +513,13 @@ def edit_project(id):
     conn.close()
     return render_template('edit_project.html', project=project)
 
-# ═══ RUN ════════════════════════════════════════════════════
+
+@app.route('/<path:path>')
+def serve_static(path):
+    if os.path.exists(os.path.join('.', path)):
+        return send_from_directory('.', path)
+    return "404 — Page not found", 404
+
+# â•â•â• RUN â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
