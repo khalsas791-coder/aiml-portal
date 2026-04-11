@@ -46,9 +46,8 @@ def init_db():
     except Exception as e:
         print(f" Startup Database Warning: {e}")
 
-# Initialize core tables on startup
-if __name__ == '__main__':
-    init_db()
+# Initialize core tables on startup (MUST run at module level for Gunicorn)
+init_db()
 
 # Health check for Render
 @app.route('/health')
