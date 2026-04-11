@@ -1,7 +1,8 @@
 {% extends 'base.html' %}
 {% block title %}Projects{% endblock %}
+{% block breadcrumb %}Projects{% endblock %}
 {% block content %}
-<div class="page-header">
+<div class="page-header animate-in">
     <div>
         <h1 class="page-title">Student Projects</h1>
         <p class="page-desc">Manage innovation projects. {{ projects|length }} total projects.</p>
@@ -9,29 +10,31 @@
     <a href="{{ url_for('add_project') }}" class="btn btn-primary"><i data-lucide="plus"></i> Add Project</a>
 </div>
 
-<div class="card">
-    <table class="data-table">
-        <thead><tr><th>Title</th><th>Student</th><th>Description</th><th>GitHub</th><th>Views</th><th>Action</th></tr></thead>
-        <tbody>
-            {% for p in projects %}
-            <tr>
-                <td style="font-weight:600; color:#fff;">{{ p.project_title }}</td>
-                <td><span class="badge badge-purple">{{ p.student_name }}</span></td>
-                <td style="font-size:0.82rem; color:var(--text-secondary); max-width:250px;">{{ p.description[:60] }}...</td>
-                <td><a href="{{ p.github_link }}" target="_blank" style="color:var(--accent); font-size:0.8rem;">Link ↗</a></td>
-                <td><span class="badge badge-cyan">{{ p.views }}</span></td>
-                <td>
-                    <div style="display:flex; gap:6px;">
-                        <a href="{{ url_for('edit_project', id=p.id) }}" class="btn btn-ghost btn-sm"><i data-lucide="pencil"></i></a>
-                        <button class="btn btn-danger btn-sm" onclick="confirmDelete('{{ url_for('delete_project', id=p.id) }}', '{{ p.project_title }}')"><i data-lucide="trash-2"></i></button>
-                    </div>
-                </td>
-            </tr>
-            {% else %}
-            <tr><td colspan="6" class="empty-state"><p class="empty-state-msg">No projects yet.</p></td></tr>
-            {% endfor %}
-        </tbody>
-    </table>
+<div class="card animate-in delay-1">
+    <div class="table-wrapper">
+        <table class="data-table">
+            <thead><tr><th>Title</th><th>Student</th><th>Description</th><th>GitHub</th><th>Views</th><th>Action</th></tr></thead>
+            <tbody>
+                {% for p in projects %}
+                <tr>
+                    <td style="font-weight:600; color:var(--text-primary);">{{ p.project_title }}</td>
+                    <td><span class="badge badge-purple">{{ p.student_name }}</span></td>
+                    <td style="font-size:0.82rem; color:var(--text-secondary); max-width:250px;">{{ p.description[:60] }}...</td>
+                    <td><a href="{{ p.github_link }}" target="_blank" style="color:var(--accent); font-size:0.8rem; text-decoration:none;">Link ↗</a></td>
+                    <td><span class="badge badge-cyan">{{ p.views }}</span></td>
+                    <td>
+                        <div style="display:flex; gap:6px;">
+                            <a href="{{ url_for('edit_project', id=p.id) }}" class="btn btn-ghost btn-sm"><i data-lucide="pencil"></i></a>
+                            <button class="btn btn-danger btn-sm" onclick="confirmDelete('{{ url_for('delete_project', id=p.id) }}', '{{ p.project_title }}')"><i data-lucide="trash-2"></i></button>
+                        </div>
+                    </td>
+                </tr>
+                {% else %}
+                <tr><td colspan="6" class="empty-state"><p class="empty-state-msg">No projects yet.</p></td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
 <script>lucide.createIcons();</script>
 {% endblock %}

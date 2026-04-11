@@ -5,112 +5,242 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Login — GNDECB Neural Console</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
         body {
-            background: #0a0e17;
+            background: #0B0F19;
             color: #e2e8f0;
-            font-family: 'Inter', sans-serif;
+            font-family: 'Inter', -apple-system, sans-serif;
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             position: relative;
             overflow: hidden;
+            -webkit-font-smoothing: antialiased;
         }
+
+        /* Ambient glow effects */
+        .ambient-glow {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+            filter: blur(80px);
+        }
+        .glow-1 {
+            width: 500px; height: 500px;
+            background: radial-gradient(circle, rgba(56,189,248,0.1) 0%, transparent 70%);
+            top: -150px; left: -100px;
+            animation: floatGlow 8s ease-in-out infinite;
+        }
+        .glow-2 {
+            width: 400px; height: 400px;
+            background: radial-gradient(circle, rgba(167,139,250,0.08) 0%, transparent 70%);
+            bottom: -100px; right: -50px;
+            animation: floatGlow 10s ease-in-out infinite reverse;
+        }
+        .glow-3 {
+            width: 300px; height: 300px;
+            background: radial-gradient(circle, rgba(52,211,153,0.06) 0%, transparent 70%);
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            animation: floatGlow 12s ease-in-out infinite;
+        }
+
+        @keyframes floatGlow {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(20px, -15px) scale(1.05); }
+        }
+
+        /* Grid pattern overlay */
         body::before {
             content: '';
             position: absolute;
-            width: 500px; height: 500px;
-            background: radial-gradient(circle, rgba(56,189,248,0.08) 0%, transparent 70%);
-            top: -100px; left: -100px;
-            border-radius: 50%;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(56,189,248,0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(56,189,248,0.02) 1px, transparent 1px);
+            background-size: 60px 60px;
             pointer-events: none;
         }
-        body::after {
-            content: '';
-            position: absolute;
-            width: 400px; height: 400px;
-            background: radial-gradient(circle, rgba(167,139,250,0.06) 0%, transparent 70%);
-            bottom: -50px; right: -50px;
-            border-radius: 50%;
-            pointer-events: none;
-        }
+
         .login-card {
-            background: #131a2b;
+            background: rgba(18, 24, 41, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border: 1px solid rgba(148,163,184,0.08);
-            border-radius: 16px;
-            padding: 3rem;
+            border-radius: 20px;
+            padding: 40px 36px;
             width: 100%;
             max-width: 420px;
             position: relative;
             z-index: 1;
+            box-shadow:
+                0 24px 64px rgba(0,0,0,0.4),
+                0 0 0 1px rgba(56,189,248,0.05);
+            animation: cardIn 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
+        @keyframes cardIn {
+            from { opacity: 0; transform: translateY(24px) scale(0.96); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
         .login-brand {
             text-align: center;
-            margin-bottom: 2.5rem;
+            margin-bottom: 32px;
         }
         .login-logo {
             width: 56px; height: 56px;
             background: linear-gradient(135deg, #38bdf8, #a78bfa);
-            border-radius: 14px;
+            border-radius: 16px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
             font-weight: 900;
             font-size: 20px;
             color: #000;
-            margin-bottom: 1rem;
+            margin-bottom: 16px;
+            box-shadow: 0 0 30px rgba(56,189,248,0.2);
+            animation: logoPulse 3s ease-in-out infinite;
         }
-        .login-brand h2 { font-size: 1.5rem; font-weight: 800; }
+        @keyframes logoPulse {
+            0%, 100% { box-shadow: 0 0 30px rgba(56,189,248,0.2); }
+            50% { box-shadow: 0 0 40px rgba(56,189,248,0.35); }
+        }
+
+        .login-brand h2 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #fff;
+            letter-spacing: -0.02em;
+        }
         .login-brand h2 span { color: #38bdf8; }
-        .login-brand p { color: #475569; font-size: 0.85rem; margin-top: 6px; }
+        .login-brand p {
+            color: #6B7280;
+            font-size: 0.85rem;
+            margin-top: 6px;
+        }
 
         .flash-bar {
-            padding: 0.75rem 1rem; border-radius: 8px; margin-bottom: 1.5rem;
-            font-size: 0.85rem; font-weight: 600;
-            background: rgba(239,68,68,0.1); color: #ef4444; border: 1px solid rgba(239,68,68,0.2);
+            padding: 12px 16px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(248,113,113,0.08);
+            color: #f87171;
+            border: 1px solid rgba(248,113,113,0.15);
+            animation: flashIn 0.3s ease;
+        }
+        @keyframes flashIn { from { opacity:0; transform:translateY(-6px); } }
+
+        .form-group { margin-bottom: 20px; }
+        .form-label {
+            display: block;
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: #B0B0B0;
+            margin-bottom: 8px;
+            letter-spacing: 0.3px;
         }
 
-        .form-group { margin-bottom: 1.25rem; }
-        .form-label { display: block; font-size: 0.78rem; font-weight: 600; color: #64748b; margin-bottom: 0.4rem; }
+        .input-wrapper {
+            position: relative;
+        }
+        .input-wrapper i {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 18px;
+            height: 18px;
+            color: #6B7280;
+            pointer-events: none;
+            transition: color 0.3s ease;
+        }
+        .input-wrapper .form-control:focus ~ i,
+        .input-wrapper .form-control:focus + i {
+            color: #38bdf8;
+        }
+
         .form-control {
-            width: 100%; padding: 0.75rem 1rem;
-            background: #0c1120;
+            width: 100%;
+            padding: 13px 16px 13px 44px;
+            background: #0D1120;
             border: 1px solid rgba(148,163,184,0.08);
-            border-radius: 8px; color: #e2e8f0;
-            font-size: 0.9rem; font-family: inherit;
-            transition: border-color 0.2s, box-shadow 0.2s;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 0.9rem;
+            font-family: inherit;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .form-control:focus {
-            outline: none; border-color: #38bdf8;
-            box-shadow: 0 0 0 3px rgba(56,189,248,0.15);
+            outline: none;
+            border-color: #38bdf8;
+            box-shadow: 0 0 0 3px rgba(56,189,248,0.12), 0 0 20px rgba(56,189,248,0.08);
         }
-        .form-control::placeholder { color: #475569; }
+        .form-control::placeholder { color: #4B5563; }
 
         .btn-login {
-            width: 100%; padding: 0.85rem;
-            background: #38bdf8; color: #000;
-            border: none; border-radius: 8px;
-            font-size: 0.9rem; font-weight: 700;
-            cursor: pointer; margin-top: 0.5rem;
-            transition: all 0.2s;
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #38bdf8, #22d3ee);
+            color: #000;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 8px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             font-family: inherit;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
         .btn-login:hover {
-            background: #7dd3fc;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 20px rgba(56,189,248,0.3);
+            background: linear-gradient(135deg, #7dd3fc, #67e8f9);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 28px rgba(56,189,248,0.3);
+        }
+        .btn-login:active {
+            transform: translateY(0);
         }
 
         .login-footer {
-            text-align: center; margin-top: 2rem;
-            color: #475569; font-size: 0.75rem;
+            text-align: center;
+            margin-top: 28px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(148,163,184,0.07);
         }
-        .login-footer a { color: #38bdf8; text-decoration: none; }
+        .login-footer a {
+            color: #6B7280;
+            text-decoration: none;
+            font-size: 0.82rem;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .login-footer a:hover { color: #38bdf8; }
+
+        @media (max-width: 480px) {
+            .login-card { margin: 16px; padding: 32px 24px; }
+        }
     </style>
 </head>
 <body>
+    <div class="ambient-glow glow-1"></div>
+    <div class="ambient-glow glow-2"></div>
+    <div class="ambient-glow glow-3"></div>
+
     <div class="login-card">
         <div class="login-brand">
             <div class="login-logo">AI</div>
@@ -121,7 +251,7 @@
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 {% for cat, msg in messages %}
-                    <div class="flash-bar">{{ msg }}</div>
+                    <div class="flash-bar">✕ {{ msg }}</div>
                 {% endfor %}
             {% endif %}
         {% endwith %}
@@ -129,18 +259,34 @@
         <form action="{{ url_for('login') }}" method="POST">
             <div class="form-group">
                 <label class="form-label">Username</label>
-                <input type="text" name="username" class="form-control" required placeholder="admin" autocomplete="username">
+                <div class="input-wrapper">
+                    <input type="text" name="username" class="form-control" required placeholder="admin@gndecb.ac.in" autocomplete="username">
+                    <i data-lucide="user"></i>
+                </div>
             </div>
             <div class="form-group">
                 <label class="form-label">Password</label>
-                <input type="password" name="password" class="form-control" required placeholder="••••••••" autocomplete="current-password">
+                <div class="input-wrapper">
+                    <input type="password" name="password" class="form-control" required placeholder="••••••••" autocomplete="current-password">
+                    <i data-lucide="lock"></i>
+                </div>
             </div>
-            <button type="submit" class="btn-login">Sign In to Dashboard</button>
+            <button type="submit" class="btn-login">
+                <i data-lucide="shield-check" style="width:18px;height:18px;"></i>
+                Sign In to Dashboard
+            </button>
         </form>
 
         <div class="login-footer">
-            <a href="/">← Back to Website</a>
+            <a href="/">
+                <i data-lucide="arrow-left" style="width:14px;height:14px;"></i>
+                Back to Website
+            </a>
         </div>
     </div>
+
+    <script>
+        lucide.createIcons();
+    </script>
 </body>
 </html>

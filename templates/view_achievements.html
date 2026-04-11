@@ -1,7 +1,8 @@
 {% extends 'base.html' %}
 {% block title %}Achievements{% endblock %}
+{% block breadcrumb %}Achievements{% endblock %}
 {% block content %}
-<div class="page-header">
+<div class="page-header animate-in">
     <div>
         <h1 class="page-title">Achievements & Awards</h1>
         <p class="page-desc">Manage milestones and achievements. {{ achievements|length }} total.</p>
@@ -9,23 +10,25 @@
     <a href="{{ url_for('add_achievement') }}" class="btn btn-primary"><i data-lucide="plus"></i> Add Achievement</a>
 </div>
 
-<div class="card">
-    <table class="data-table">
-        <thead><tr><th>Title</th><th>Description</th><th>Action</th></tr></thead>
-        <tbody>
-            {% for a in achievements %}
-            <tr>
-                <td style="font-weight:600; color:#fff;">🏆 {{ a.title }}</td>
-                <td style="font-size:0.82rem; color:var(--text-secondary);">{{ a.description[:100] }}{% if a.description|length > 100 %}...{% endif %}</td>
-                <td>
-                    <button class="btn btn-danger btn-sm" onclick="confirmDelete('{{ url_for('delete_achievement', id=a.id) }}', '{{ a.title }}')"><i data-lucide="trash-2"></i></button>
-                </td>
-            </tr>
-            {% else %}
-            <tr><td colspan="3" class="empty-state"><p class="empty-state-msg">No achievements yet.</p></td></tr>
-            {% endfor %}
-        </tbody>
-    </table>
+<div class="card animate-in delay-1">
+    <div class="table-wrapper">
+        <table class="data-table">
+            <thead><tr><th>Title</th><th>Description</th><th>Action</th></tr></thead>
+            <tbody>
+                {% for a in achievements %}
+                <tr>
+                    <td style="font-weight:600; color:var(--text-primary);">🏆 {{ a.title }}</td>
+                    <td style="font-size:0.82rem; color:var(--text-secondary);">{{ a.description[:100] }}{% if a.description|length > 100 %}...{% endif %}</td>
+                    <td>
+                        <button class="btn btn-danger btn-sm" onclick="confirmDelete('{{ url_for('delete_achievement', id=a.id) }}', '{{ a.title }}')"><i data-lucide="trash-2"></i></button>
+                    </td>
+                </tr>
+                {% else %}
+                <tr><td colspan="3" class="empty-state"><p class="empty-state-msg">No achievements yet.</p></td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
 <script>lucide.createIcons();</script>
 {% endblock %}

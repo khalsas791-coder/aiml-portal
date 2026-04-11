@@ -1,7 +1,8 @@
 {% extends 'base.html' %}
 {% block title %}Gallery{% endblock %}
+{% block breadcrumb %}Gallery{% endblock %}
 {% block content %}
-<div class="page-header">
+<div class="page-header animate-in">
     <div>
         <h1 class="page-title">Gallery Management</h1>
         <p class="page-desc">Add images by URL to the campus gallery section of your website.</p>
@@ -9,8 +10,8 @@
 </div>
 
 <!-- Add Image -->
-<div class="card" style="max-width: 800px; margin-bottom: 2rem;">
-    <h3 class="card-title" style="margin-bottom:1rem;">Add Gallery Image</h3>
+<div class="card animate-in delay-1" style="max-width: 860px; margin-bottom: 24px;">
+    <h3 class="card-title" style="margin-bottom:16px;">Add Gallery Image</h3>
     <form method="POST">
         <div class="form-grid">
             <div class="form-group">
@@ -27,16 +28,16 @@
 </div>
 
 <!-- Gallery Grid -->
-<div class="card">
+<div class="card animate-in delay-2">
     <div class="card-header">
         <h3 class="card-title">Current Gallery ({{ gallery|length }} images)</h3>
     </div>
-    <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem;">
+    <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px;">
         {% for g in gallery %}
-        <div style="position:relative; border-radius: 10px; overflow: hidden; border: 1px solid var(--border);">
-            <img src="{{ g.url }}" alt="{{ g.caption }}" style="width: 100%; height: 150px; object-fit: cover; display: block;"
+        <div style="position:relative; border-radius: var(--radius-sm); overflow: hidden; border: 1px solid var(--border); transition: all 0.3s ease; background: var(--bg-body);" onmouseover="this.style.borderColor='rgba(56,189,248,0.2)';this.style.transform='translateY(-3px)'" onmouseout="this.style.borderColor='var(--border)';this.style.transform='translateY(0)'">
+            <img src="{{ g.url }}" alt="{{ g.caption }}" style="width: 100%; height: 150px; object-fit: cover; display: block; transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'"
                  onerror="this.src='https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&w=400&q=80'">
-            <div style="padding: 0.6rem 0.75rem; display:flex; justify-content: space-between; align-items: center;">
+            <div style="padding: 10px 14px; display:flex; justify-content: space-between; align-items: center;">
                 <span style="font-size: 0.78rem; color: var(--text-secondary);">{{ g.caption }}</span>
                 <button class="btn btn-danger btn-sm" onclick="confirmDelete('{{ url_for('delete_gallery', id=g.id) }}', '{{ g.caption }}')">
                     <i data-lucide="trash-2"></i>

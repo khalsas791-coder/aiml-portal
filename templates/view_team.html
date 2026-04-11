@@ -1,7 +1,8 @@
 {% extends 'base.html' %}
 {% block title %}Team{% endblock %}
+{% block breadcrumb %}Team{% endblock %}
 {% block content %}
-<div class="page-header">
+<div class="page-header animate-in">
     <div>
         <h1 class="page-title">Team Members</h1>
         <p class="page-desc">Manage faculty and student coordinators. {{ team|length }} members.</p>
@@ -9,24 +10,26 @@
     <a href="{{ url_for('add_team') }}" class="btn btn-primary"><i data-lucide="plus"></i> Add Member</a>
 </div>
 
-<div class="card">
-    <table class="data-table">
-        <thead><tr><th>Photo</th><th>Name</th><th>Role</th><th>Action</th></tr></thead>
-        <tbody>
-            {% for t in team %}
-            <tr>
-                <td><img src="{{ url_for('static', filename='images/' + t.image_path) }}" class="avatar-preview" alt="{{ t.name }}" onerror="this.src='https://ui-avatars.com/api/?name={{ t.name|urlencode }}&background=0f172a&color=06b6d4&size=96&bold=true'"></td>
-                <td style="font-weight:600; color:#fff;">{{ t.name }}</td>
-                <td><span class="badge badge-green">{{ t.role }}</span></td>
-                <td>
-                    <button class="btn btn-danger btn-sm" onclick="confirmDelete('{{ url_for('delete_team', id=t.id) }}', '{{ t.name }}')"><i data-lucide="trash-2"></i></button>
-                </td>
-            </tr>
-            {% else %}
-            <tr><td colspan="4" class="empty-state"><p class="empty-state-msg">No team members yet.</p></td></tr>
-            {% endfor %}
-        </tbody>
-    </table>
+<div class="card animate-in delay-1">
+    <div class="table-wrapper">
+        <table class="data-table">
+            <thead><tr><th>Photo</th><th>Name</th><th>Role</th><th>Action</th></tr></thead>
+            <tbody>
+                {% for t in team %}
+                <tr>
+                    <td><img src="{{ url_for('static', filename='images/' + t.image_path) }}" class="avatar-preview" alt="{{ t.name }}" onerror="this.src='https://ui-avatars.com/api/?name={{ t.name|urlencode }}&background=0f172a&color=06b6d4&size=96&bold=true'"></td>
+                    <td style="font-weight:600; color:var(--text-primary);">{{ t.name }}</td>
+                    <td><span class="badge badge-green">{{ t.role }}</span></td>
+                    <td>
+                        <button class="btn btn-danger btn-sm" onclick="confirmDelete('{{ url_for('delete_team', id=t.id) }}', '{{ t.name }}')"><i data-lucide="trash-2"></i></button>
+                    </td>
+                </tr>
+                {% else %}
+                <tr><td colspan="4" class="empty-state"><p class="empty-state-msg">No team members yet.</p></td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
 <script>lucide.createIcons();</script>
 {% endblock %}

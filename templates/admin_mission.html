@@ -1,17 +1,18 @@
 {% extends 'base.html' %}
 {% block title %}Mission Points{% endblock %}
+{% block breadcrumb %}Mission Points{% endblock %}
 {% block content %}
-<div class="page-header">
+<div class="page-header animate-in">
     <div>
         <h1 class="page-title">Mission Points</h1>
         <p class="page-desc">Manage the mission points displayed in the About section of your website.</p>
     </div>
 </div>
 
-<div style="display:grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; max-width: 1000px;">
+<div class="grid-2" style="max-width: 1000px;">
     <!-- Add New -->
-    <div class="card">
-        <h3 class="card-title" style="margin-bottom:1rem;">Add Mission Point</h3>
+    <div class="card animate-in delay-1">
+        <h3 class="card-title" style="margin-bottom:16px;">Add Mission Point</h3>
         <form method="POST">
             <div class="form-group">
                 <label class="form-label">Mission Statement</label>
@@ -22,11 +23,11 @@
     </div>
 
     <!-- Current Points -->
-    <div class="card">
-        <h3 class="card-title" style="margin-bottom:1rem;">Current Points ({{ points|length }})</h3>
+    <div class="card animate-in delay-2">
+        <h3 class="card-title" style="margin-bottom:16px;">Current Points ({{ points|length }})</h3>
         {% for p in points %}
-        <div style="display:flex; justify-content:space-between; align-items:center; padding: 0.75rem 0; border-bottom: 1px solid rgba(148,163,184,0.08);">
-            <span style="font-size:0.88rem;">• {{ p.point }}</span>
+        <div style="display:flex; justify-content:space-between; align-items:center; padding: 12px 0; border-bottom: 1px solid rgba(148,163,184,0.07);">
+            <span style="font-size:0.88rem; color: var(--text-secondary); flex: 1; margin-right: 12px;">• {{ p.point }}</span>
             <button class="btn btn-danger btn-sm" onclick="confirmDelete('{{ url_for('delete_mission', id=p.id) }}', '{{ p.point[:30] }}')">
                 <i data-lucide="trash-2"></i>
             </button>

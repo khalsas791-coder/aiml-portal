@@ -1,7 +1,8 @@
 {% extends 'base.html' %}
 {% block title %}FAQ{% endblock %}
+{% block breadcrumb %}FAQ{% endblock %}
 {% block content %}
-<div class="page-header">
+<div class="page-header animate-in">
     <div>
         <h1 class="page-title">FAQ Management</h1>
         <p class="page-desc">Manage frequently asked questions displayed on the website.</p>
@@ -9,8 +10,8 @@
 </div>
 
 <!-- Add FAQ -->
-<div class="card" style="max-width: 800px; margin-bottom: 2rem;">
-    <h3 class="card-title" style="margin-bottom:1rem;">Add New FAQ</h3>
+<div class="card animate-in delay-1" style="max-width: 860px; margin-bottom: 24px;">
+    <h3 class="card-title" style="margin-bottom:16px;">Add New FAQ</h3>
     <form method="POST">
         <div class="form-group">
             <label class="form-label">Question</label>
@@ -25,34 +26,36 @@
 </div>
 
 <!-- FAQ List -->
-<div class="card">
+<div class="card animate-in delay-2">
     <div class="card-header">
         <h3 class="card-title">Current FAQs ({{ faq|length }})</h3>
     </div>
-    <table class="data-table">
-        <thead>
-            <tr>
-                <th style="width:35%;">Question</th>
-                <th>Answer</th>
-                <th style="width:80px;">Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for f in faq %}
-            <tr>
-                <td style="font-weight:600; color:#fff;">{{ f.question }}</td>
-                <td style="font-size:0.82rem; color:var(--text-secondary);">{{ f.answer[:120] }}{% if f.answer|length > 120 %}...{% endif %}</td>
-                <td>
-                    <button class="btn btn-danger btn-sm" onclick="confirmDelete('{{ url_for('delete_faq', id=f.id) }}', '{{ f.question[:30] }}')">
-                        <i data-lucide="trash-2"></i>
-                    </button>
-                </td>
-            </tr>
-            {% else %}
-            <tr><td colspan="3" class="empty-state"><p class="empty-state-msg">No FAQs added yet.</p></td></tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <div class="table-wrapper">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th style="width:35%;">Question</th>
+                    <th>Answer</th>
+                    <th style="width:80px;">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for f in faq %}
+                <tr>
+                    <td style="font-weight:600; color:var(--text-primary);">{{ f.question }}</td>
+                    <td style="font-size:0.82rem; color:var(--text-secondary);">{{ f.answer[:120] }}{% if f.answer|length > 120 %}...{% endif %}</td>
+                    <td>
+                        <button class="btn btn-danger btn-sm" onclick="confirmDelete('{{ url_for('delete_faq', id=f.id) }}', '{{ f.question[:30] }}')">
+                            <i data-lucide="trash-2"></i>
+                        </button>
+                    </td>
+                </tr>
+                {% else %}
+                <tr><td colspan="3" class="empty-state"><p class="empty-state-msg">No FAQs added yet.</p></td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
 <script>lucide.createIcons();</script>
 {% endblock %}

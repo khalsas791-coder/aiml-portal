@@ -1,35 +1,38 @@
 {% extends 'base.html' %}
 {% block title %}Messages{% endblock %}
+{% block breadcrumb %}Messages{% endblock %}
 {% block content %}
-<div class="page-header">
+<div class="page-header animate-in">
     <div>
         <h1 class="page-title">Contact Messages</h1>
         <p class="page-desc">Messages received from your website's contact form. {{ messages|length }} total.</p>
     </div>
 </div>
 
-<div class="card">
-    <table class="data-table">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Message</th>
-                <th>Received</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for m in messages %}
-            <tr>
-                <td style="font-weight:600; color:#fff;">{{ m.name }}</td>
-                <td><a href="mailto:{{ m.email }}" style="color:var(--accent); text-decoration:none;">{{ m.email }}</a></td>
-                <td style="font-size:0.82rem; color:var(--text-secondary); max-width:350px;">{{ m.message }}</td>
-                <td style="font-size:0.75rem; color:var(--text-muted);">{{ m.created_at or 'N/A' }}</td>
-            </tr>
-            {% else %}
-            <tr><td colspan="4" class="empty-state"><div class="empty-state-icon">📭</div><p class="empty-state-msg">No messages received yet.</p></td></tr>
-            {% endfor %}
-        </tbody>
-    </table>
+<div class="card animate-in delay-1">
+    <div class="table-wrapper">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Message</th>
+                    <th>Received</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for m in messages %}
+                <tr>
+                    <td style="font-weight:600; color:var(--text-primary);">{{ m.name }}</td>
+                    <td><a href="mailto:{{ m.email }}" style="color:var(--accent); text-decoration:none;">{{ m.email }}</a></td>
+                    <td style="font-size:0.82rem; color:var(--text-secondary); max-width:350px;">{{ m.message }}</td>
+                    <td style="font-size:0.75rem; color:var(--text-muted); white-space:nowrap;">{{ m.created_at or 'N/A' }}</td>
+                </tr>
+                {% else %}
+                <tr><td colspan="4" class="empty-state"><div class="empty-state-icon">📭</div><p class="empty-state-msg">No messages received yet.</p></td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
 {% endblock %}

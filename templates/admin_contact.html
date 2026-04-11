@@ -1,14 +1,15 @@
 {% extends 'base.html' %}
 {% block title %}Contact Info{% endblock %}
+{% block breadcrumb %}Contact Info{% endblock %}
 {% block content %}
-<div class="page-header">
+<div class="page-header animate-in">
     <div>
         <h1 class="page-title">Contact Configuration</h1>
         <p class="page-desc">Edit the address, email, phone, and map embed shown on the website Contact section.</p>
     </div>
 </div>
 
-<div class="card" style="max-width: 800px;">
+<div class="card animate-in delay-1" style="max-width: 860px;">
     <form method="POST">
         <div class="form-grid">
             <div class="form-group full">
@@ -26,7 +27,7 @@
             <div class="form-group full">
                 <label class="form-label">Google Maps Embed URL</label>
                 <input type="text" name="map_location" class="form-control" value="{{ contact.map_location }}" placeholder="https://www.google.com/maps/embed?pb=...">
-                <p style="font-size:0.7rem; color:var(--text-muted); margin-top:6px;">Go to Google Maps → Share → Embed → Copy the src URL from the iframe code.</p>
+                <p class="form-hint">Go to Google Maps → Share → Embed → Copy the src URL from the iframe code.</p>
             </div>
         </div>
         <button type="submit" class="btn btn-primary"><i data-lucide="save"></i> Save Contact Info</button>
